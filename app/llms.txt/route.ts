@@ -5,7 +5,7 @@ export function GET() {
   const body = [
     `# ${companyConfig.name}`,
     "",
-    "Elektrik ariza, tesisat, pano, aydinlatma ve montaj hizmetleri veren yerel elektrik firmasi web sitesi.",
+    "Çorlu ve yakın çevrede elektrik arıza, acil elektrikçi, tesisat, pano, aydınlatma, avize ve montaj hizmetleri veren yerel elektrik firması web sitesi.",
     "",
     "## Sayfalar",
     "- /",

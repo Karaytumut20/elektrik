@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { companyConfig } from "@/data/site";
+import { companyConfig, localSearchTerms } from "@/data/site";
 
 type MetadataInput = {
   title: string;
   description: string;
   path?: string;
   image?: string;
+  keywords?: string[];
   noIndex?: boolean;
 };
 
@@ -15,11 +16,14 @@ export function absoluteUrl(path = "/") {
 
 export function buildMetadata(input: MetadataInput): Metadata {
   const url = absoluteUrl(input.path ?? "/");
-  const imageUrl = input.image ? absoluteUrl(input.image) : absoluteUrl("/images/electrician-hero.png");
+  const imageUrl = input.image ? absoluteUrl(input.image) : absoluteUrl("/images/electrician-hero.webp");
 
   return {
     title: input.title,
     description: input.description,
+    keywords: input.keywords ?? localSearchTerms,
+    creator: companyConfig.name,
+    publisher: companyConfig.name,
     alternates: {
       canonical: url,
     },
@@ -30,7 +34,7 @@ export function buildMetadata(input: MetadataInput): Metadata {
       siteName: companyConfig.name,
       locale: "tr_TR",
       type: "website",
-      images: [{ url: imageUrl, width: 1600, height: 900, alt: `${companyConfig.name} elektrik hizmetleri` }],
+      images: [{ url: imageUrl, width: 1500, height: 844, alt: `${companyConfig.name} elektrik hizmetleri` }],
     },
     twitter: {
       card: "summary_large_image",

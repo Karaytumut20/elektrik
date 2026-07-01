@@ -3,6 +3,7 @@ import { cache } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { requireSupabasePublicEnv, requireSupabaseServiceEnv } from "@/lib/supabase/env";
+import { customFetch } from "@/lib/supabase/fetch";
 
 const getSupabaseServerClient = cache(async () => {
   const env = requireSupabasePublicEnv();
@@ -23,6 +24,9 @@ const getSupabaseServerClient = cache(async () => {
         }
       },
     },
+    global: {
+      fetch: customFetch,
+    },
   });
 });
 
@@ -36,6 +40,9 @@ export function createSupabaseServiceClient() {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
+    },
+    global: {
+      fetch: customFetch,
     },
   });
 }

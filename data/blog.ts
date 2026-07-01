@@ -12,7 +12,7 @@ export type BlogPost = {
 };
 
 export const blogEmptyState = {
-  title: "Blog yazisi henuz eklenmedi",
+  title: "Rehber yazılar yakında",
   description:
-    "Elektrik arizalari, tesisat bakimi ve guvenli kullanim rehberleri admin panelinden yayinlandiginda burada gorunecek.",
+    "Elektrik arızaları, tesisat bakımı ve güvenli kullanım rehberleri hazırlandığında burada yayınlanacak.",
 };

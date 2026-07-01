@@ -1,12 +1,12 @@
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Card } from "@/components/ui/Card";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { companyConfig, legalPlaceholders } from "@/data/site";
+import { companyConfig } from "@/data/site";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "KVKK Aydinlatma Metni",
-  description: "Elektrik hizmet talebi kapsaminda islenen kisisel verilere iliskin KVKK aydinlatma metni taslagi.",
+  title: "KVKK Aydınlatma Metni",
+  description: "Elektrik hizmet talebi kapsamında işlenen kişisel verilere ilişkin KVKK aydınlatma metni.",
   path: "/kvkk",
 });
 
@@ -14,15 +14,15 @@ export default function KvkkPage() {
   const sections = [
     {
       title: "Veri sorumlusu",
-      text: `${companyConfig.name} icin kesin veri sorumlusu bilgileri yayin oncesi doldurulmalidir. ${legalPlaceholders.companyDetails}`,
+      text: `Kişisel verileriniz ${companyConfig.legalName} tarafından, ${companyConfig.address} adres bilgisi ve ${companyConfig.email} iletişim kanalı üzerinden yürütülen hizmet talepleri kapsamında işlenir.`,
     },
     {
-      title: "Isleme amaci",
-      text: "Ad soyad, telefon, e-posta, hizmet secimi ve mesaj icerigi; teklif hazirlamak, hizmet talebine donus yapmak ve iletisim kaydi olusturmak amaciyla islenebilir.",
+      title: "İşleme amacı",
+      text: "Ad soyad, telefon, e-posta, hizmet seçimi ve mesaj içeriği; teklif hazırlamak, hizmet talebine dönüş yapmak ve iletişim kaydı oluşturmak amacıyla işlenebilir.",
     },
     {
-      title: "Haklariniz",
-      text: "KVKK kapsamindaki bilgi alma, duzeltme, silme, itiraz ve basvuru haklariniz icin firma iletisim adresleri kullanilabilir. Basvuru usulu firma tarafindan kesinlestirilmelidir.",
+      title: "Haklarınız",
+      text: "KVKK kapsamındaki bilgi alma, düzeltme, silme, itiraz ve başvuru haklarınız için iletişim sayfasındaki telefon, e-posta veya form kanallarını kullanabilirsiniz.",
     },
   ];
 
@@ -33,8 +33,8 @@ export default function KvkkPage() {
           <Breadcrumbs items={[{ label: "KVKK", href: "/kvkk" }]} />
           <SectionHeading
             eyebrow="Yasal"
-            title="KVKK Aydinlatma Metni"
-            description="Bu taslak, firma bilgileri kesinlestikten sonra hukuk danismani tarafindan kontrol edilmelidir."
+            title="KVKK Aydınlatma Metni"
+            description="Elektrik hizmet talebi için paylaşılan kişisel verilerin işlenme amacı, kapsamı ve başvuru kanalları."
             className="mb-0 mt-8"
             as="h1"
           />

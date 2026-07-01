@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/admin/auth";
 import { isValidSlug, slugify } from "@/lib/slug";
 
@@ -162,3 +162,16 @@ export async function signOutAdmin() {
   await supabase.auth.signOut();
   redirect("/admin/login?logged_out=1");
 }
+
+export async function deleteContactSubmission(formData: FormData) {
+  await requireAdmin();
+  const id = formValue(formData, "id");
+  if (!id) redirect("/admin/iletisim?error=missing-id");
+
+  const supabase = createSupabaseServiceClient();
+  await supabase.from("contact_submissions").delete().eq("id", id);
+
+  revalidatePath("/admin/iletisim");
+  redirect("/admin/iletisim?saved=deleted");
+}
+

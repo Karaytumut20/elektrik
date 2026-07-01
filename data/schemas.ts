@@ -1,23 +1,43 @@
-import { companyConfig } from "@/data/site";
+import { companyConfig, serviceAreas } from "@/data/site";
 import type { ElectricalService } from "@/data/services";
 import type { BlogPost } from "@/data/blog";
+
+const contactPhone = companyConfig.phone.includes("X") ? undefined : companyConfig.phone;
+const contactEmail = companyConfig.email.includes("example") ? undefined : companyConfig.email;
+const hasStreetAddress = companyConfig.address !== `${companyConfig.city}, ${companyConfig.region}`;
+const localAreas = serviceAreas.map((area) => ({
+  "@type": "Place",
+  name: area,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: area.includes("Çerkezköy") || area.includes("Ergene") ? area : companyConfig.city,
+    addressRegion: companyConfig.region,
+    addressCountry: companyConfig.country,
+  },
+}));
 
 export function electricianSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Electrician",
+    "@id": `${companyConfig.siteUrl}/#electrician`,
     name: companyConfig.name,
     legalName: companyConfig.legalName,
     url: companyConfig.siteUrl,
-    telephone: companyConfig.phone,
-    email: companyConfig.email,
+    image: `${companyConfig.siteUrl}/images/electrician-hero.webp`,
+    logo: `${companyConfig.siteUrl}/favicon.svg`,
+    description:
+      "Çorlu ve yakın çevrede elektrik arıza tespiti, acil elektrikçi, tesisat yenileme, pano düzenleme, topraklama, priz, avize ve aydınlatma hizmetleri.",
+    telephone: contactPhone,
+    email: contactEmail,
     address: {
       "@type": "PostalAddress",
-      streetAddress: companyConfig.address,
+      streetAddress: hasStreetAddress ? companyConfig.address : undefined,
       addressLocality: companyConfig.city,
-      addressCountry: "TR",
+      addressRegion: companyConfig.region,
+      addressCountry: companyConfig.country,
     },
-    areaServed: companyConfig.city,
+    areaServed: localAreas,
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -35,12 +55,14 @@ export function serviceSchema(service: ElectricalService) {
     "@type": "Service",
     name: service.title,
     description: service.shortDescription,
+    serviceType: service.title,
     provider: {
       "@type": "Electrician",
+      "@id": `${companyConfig.siteUrl}/#electrician`,
       name: companyConfig.name,
       url: companyConfig.siteUrl,
     },
-    areaServed: companyConfig.city,
+    areaServed: localAreas,
   };
 }
 

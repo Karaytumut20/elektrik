@@ -2,6 +2,7 @@ import { cache } from "react";
 import { createClient } from "@supabase/supabase-js";
 import type { BlogPost } from "@/data/blog";
 import { hasSupabasePublicEnv, requireSupabasePublicEnv } from "@/lib/supabase/env";
+import { customFetch } from "@/lib/supabase/fetch";
 
 let supabasePublicClient: ReturnType<typeof createClient> | null = null;
 
@@ -12,6 +13,9 @@ function getPublicSupabase() {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
+    },
+    global: {
+      fetch: customFetch,
     },
   });
   return supabasePublicClient;

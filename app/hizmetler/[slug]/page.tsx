@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -65,11 +66,25 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 </ButtonLink>
               </div>
             </div>
-            <Card className="bg-slate-950 text-white">
-              <Icon className="h-10 w-10 text-amber-300" />
-              <h2 className="mt-4 text-xl font-bold">Bu hizmette odak</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-300">{service.shortDescription}</p>
-            </Card>
+            <div className="flex flex-col gap-6 w-full">
+              {service.image && (
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-slate-200/60 bg-slate-100 shadow-sm">
+                  <Image
+                    src={service.image}
+                    alt={service.title}
+                    fill
+                    sizes="(min-width: 1024px) 360px, 100vw"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              )}
+              <Card className="bg-slate-950 text-white">
+                <Icon className="h-10 w-10 text-amber-300" />
+                <h2 className="mt-4 text-xl font-bold">Bu hizmette odak</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{service.shortDescription}</p>
+              </Card>
+            </div>
           </div>
         </div>
       </section>

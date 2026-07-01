@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
   return buildMetadata({
     title: post.title,
-    description: post.excerpt ?? "Elektrik hizmetleri hakkinda blog yazisi.",
+    description: post.excerpt ?? "Elektrik hizmetleri hakkında blog yazısı.",
     path: `/blog/${post.slug}`,
     image: post.cover_image_url ?? undefined,
   });
@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {post.cover_image_url ? (
           <div className="site-container py-6">
             <div className="relative h-[360px] overflow-hidden rounded-lg border border-slate-200 bg-slate-200">
-              <Image src={post.cover_image_url} alt={`${post.title} kapak gorseli`} fill sizes="100vw" className="object-cover" />
+              <Image src={post.cover_image_url} alt={`${post.title} kapak görseli`} fill sizes="100vw" className="object-cover" />
             </div>
           </div>
         ) : null}

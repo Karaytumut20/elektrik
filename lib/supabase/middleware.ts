@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { hasSupabasePublicEnv, requireSupabasePublicEnv } from "@/lib/supabase/env";
+import { customFetch } from "@/lib/supabase/fetch";
 
 export async function updateSupabaseSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -20,6 +21,9 @@ export async function updateSupabaseSession(request: NextRequest) {
         response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
       },
+    },
+    global: {
+      fetch: customFetch,
     },
   });
 

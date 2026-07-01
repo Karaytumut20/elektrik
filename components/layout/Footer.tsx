@@ -14,7 +14,7 @@ export function Footer() {
             <Logo />
           </div>
           <p className="mt-5 max-w-md text-sm leading-6 text-slate-300">
-            Konut ve is yerleri icin elektrik ariza, tesisat, pano, topraklama ve aydinlatma hizmetlerinde temiz iscilik ve guvenli uygulama.
+            Konut ve iş yerleri için elektrik arıza, tesisat, pano, topraklama ve aydınlatma hizmetlerinde temiz işçilik ve güvenli uygulama.
           </p>
           <div className="mt-5 grid gap-3 text-sm text-slate-300">
             <a href={phoneHref()} className="flex items-center gap-2 hover:text-amber-200">
@@ -36,7 +36,7 @@ export function Footer() {
           <FooterColumn title="Sayfalar" links={mainNavigation} />
           <FooterColumn title="Hizmetler" links={services.slice(0, 6).map((service) => ({ label: service.title, href: `/hizmetler/${service.slug}` }))} />
           <div>
-            <h2 className="text-sm font-bold uppercase text-amber-200">Hizmet Bolgeleri</h2>
+            <h2 className="text-sm font-bold uppercase text-amber-200">Hizmet Bölgeleri</h2>
             <ul className="mt-4 grid gap-2 text-sm text-slate-300">
               {serviceAreas.map((area) => (
                 <li key={area}>{area}</li>
@@ -47,13 +47,13 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="site-container flex flex-col gap-3 py-5 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 {companyConfig.name}. Tum haklari saklidir.</p>
+          <p>© 2026 {companyConfig.name}. Tüm hakları saklıdır.</p>
           <div className="flex flex-wrap gap-4">
             <Link href="/gizlilik-politikasi" className="hover:text-amber-200">
               Gizlilik
             </Link>
             <Link href="/cerez-politikasi" className="hover:text-amber-200">
-              Cerez
+              Çerez
             </Link>
             <Link href="/kvkk" className="hover:text-amber-200">
               KVKK

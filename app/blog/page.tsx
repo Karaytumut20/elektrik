@@ -9,8 +9,8 @@ import { buildMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata = buildMetadata({
-  title: "Elektrik Blog",
-  description: "Elektrik arizalari, tesisat bakimi, pano guvenligi ve aydinlatma hakkinda rehber yazilar.",
+  title: "Çorlu Elektrik Blog",
+  description: "Çorlu elektrik arızaları, tesisat bakımı, pano güvenliği, kaçak akım, priz ve aydınlatma hakkında pratik rehber yazılar.",
   path: "/blog",
 });
 
@@ -24,8 +24,8 @@ export default async function BlogPage() {
           <Breadcrumbs items={[{ label: "Blog", href: "/blog" }]} />
           <SectionHeading
             eyebrow="Blog"
-            title="Elektrik tesisati ve guvenli kullanim rehberleri"
-            description="Yayinlanan blog yazilari Supabase blog_posts tablosundan okunur; taslak yazilar burada listelenmez."
+            title="Elektrik tesisatı ve güvenli kullanım rehberleri"
+            description="Çorlu'da konut ve iş yerleri için elektrik arızası, tesisat bakımı, pano güvenliği ve aydınlatma konularında pratik bilgiler."
             className="mb-0 mt-8"
             as="h1"
           />
@@ -40,7 +40,7 @@ export default async function BlogPage() {
           ) : (
             <Card>
               <h2 className="text-xl font-bold text-slate-950">{blogEmptyState.title}</h2>
-              <p className="mt-2 text-slate-600">{result.isConfigured ? blogEmptyState.description : "Supabase baglantisi yapildiktan sonra yayinlanan yazilar burada gorunecek."}</p>
+              <p className="mt-2 text-slate-600">{result.isConfigured ? blogEmptyState.description : "İlk rehber yazılar hazırlandığında burada yayınlanacak."}</p>
             </Card>
           )}
         </div>

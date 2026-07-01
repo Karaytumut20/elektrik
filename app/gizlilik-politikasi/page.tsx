@@ -1,32 +1,32 @@
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Card } from "@/components/ui/Card";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { companyConfig, legalPlaceholders } from "@/data/site";
+import { companyConfig } from "@/data/site";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Gizlilik Politikasi",
-  description: "Elektrik hizmetleri web sitesi gizlilik politikasi ve kisisel veri isleme prensipleri.",
+  title: "Gizlilik Politikası",
+  description: "Elektrik hizmetleri web sitesi gizlilik politikası ve kişisel veri işleme prensipleri.",
   path: "/gizlilik-politikasi",
 });
 
 export default function PrivacyPage() {
   return (
     <LegalPage
-      title="Gizlilik Politikasi"
-      description="Bu metin yayin oncesi firma bilgileri ve hukuk danismani kontroluyle guncellenmelidir."
+      title="Gizlilik Politikası"
+      description="Elektrik hizmet talebi kapsamında paylaştığınız kişisel verilerin nasıl işlendiğine dair bilgilendirme."
       sections={[
         {
           title: "Veri sorumlusu",
-          text: `${companyConfig.name} icin veri sorumlusu bilgileri: ${legalPlaceholders.dataController}`,
+          text: `Bu web sitesi üzerinden iletilen talepler ${companyConfig.legalName} tarafından değerlendirilir. İletişim için ${companyConfig.email} adresini veya iletişim sayfasındaki kanalları kullanabilirsiniz.`,
         },
         {
           title: "Toplanan bilgiler",
-          text: "Iletisim formu, telefon, e-posta ve WhatsApp uzerinden paylastiginiz ad soyad, telefon, e-posta, hizmet secimi ve mesaj icerigi talebinize donus yapmak amaciyla islenebilir.",
+          text: "İletişim formu, telefon, e-posta ve WhatsApp üzerinden paylaştığınız ad soyad, telefon, e-posta, hizmet seçimi ve mesaj içeriği talebinize dönüş yapmak amacıyla işlenebilir.",
         },
         {
-          title: "Saklama ve guvenlik",
-          text: "Kisisel veriler yalnizca hizmet talebinin degerlendirilmesi ve yasal yukumlulukler icin gerekli sure boyunca saklanmalidir. Kesin saklama sureleri firma politikasi ile belirlenmelidir.",
+          title: "Saklama ve güvenlik",
+          text: "Kişisel veriler hizmet talebinin değerlendirilmesi, iletişim kurulması ve yasal yükümlülüklerin yerine getirilmesi için gerekli süre boyunca saklanır. Yetkisiz erişime karşı makul teknik ve idari tedbirler alınır.",
         },
       ]}
     />

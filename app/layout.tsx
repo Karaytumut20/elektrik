@@ -11,23 +11,43 @@ import { companyConfig } from "@/data/site";
 import { electricianSchema } from "@/data/schemas";
 
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
   variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(companyConfig.siteUrl),
+  applicationName: companyConfig.name,
   title: {
-    default: `${companyConfig.name} | Elektrik Ariza ve Tesisat Hizmetleri`,
+    default: `${companyConfig.name} | Çorlu Elektrik Arıza ve Tesisat Hizmetleri`,
     template: `%s | ${companyConfig.name}`,
   },
   description:
-    "Konut ve is yerleri icin elektrik ariza tespiti, tesisat yenileme, pano duzenleme, aydinlatma ve acil elektrikci hizmetleri.",
+    "Çorlu ve yakın çevrede konut ve iş yerleri için elektrik arıza tespiti, tesisat yenileme, pano düzenleme, aydınlatma ve acil elektrikçi hizmetleri.",
+  keywords: [
+    "Çorlu elektrikçi",
+    "Çorlu acil elektrikçi",
+    "Çorlu elektrik arıza",
+    "Çorlu elektrik tesisatı",
+    "Çorlu pano yenileme",
+    "Çorlu avize montajı",
+  ],
   icons: {
     icon: "/favicon.svg",
   },
   manifest: "/site.webmanifest",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {

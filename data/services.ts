@@ -24,6 +24,7 @@ export type ElectricalService = {
   title: string;
   shortDescription: string;
   detailDescription: string;
+  image: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   operations: string[];
   benefits: string[];
@@ -32,109 +33,157 @@ export type ElectricalService = {
 };
 
 const commonProcess = [
-  "Talebin ve ariza belirtisinin netlestirilmesi",
-  "Yerinde kontrol veya fotografa gore on degerlendirme",
-  "Malzeme ve iscilik kapsamiyla seffaf teklif",
-  "Guvenli uygulama ve devreye alma testi",
+  "Talebin ve arıza belirtisinin netleştirilmesi",
+  "Yerinde kontrol veya fotoğrafa göre ön değerlendirme",
+  "Malzeme ve işçilik kapsamıyla şeffaf teklif",
+  "Güvenli uygulama ve devreye alma testi",
 ];
 
 export const services: ElectricalService[] = [
   {
     slug: "elektrik-ariza-tespiti",
-    title: "Elektrik Ariza Tespiti",
+    title: "Elektrik Arıza Tespiti",
     shortDescription:
-      "Sigorta atmasi, kisa devre, prizde enerji olmamasi ve hat kopuklugu gibi arizalar icin sistemli kontrol.",
+      "Sigorta atması, kısa devre, prizde enerji olmaması ve hat kopukluğu gibi arızalar için sistemli kontrol.",
     detailDescription:
-      "Elektrik arizalarinda tahminle ilerlemek hem zaman kaybettirir hem de tesisata zarar verebilir. Hat, sigorta, klemens, priz, aydinlatma ve pano kontrollerini sirasiyla yaparak sorunun kaynagini netlestiriyoruz.",
+      "Elektrik arızalarında tahminle ilerlemek hem zaman kaybettirir hem de tesisata zarar verebilir. Hat, sigorta, klemens, priz, aydınlatma ve pano kontrollerini sırasıyla yaparak sorunun kaynağını netleştiriyoruz.",
+    image: "/images/service-troubleshooting.webp",
     icon: Zap,
     operations: [
-      "Hat ve sigorta kontrolu",
-      "Kisa devre ve kacaga yonelik olcum",
+      "Hat ve sigorta kontrolü",
+      "Kısa devre ve kaçağa yönelik ölçüm",
       "Priz, anahtar ve buat kontrolleri",
-      "Arizali bolumun guvenli sekilde izole edilmesi",
+      "Arızalı bölümün güvenli şekilde izole edilmesi",
     ],
     benefits: [
-      "Kok neden odakli onarim",
-      "Gereksiz kırım ve malzeme degisiminden kacinma",
-      "Ayni arizanin tekrar etme riskini azaltma",
+      "Kök neden odaklı onarım",
+      "Gereksiz kırım ve malzeme değişiminden kaçınma",
+      "Aynı arızanın tekrar etme riskini azaltma",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Ariza tespiti icin elektrik tamamen kesilir mi?",
+        question: "Arıza tespiti için elektrik tamamen kesilir mi?",
         answer:
-          "Gerekli durumlarda ilgili hat guvenli sekilde kesilir. Tum alanin enerjisiz kalmasi gerekiyorsa isleme baslamadan once bilgilendirme yapilir.",
+          "Gerekli durumlarda ilgili hat güvenli şekilde kesilir. Tüm alanın enerjisiz kalması gerekiyorsa işleme başlamadan önce bilgilendirme yapılır.",
       },
       {
-        question: "Kisa devre tespiti ne kadar surer?",
+        question: "Kısa devre tespiti ne kadar sürer?",
         answer:
-          "Sure tesisatin karmasikligina baglidir. Basit priz ve sigorta arizalari genellikle ayni ziyarette netlestirilebilir.",
+          "Süre tesisatın karmaşıklığına bağlıdır. Basit priz ve sigorta arızaları genellikle aynı ziyarette netleştirilebilir.",
+      },
+      {
+        question: "Hangi arıza tespit cihazlarını kullanıyorsunuz?",
+        answer:
+          "Kablo kopuklukları ve temassızlıkları tespit etmek için dijital kaçak akım test cihazları, multimetreler ve temassız voltaj dedektörleri kullanıyoruz.",
+      },
+      {
+        question: "Evdeki arızanın komşularla bir ilgisi olabilir mi?",
+        answer:
+          "Bazen apartman ana panosundaki faz kesintileri veya nötr gevşemeleri dairenizi etkileyebilir. Bu durumda bina ana hattını da kontrol ediyoruz.",
+      },
+      {
+        question: "Arıza tespiti sonrasında garanti veriyor musunuz?",
+        answer:
+          "Yapılan onarım ve montaj işçiliğimiz ile değiştirdiğimiz parçalar için garanti sunuyoruz. Herhangi bir sorunda bize tekrar ulaşabilirsiniz.",
       },
     ],
   },
   {
     slug: "ev-elektrik-tesisati",
-    title: "Ev Elektrik Tesisati",
+    title: "Ev Elektrik Tesisatı",
     shortDescription:
-      "Daire, villa ve tadilat projeleri icin guvenli, duzenli ve ihtiyaca uygun elektrik tesisati kurulumu.",
+      "Daire, villa and tadilat projeleri için güvenli, düzenli ve ihtiyaca uygun elektrik tesisatı kurulumu.",
     detailDescription:
-      "Konutlarda elektrik tesisati; guvenlik, kullanim konforu ve ileride yapilacak degisiklikler dusunulerek planlanmalidir. Priz, aydinlatma, mutfak hatlari ve zayif akim gecislerini proje ihtiyacina gore duzenliyoruz.",
+      "Konutlarda elektrik tesisatı; güvenlik, kullanım konforu ve ileride yapılacak değişiklikler düşünülerek planlanmalıdır. Priz, aydınlatma, mutfak hatları ve zayıf akım geçişlerini proje ihtiyacına göre düzenliyoruz.",
+    image: "/images/service-wiring.webp",
     icon: Cable,
     operations: [
-      "Priz ve aydinlatma hatlarinin planlanmasi",
-      "Mutfak ve yuksek guc hatlarinin ayrilmasi",
-      "Buat, kablo ve sigorta organizasyonu",
+      "Priz ve aydınlatma hatlarının planlanması",
+      "Mutfak ve yüksek güç hatlarının ayrılması",
+      "Buat, kablo and sigorta organizasyonu",
       "Test ve etiketleme",
     ],
     benefits: [
-      "Daha guvenli gunluk kullanim",
-      "Yuksek guc tuketen cihazlar icin uygun hat yapisi",
-      "Tadilat sonrasi temiz ve okunabilir tesisat",
+      "Daha güvenli günlük kullanım",
+      "Yüksek güç tüketen cihazlar için uygun hat yapısı",
+      "Tadilat sonrası temiz ve okunabilir tesisat",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Eski ev tesisati yenilenirken duvarlar kirilir mi?",
+        question: "Eski ver tesisatı yenilenirken duvarlar kırılır mı?",
         answer:
-          "Mevcut altyapiya gore degisir. Mumkun olan yerlerde mevcut borular kullanilir, gerekli kısımlar icin onceden kapsam paylasilir.",
+          "Mevcut altyapıya göre değişir. Mümkün olan yerlerde mevcut borular kullanılır, gerekli kısımlar için önceden kapsam paylaşılır.",
       },
       {
-        question: "Malzeme secimini siz mi yapiyorsunuz?",
+        question: "Malzeme seçimini siz mi yapıyorsunuz?",
         answer:
-          "Ihtiyaca uygun kablo, sigorta ve ekipman onerisi sunulur. Marka ve kalite tercihi teklif asamasinda netlestirilir.",
+          "İhtiyaca uygun kablo, sigorta ve ekipman önerisi sunulur. Marka ve kalite tercihi teklif aşamasında netleştirilir.",
+      },
+      {
+        question: "Komple daire tesisat yenilemesi kaç gün sürer?",
+        answer:
+          "Dairenin büyüklüğüne ve kırım yapılacak kanal miktarına bağlı olarak komple kablo ve kasa yenileme işlemleri 3 ila 5 iş günü arasında tamamlanır.",
+      },
+      {
+        question: "Tesisatta hangi kablo markalarını ve kesitlerini tercih ediyorsunuz?",
+        answer:
+          "Priz hatlarında en az 2.5 mm², aydınlatma hatlarında ise 1.5 mm² kesitinde, TSE onaylı halojensiz (alev iletmeyen) bakır kablolar kullanıyoruz.",
+      },
+      {
+        question: "Mutfak tesisatı için özel bir güç hattı çekilmeli midir?",
+        answer:
+          "Evet. Fırın, bulaşık makinesi ve mikrodalga gibi yüksek akım çeken cihazlar için sigorta panosundan bağımsız, ayrı priz hatları çekilmelidir.",
       },
     ],
   },
   {
     slug: "is-yeri-elektrik-tesisati",
-    title: "Is Yeri Elektrik Tesisati",
+    title: "İş Yeri Elektrik Tesisatı",
     shortDescription:
-      "Ofis, magaza, atölye ve kucuk isletmeler icin is akisina uygun elektrik altyapisi.",
+      "Ofis, mağaza, atölye ve küçük işletmeler için iş akışına uygun elektrik altyapısı.",
     detailDescription:
-      "Is yerlerinde tesisat sadece enerji dagitimi degil, is surekliligi meselesidir. Cihaz yerlesimi, aydinlatma ihtiyaci, pano kapasitesi ve bakim erisimi birlikte degerlendirilir.",
+      "İş yerlerinde tesisat sadece enerji dağıtımı değil, iş sürekliliği meselesidir. Cihaz yerleşimi, aydınlatma ihtiyacı, pano kapasitesi ve bakım erişimi birlikte değerlendirilir.",
+    image: "/images/service-office-wiring.webp",
     icon: Gauge,
     operations: [
-      "Yuk analizi ve hat ayrimi",
-      "Pano ve sigorta duzeni",
-      "Calisma alanlarina uygun priz planlamasi",
-      "Aydinlatma ve acil durum hatlari",
+      "Yük analizi ve hat ayrımı",
+      "Pano ve sigorta düzeni",
+      "Çalışma alanlarına uygun priz planlaması",
+      "Aydınlatma ve acil durum hatları",
     ],
     benefits: [
-      "Is kesintisi riskini azaltan altyapi",
-      "Bakimi kolay pano ve hat organizasyonu",
-      "Calisan konforunu artiran aydinlatma",
+      "İş kesintisi riskini azaltan altyapı",
+      "Bakımı kolay pano ve hat organizasyonu",
+      "Çalışan konforunu artıran aydınlatma",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Is yeri calisirken tadilat yapilabilir mi?",
+        question: "İş yeri çalışırken tadilat yapılabilir mi?",
         answer:
-          "Uygun is planinda bolgesel calisma yapilabilir. Enerji kesintisi gerektiren adimlar onceden programlanir.",
+          "Uygun iş planında bölgesel çalışma yapılabilir. Enerji kesintisi gerektiren adımlar önceden programlanır.",
       },
       {
-        question: "Yeni cihazlar icin ek hat cekiyor musunuz?",
+        question: "Yeni cihazlar için ek hat çekiyor musunuz?",
         answer:
-          "Evet. Cihazin gucu ve kullanim kosullarina gore ayri hat ve sigorta planlanabilir.",
+          "Evet. Cihazın gücü ve kullanım koşullarına göre ayrı hat ve sigorta planlanabilir.",
+      },
+      {
+        question: "Ofislerde kablo kanalları ve zemin priz sistemleri kuruyor musunuz?",
+        answer:
+          "Evet. Masalara elektrik, internet ve telefon hatlarını taşımak için zemin altı buatlar, süpürgelik kanalları ve modern masaüstü priz blokları kuruyoruz.",
+      },
+      {
+        question: "İş yerlerinde üç fazlı (trifaze) sistem kurulumu yapıyor musunuz?",
+        answer:
+          "Evet. Yüksek güçlü makineler, endüstriyel fırınlar veya klimalar için trifaze pano dağıtımı ve hat çekim işlemlerini gerçekleştiriyoruz.",
+      },
+      {
+        question: "İş yerinde elektrik kaynaklı arızalar için periyodik bakım yapıyor musunuz?",
+        answer:
+          "Evet. Gevşek bağlantıların ve aşırı ısınmaların önlenmesi için periyodik pano sıkma, kaçak akım testi ve yük analiz hizmetleri sunmaktayız.",
       },
     ],
   },
@@ -142,197 +191,293 @@ export const services: ElectricalService[] = [
     slug: "sigorta-ve-elektrik-panosu-yenileme",
     title: "Sigorta ve Elektrik Panosu Yenileme",
     shortDescription:
-      "Eski, karisik veya yetersiz panolari guvenli, etiketli ve bakimi kolay hale getirme.",
+      "Eski, karışık veya yetersiz panoları güvenli, etiketli ve bakımı kolay hale getirme.",
     detailDescription:
-      "Elektrik panosu tesisatin kalbidir. Eskiyen sigortalar, zayif klemensler ve karisik hatlar ariza riskini artirir. Pano yenilemede hatlar kontrol edilir, koruma elemanlari ihtiyaca gore duzenlenir.",
+      "Elektrik panosu tesisatın kalbidir. Eskiyen sigortalar, zayıf klemensler ve karışık hatlar arıza riskini artırır. Pano yenilemede hatlar kontrol edilir, koruma elemanları ihtiyaca göre düzenlenir.",
+    image: "/images/service-panel.webp",
     icon: ShieldCheck,
     operations: [
       "Mevcut pano ve hat incelemesi",
-      "Sigorta ve kacak akim duzenlemesi",
-      "Klemens, etiket ve kablo duzeni",
-      "Devreye alma ve yuk kontrolu",
+      "Sigorta and kaçak akım düzenlemesi",
+      "Klemens, etiket ve kablo düzeni",
+      "Devreye alma ve yük kontrolü",
     ],
     benefits: [
-      "Ariza takibini kolaylastiran etiketleme",
-      "Daha guvenli koruma yapisi",
-      "Gelecek eklemelere uygun pano duzeni",
+      "Arıza takibini kolaylaştıran etiketleme",
+      "Daha güvenli koruma yapısı",
+      "Gelecek eklemelere uygun pano düzeni",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Pano yenileme ayni gun biter mi?",
+        question: "Pano yenileme aynı gün biter mi?",
         answer:
-          "Kucuk ve orta olcekli panolarda genellikle ayni gun tamamlanabilir. Kapsam kesifte netlestirilir.",
+          "Küçük ve orta ölçekli panolarda genellikle aynı gün tamamlanabilir. Kapsam keşifte netleştirilir.",
       },
       {
-        question: "Pano degisiminde elektrik kesintisi olur mu?",
+        question: "Pano değişiminde elektrik kesintisi olur mu?",
         answer:
-          "Evet, guvenli calisma icin kesinti gerekir. Kesinti suresi is baslamadan once paylasilir.",
+          "Evet, güvenli çalışma için kesinti gerekir. Kesinti süresi iş başlamadan önce paylaşılır.",
+      },
+      {
+        question: "Eski sigorta kutusu neden cızırdayarak ses yapar?",
+        answer:
+          "Sigorta girişlerindeki gevşek vidalar ark oluşturur ve ısınmaya neden olur. Bu ses ciddi bir yangın uyarısıdır ve sigortanın veya baranın acilen yenilenmesini gerektirir.",
+      },
+      {
+        question: "Hangi sigorta markalarını kullanıyorsunuz?",
+        answer:
+          "Siemens, Schneider veya Legrand gibi global olarak kendini kanıtlamış, yüksek kesme kapasitesine sahip kaliteli sigorta markalarını tercih ediyoruz.",
+      },
+      {
+        question: "Sigorta değerleri neye göre belirlenir?",
+        answer:
+          "Hattın kablo kalınlığına göre belirlenir. Örneğin 2.5 mm² priz hattı için genellikle en fazla 16A sigorta kullanarak kablonun aşırı ısınıp yanmasını önlüyoruz.",
       },
     ],
   },
   {
     slug: "kacak-akim-rolesi-montaji",
-    title: "Kacak Akim Rolesi Montaji",
+    title: "Kaçak Akım Rölesi Montajı",
     shortDescription:
-      "Can guvenligi icin uygun degerde kacak akim rolesi secimi, montaji ve test edilmesi.",
+      "Can güvenliği için uygun değerde kaçak akım rölesi seçimi, montajı ve test edilmesi.",
     detailDescription:
-      "Kacak akim rolesi, tesisatta olusabilecek kacak akim durumlarinda devreyi keserek can guvenligini destekler. Dogru urun secimi ve duzenli test, sistemin verimli calismasi icin onemlidir.",
+      "Kaçak akım rölesi, tesisatta oluşabilecek kaçak akım durumlarında devreyi keserek can güvenliğini destekler. Doğru ürün seçimi ve düzenli test, sistemin verimli çalışması için önemlidir.",
+    image: "/images/service-rcd.webp",
     icon: BadgeCheck,
     operations: [
-      "Pano uygunluk kontrolu",
-      "Role secimi ve montaji",
-      "Test butonu ve olcum kontrolu",
-      "Kullanim bilgilendirmesi",
+      "Pano uygunluk kontrolü",
+      "Röle seçimi ve montajı",
+      "Test butonu ve ölçüm kontrolü",
+      "Kullanım bilgilendirmesi",
     ],
     benefits: [
-      "Can guvenligine katkı",
+      "Can güvenliğine katkı",
       "Nemli alanlarda ek koruma",
-      "Elektrik tesisati risklerini azaltma",
+      "Elektrik tesisatı risklerini azaltma",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Kacak akim rolesi surekli atarsa ne yapilmali?",
+        question: "Kaçak akım rölesi sürekli atarsa ne yapılmalı?",
         answer:
-          "Bu durum genellikle tesisatta kacak, nem veya arizali cihaz belirtisidir. Role iptal edilmeden once kaynak tespit edilmelidir.",
+          "Bu durum genellikle tesisatta kaçak, nem veya arızalı cihaz belirtisidir. Röle iptal edilmeden önce kaynak tespit edilmelidir.",
       },
       {
-        question: "Her eve kacac akim rolesi gerekir mi?",
+        question: "Her eve kaçak akım rölesi gerekir mi?",
         answer:
-          "Modern ve guvenli tesisatlarda uygun koruma elemanlari bulunmalidir. Mevcut pano kontrol edilerek ihtiyac netlestirilir.",
+          "Modern ve güvenli tesisatlarda uygun koruma elemanları bulunmalıdır. Mevcut pano kontrol edilerek ihtiyaç netleştirilir.",
+      },
+      {
+        question: "Kaçak akım rölesi neden durduk yere atar?",
+        answer:
+          "Genelde prizlere su kaçması, kettle/şofben rezistans arızaları veya nötr-toprak kablolarının birbiriyle temas etmesi kaçak akım rölesini tetikler.",
+      },
+      {
+        question: "30mA ve 300mA kaçak akım röleleri arasındaki fark nedir?",
+        answer:
+          "30mA olan röle insan hayatını koruma amaçlıdır ve evlerde zorunludur. 300mA olan ise yangın koruma amaçlıdır ve ana bina girişlerinde kullanılır.",
+      },
+      {
+        question: "Kaçak akım rölesinin sağlam olduğunu nasıl test edebilirim?",
+        answer:
+          "Röle üzerindeki 'Test' (T) butonuna basarak mekanizmayı kontrol edebilirsiniz. Butona basıldığında röle anında mandalını aşağı atmalıdır.",
       },
     ],
   },
   {
     slug: "priz-ve-anahtar-montaji",
-    title: "Priz ve Anahtar Montaji",
+    title: "Priz ve Anahtar Montajı",
     shortDescription:
-      "Yeni priz, anahtar, dimmer ve yer degisimi islemlerinde temiz ve guvenli montaj.",
+      "Yeni priz, anahtar, dimmer ve yer değişimi işlemlerinde temiz ve güvenli montaj.",
     detailDescription:
-      "Gevsek prizler, isinma yapan anahtarlar ve yetersiz priz sayisi gunluk kullanimda hem konforsuz hem risklidir. Hat uygunlugu kontrol edilerek duzenli montaj yapilir.",
+      "Gevşek prizler, ısınma yapan anahtarlar ve yetersiz priz sayısı günlük kullanımda hem konforsuz hem risklidir. Hat uygunluğu kontrol edilerek düzenli montaj yapılır.",
+    image: "/images/service-socket.webp",
     icon: Plug,
     operations: [
-      "Hat uygunluk kontrolu",
-      "Priz ve anahtar montaji",
-      "Gevsek buat ve klemens duzeltme",
-      "Topraklama kontrolu",
+      "Hat uygunluk kontrolü",
+      "Priz ve anahtar montajı",
+      "Gevşek buat ve klemens düzeltme",
+      "Topraklama kontrolü",
     ],
     benefits: [
-      "Daha temiz gorunum",
-      "Gevsek temas ve isinma riskini azaltma",
-      "Kullanim ihtiyacina gore dogru konumlandirma",
+      "Daha temiz görünüm",
+      "Gevşek temas ve ısınma riskini azaltma",
+      "Kullanım ihtiyacına göre doğru konumlandırma",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Priz yeri degistirilebilir mi?",
+        question: "Priz yeri değiştirilebilir mi?",
         answer:
-          "Mevcut hat ve duvar yapisina gore degistirilebilir. En temiz uygulama yolu yerinde belirlenir.",
+          "Mevcut hat ve duvar yapısına göre değiştirilebilir. En temiz uygulama yolu yerinde belirlenir.",
       },
       {
-        question: "Topraklamasiz prize cihaz takmak guvenli mi?",
+        question: "Topraklamasiz prize cihaz takmak güvenli mi?",
         answer:
-          "Topraklama gerektiren cihazlarda uygun degildir. Hat ve topraklama kontrolu yapilmalidir.",
+          "Topraklama gerektiren cihazlarda uygun değildir. Hat ve topraklama kontrolü yapılmalıdır.",
+      },
+      {
+        question: "Gevşek veya yerinden çıkan prizler nasıl tamir edilir?",
+        answer:
+          "Priz kasasının tırnakları gevşemiş veya duvar kasası kırılmış olabilir. Güvenli montaj aparatları veya yeni bir sıva altı kasa yerleştirilerek priz duvara sabitlenir.",
+      },
+      {
+        question: "USB girişli veya çocuk korumalı priz montajı yapıyor musunuz?",
+        answer:
+          "Evet. Akıllı telefonlar için doğrudan duvar prizinden şarj imkanı sunan USB'li prizler ve çocukların güvenliği için koruma kapaklı prizler monte ediyoruz.",
+      },
+      {
+        question: "Prizden kıvılcım çıkması veya kararma yapması ne anlama gelir?",
+        answer:
+          "Priz içindeki metal tırnakların gevşediğini ve fişle tam temas kuramadığını gösterir. Ark oluştuğu için elektrik yangını riski taşır, prizin hemen değişmesi gerekir.",
       },
     ],
   },
   {
     slug: "aydinlatma-sistemleri",
-    title: "Aydinlatma Sistemleri",
+    title: "Aydınlatma Sistemleri",
     shortDescription:
-      "Ev, ofis, magaza ve dis mekanlar icin amaca uygun aydinlatma planlama ve montaj.",
+      "Ev, ofis, mağaza ve dış mekanlar için amaca uygun aydınlatma planlama ve montaj.",
     detailDescription:
-      "Dogru aydinlatma, mekanin konforunu ve islevini dogrudan etkiler. Genel, bolgesel ve vurgu aydinlatmalari birlikte planlanarak dengeli bir sonuc hedeflenir.",
+      "Doğru aydınlatma, mekanın konforunu ve işlevini doğrudan etkiler. Genel, bölgesel ve vurgu aydınlatmaları birlikte planlanarak dengeli bir sonuç hedeflenir.",
+    image: "/images/service-lighting.webp",
     icon: Lightbulb,
     operations: [
-      "Aydinlatma ihtiyac analizi",
-      "Armatür ve hat planlamasi",
-      "Montaj ve yon ayari",
-      "Enerji verimliligi kontrolu",
+      "Aydınlatma ihtiyaç analizi",
+      "Armatür ve hat planlaması",
+      "Montaj ve yön ayarı",
+      "Enerji verimliliği kontrolü",
     ],
     benefits: [
-      "Daha konforlu mekan kullanimi",
-      "Enerji tuketimini dusuren secimler",
-      "Profesyonel ve temiz gorunum",
+      "Daha konforlu mekan kullanımı",
+      "Enerji tüketimini düşüren seçimler",
+      "Profesyonel ve temiz görünüm",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Magaza aydinlatmasi icin yardimci oluyor musunuz?",
+        question: "Mağaza aydınlatması için yardımcı oluyor musunuz?",
         answer:
-          "Evet. Urun, kasa, vitrin ve genel alanlar icin farkli aydinlatma ihtiyaclari birlikte planlanir.",
+          "Evet. Ürün, kasa, vitrin ve genel alanlar için farklı aydınlatma ihtiyaçları birlikte planlanır.",
       },
       {
-        question: "LED donusumu yapiliyor mu?",
+        question: "LED donusumu yapılıyor mu?",
         answer:
-          "Evet. Mevcut armatürler ve hat uygunlugu kontrol edilerek LED donusum uygulanabilir.",
+          "Evet. Mevcut armatürler ve hat uygunluğu kontrol edilerek LED dönüşümü uygulanabilir.",
+      },
+      {
+        question: "Sensörlü (hareket dedektörlü) aydınlatma kurulumu yapıyor musunuz?",
+        answer:
+          "Evet. Bina girişleri, koridorlar ve otoparklar gibi alanlar için enerji tasarrufu sağlayan hareket sensörlü armatörlerin montajını yapıyoruz.",
+      },
+      {
+        question: "Aydınlatma hatlarında dimmer (ışık ayarlı anahtar) kullanılabilir mi?",
+        answer:
+          "Kullanılan ampulün 'dimlenebilir' (dimmable) özellikte olması şartıyla evet. Uygun dimmer anahtarı ve ampul eşleştirmesini yapıyoruz.",
+      },
+      {
+        question: "Bahçe veya dış mekan aydınlatmasında nelere dikkat edilmelidir?",
+        answer:
+          "Dış mekan armatürlerinin neme ve toza karşı en az IP65 koruma sınıfında olması, kabloların yeraltı tipi zırhlı kablo olması gerekir.",
       },
     ],
   },
   {
     slug: "led-aydinlatma-uygulamalari",
-    title: "LED Aydinlatma Uygulamalari",
+    title: "LED Aydınlatma Uygulamaları",
     shortDescription:
-      "Serit LED, spot, panel LED ve dekoratif LED cozumleri icin uygun surucu ve hat uygulamasi.",
+      "Şerit LED, spot, panel LED ve dekoratif LED çözümleri için uygun sürücü ve hat uygulaması.",
     detailDescription:
-      "LED uygulamalarinda dogru surucu, kablo kesiti ve sogutma kosullari uzun omur icin kritik rol oynar. Dekoratif gorunumu teknik guvenlikle birlikte ele aliyoruz.",
+      "LED uygulamalarında doğru sürücü, kablo kesiti ve soğutma koşulları uzun ömür için kritik rol oynar. Dekoratif görünümü teknik güvenlikle birlikte ele alıyoruz.",
+    image: "/images/service-led.webp",
     icon: LampCeiling,
     operations: [
-      "LED tipi ve guc hesabı",
-      "Surucu ve hat planlama",
-      "Montaj, lehim ve baglanti kontrolleri",
-      "Işık siddeti ve renk tonu ayari",
+      "LED tipi ve güç hesabı",
+      "Sürücü ve hat planlama",
+      "Montaj, lehim ve bağlantı kontrolleri",
+      "Işık şiddeti ve renk tonu ayarı",
     ],
     benefits: [
-      "Daha dusuk enerji tuketimi",
+      "Daha düşük enerji tüketimi",
       "Mekana uygun atmosfer",
-      "Uzun omurlu ve duzenli montaj",
+      "Uzun ömürlü ve düzenli montaj",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Serit LED neden titreme yapar?",
+        question: "Şerit LED neden titreme yapar?",
         answer:
-          "Uygun olmayan surucu, zayif baglanti veya hat uzunlugu titremeye neden olabilir. Sistem birlikte kontrol edilmelidir.",
+          "Uygun olmayan sürücü, zayıf bağlantı veya hat uzunluğu titremeye neden olabilir. Sistem birlikte kontrol edilmelidir.",
       },
       {
-        question: "Dis mekan LED uygulamasi yapiliyor mu?",
+        question: "Dış mekan LED uygulaması yapılıyor mu?",
         answer:
-          "Evet. Dis mekanda IP koruma sinifi, nem ve kablo gecisleri ozellikle dikkate alinir.",
+          "Evet. Dış mekanda IP koruma sınıfı, nem ve kablo geçişleri özellikle dikkate alınır.",
+      },
+      {
+        question: "Şerit LED trafosu seçimi nasıl yapılır?",
+        answer:
+          "Kullanılacak LED şeridinin metre başına çektiği güç (Watt) hesaplanır ve toplam güce en az %20-30 oranında tolerans payı eklenerek uygun trafo amper değeri seçilir.",
+      },
+      {
+        question: "Gizli ışık (alçıpan havuz) LED montajı nasıl yapılır?",
+        answer:
+          "Alçıpan kanalların içine alüminyum LED profilleri yerleştirilir. Isı dağılımı sağlayan bu profiller LED şeridin ömrünü uzatır ve homojen ışık verir.",
+      },
+      {
+        question: "Tek trafo ile kaç metre şerit LED beslenebilir?",
+        answer:
+          "Gerilim düşümünü engellemek ve LED'lerin eşit parlaklıkta yanmasını sağlamak için her 5-8 metrede bir trafondan paralel ek besleme hattı çekilmesi önerilir.",
       },
     ],
   },
   {
     slug: "avize-montaji",
-    title: "Avize Montaji",
+    title: "Avize Montajı",
     shortDescription:
-      "Avize, aplik ve dekoratif armatürlerin saglam tasiyiciyle guvenli sekilde montaji.",
+      "Avize, aplik ve dekoratif armatürlerin sağlam taşıyıcıyla güvenli şekilde montajı.",
     detailDescription:
-      "Avize montajinda sadece kablo baglantisi degil, tavan yapisi ve tasiyici guvenligi de onemlidir. Montaj oncesi hat ve askı noktasi kontrol edilir.",
+      "Avize montajında sadece kablo bağlantısı değil, tavan yapısı ve taşıyıcı güvenliği de önemlidir. Montaj öncesi hat ve askı noktası kontrol edilir.",
+    image: "/images/service-chandelier.webp",
     icon: Hammer,
     operations: [
-      "Tavan ve askı noktasi kontrolu",
-      "Elektrik baglantisi",
-      "Saglam montaj ve denge ayari",
-      "Calisma testi",
+      "Tavan ve askı noktası kontrolü",
+      "Elektrik bağlantısı",
+      "Sağlam montaj ve denge ayarı",
+      "Çalışma testi",
     ],
     benefits: [
-      "Guvenli tasima",
-      "Temiz baglanti ve duzenli gorunum",
-      "Uygun ampul ve guc kullanimi",
+      "Güvenli taşıma",
+      "Temiz bağlantı ve düzenli görünüm",
+      "Uygun ampul ve güç kullanımı",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Agir avize montaji yapiliyor mu?",
+        question: "Ağır avize montajı yapılıyor mu?",
         answer:
-          "Tavan yapisi uygun ise evet. Gerekirse ek tasiyici cozum onerilir.",
+          "Tavan yapısı uygun ise evet. Gerekirse ek taşıyıcı çözüm önerilir.",
       },
       {
-        question: "Eski avize sokumu dahil mi?",
+        question: "Eski avize sökümü dahil mi?",
         answer:
-          "Talebe gore eski armatür sokumu ve yeni avize montaji birlikte yapilabilir.",
+          "Talebe göre eski armatür sökümü ve yeni avize montajı birlikte yapılabilir.",
+      },
+      {
+        question: "Tavanda kanca veya askı aparatı yoksa ne yapıyorsunuz?",
+        answer:
+          "Tavan betonuna çelik dübel çakarak avizeyi güvenli bir şekilde taşıyacak sağlam askı halkası veya montaj sacı oluşturuyoruz.",
+      },
+      {
+        question: "Kumandalı veya çok kademeli avize montajı yapıyor musunuz?",
+        answer:
+          "Evet. Alıcısı bulunan, uzaktan kumandalı veya anahtardan kademeli olarak farklı ışık modları sunan modern avizelerin bağlantılarını yapıyoruz.",
+      },
+      {
+        question: "Asma tavan veya alçıpan tavanlara avize monte edilebilir mi?",
+        answer:
+          "Hafif avizeler özel alçıpan dübelleriyle monte edilebilir ancak ağır avizeler için asma tavanın arkasındaki beton tavana kadar uzanan tij askı sistemleri kurulmalıdır.",
       },
     ],
   },
@@ -340,98 +485,146 @@ export const services: ElectricalService[] = [
     slug: "topraklama-sistemleri",
     title: "Topraklama Sistemleri",
     shortDescription:
-      "Konut ve is yerlerinde topraklama kontrolu, iyilestirme ve baglanti duzenleme.",
+      "Konut ve iş yerlerinde topraklama kontrolü, iyileştirme ve bağlantı düzenleme.",
     detailDescription:
-      "Topraklama, elektrik tesisatinda guvenli kullanim icin temel koruma katmanidir. Mevcut sistem kontrol edilir, uygunsuzluklar belirlenir ve iyilestirme onerisi sunulur.",
+      "Topraklama, elektrik tesisatında güvenli kullanım için temel koruma katmanıdır. Mevcut sistem kontrol edilir, uygunsuzluklar belirlenir ve iyileştirme önerisi sunulur.",
+    image: "/images/service-earthing.webp",
     icon: Wrench,
     operations: [
-      "Topraklama hatti kontrolu",
-      "Pano ve priz baglanti incelemesi",
-      "Iyilestirme ve baglanti duzenlemesi",
+      "Topraklama hattı kontrolü",
+      "Pano ve priz bağlantı incelemesi",
+      "İyileştirme ve bağlantı düzenlemesi",
       "Son kontrol ve bilgilendirme",
     ],
     benefits: [
-      "Elektrikli cihazlarda daha guvenli kullanim",
-      "Kacak akim korumasiyla uyum",
-      "Tesisat sagligini netlestirme",
+      "Elektrikli cihazlarda daha güvenli kullanım",
+      "Kaçak akım korumasıyla uyum",
+      "Tesisat sağlığını netleştirme",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Topraklama yoksa nasil anlasilir?",
+        question: "Topraklama yoksa nasıl anlaşılır?",
         answer:
-          "Priz ve pano kontrolleriyle hatti izlemek gerekir. Sadece priz gorunumune bakarak kesin karar verilmemelidir.",
+          "Priz ve pano kontrolleriyle hattı izlemek gerekir. Sadece priz görünümüne bakarak kesin karar verilmelidir.",
       },
       {
         question: "Topraklama raporu veriliyor mu?",
         answer:
-          "Resmi rapor ihtiyaci varsa yetkili olcum ve raporlama kapsami ayrica netlestirilmelidir.",
+          "Resmi rapor ihtiyacı varsa yetkili ölçüm ve raporlama kapsamı ayrıca netleştirilmelidir.",
+      },
+      {
+        question: "Evlerde topraklama hattı neden önemlidir?",
+        answer:
+          "Çamaşır makinesi, bulaşık makinesi ve kombi gibi metal gövdeli cihazlarda elektrik kaçağı oluştuğunda enerjiyi toprağa ileterek çarpılmayı önler.",
+      },
+      {
+        question: "Topraklama ölçümü nasıl yapılır?",
+        answer:
+          "Dijital topraklama megeri (ölçüm cihazı) kullanarak topraklama direnci (ohm) ölçülür. Evlerde bu değerin 2 ohm sınırının altında olması istenir.",
+      },
+      {
+        question: "Sıfırlama nedir ve neden tehlikelidir?",
+        answer:
+          "Sıfırlama, prizde toprak klemensi ile nötr klemensinin birleştirilmesidir. Nötr hattında kopukluk olduğunda cihazın dış gövdesine doğrudan elektrik vererek ölümcül risk yaratır. Kesinlikle yapılmamalıdır.",
       },
     ],
   },
   {
     slug: "insaat-elektrik-tesisati",
-    title: "Insaat Elektrik Tesisati",
+    title: "İnşaat Elektrik Tesisatı",
     shortDescription:
-      "Yeni yapilar ve tadilatlar icin proje akisina uygun kaba ve ince elektrik isleri.",
+      "Yeni yapılar ve tadilatlar için proje akışına uygun kaba ve ince elektrik işleri.",
     detailDescription:
-      "Insaat elektrik tesisatinda zamanlama, diger disiplinlerle koordinasyon ve okunabilir uygulama onemlidir. Kaba tesisattan son armatür montajina kadar kontrollu ilerlenir.",
+      "İnşaat elektrik tesisatında zamanlama, diğer disiplinlerle koordinasyon ve okunabilir uygulama önemlidir. Kaba tesisattan son armatür montajına kadar kontrollü ilerlenir.",
+    image: "/images/service-construction.webp",
     icon: Construction,
     operations: [
-      "Kaba tesisat borulama ve hat cekimi",
-      "Pano, priz ve anahtar altyapisi",
-      "Aydinlatma ve zayif akim gecisleri",
+      "Kaba tesisat borulama ve hat çekimi",
+      "Pano, priz ve anahtar altyapısı",
+      "Aydınlatma ve zayıf akım geçişleri",
       "Son montaj ve devreye alma",
     ],
     benefits: [
-      "Diger ekiplerle uyumlu is programi",
-      "Gelecekte bakimi kolay hat yapisi",
-      "Temiz ve duzenli teslim",
+      "Diğer ekiplerle uyumlu iş programı",
+      "Gelecekte bakımı kolay hat yapisi",
+      "Temiz ve düzenli teslim",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Mimari plana gore calisiyor musunuz?",
+        question: "Mimari plana göre çalışıyor musunuz?",
         answer:
-          "Evet. Mimari plan, kullanim senaryosu ve saha kosullari birlikte degerlendirilir.",
+          "Evet. Mimari plan, kullanım senaryosu ve saha koşulları birlikte değerlendirilir.",
       },
       {
-        question: "Malzeme listesi hazirlanir mi?",
+        question: "Malzeme listesi hazırlanır mı?",
         answer:
-          "Kesif ve proje kapsamindan sonra uygulanacak malzemeler teklif icinde netlestirilir.",
+          "Keşif ve proje kapsamından sonra uygulanacak malzemeler teklif içinde netleştirilir.",
+      },
+      {
+        question: "İnşaat elektrik aşamaları nelerdir?",
+        answer:
+          "İlk aşamada beton dökülürken borulama yapılır. İkinci aşamada sıva altı borular ve kasalar yerleştirilir. Üçüncü aşamada kablolar çekilir ve son aşamada anahtar, priz, pano montajları tamamlanır.",
+      },
+      {
+        question: "Zayıf akım (TV, internet, telefon) kablolamasını da yapıyor musunuz?",
+        answer:
+          "Evet. Yeni binalarda fiber internet uyumlu CAT6 kablo çekimi, merkezi uydu TV kablolaması ve görüntülü diyafon hatlarının kurulumunu gerçekleştiriyoruz.",
+      },
+      {
+        question: "İnşaat elektrik işlerinde hangi güvenlik standartlarına uyulur?",
+        answer:
+          "İş güvenliği kurallarına ek olarak, kabloların renk standartlarına (Faz: Kahve/Siyah, Nötr: Mavi, Toprak: Sarı-Yeşil) ve yalıtım mesafelerine tam uyulmaktadır.",
       },
     ],
   },
   {
     slug: "acil-elektrikci-hizmeti",
-    title: "Acil Elektrikci Hizmeti",
+    title: "Acil Elektrikçi Hizmeti",
     shortDescription:
-      "Sigorta atmasi, yanik kokusu, priz isinmasi ve ani elektrik kesintileri icin hizli destek.",
+      "Sigorta atması, yanık kokusu, priz ısınması ve ani elektrik kesintileri için hızlı destek.",
     detailDescription:
-      "Acil elektrik arizalarinda ilk hedef guvenligi saglamak ve riski buyutmemektir. Belirtiye gore on bilgilendirme yapilir, yerinde kontrolle guvenli cozum uygulanir.",
+      "Acil elektrik arızalarında ilk hedef güvenliği sağlamak ve riski büyütmemektir. Belirtiyle göre ön bilgilendirme yapılır, yerinde kontrolle güvenli çözüm uygulanır.",
+    image: "/images/service-emergency.webp",
     icon: Siren,
     operations: [
-      "Acil risk degerlendirmesi",
-      "Enerjinin guvenli sekilde kontrolu",
-      "Ariza kaynaginin tespiti",
-      "Gecici veya kalici guvenli cozum",
+      "Acil risk değerlendirmesi",
+      "Enerjinin güvenli şekilde kontrolü",
+      "Arıza kaynağının tespiti",
+      "Geçici veya kalici güvenli çözüm",
     ],
     benefits: [
-      "Riskli arizalara hizli yaklasim",
-      "Guvenlik odakli mudahale",
-      "Sorun buyumeden kontrol altina alma",
+      "Riskli arızalara hızlı yaklaşım",
+      "Güvenlik odaklı müdahale",
+      "Sorun büyümeden kontrol altına alma",
     ],
     process: commonProcess,
     faqs: [
       {
-        question: "Yanik kokusu varsa ne yapmaliyim?",
+        question: "Yanık kokusu varsa ne yapılmalı?",
         answer:
-          "Ilgili sigortayi kapatin, cihazi kullanmayin ve profesyonel destek alin. Koku kaynagi bulunmadan tekrar enerji vermeyin.",
+          "İlgili sigortayı kapatın, cihazı kullanmayın ve profesyonel destek alın. Koku kaynağı bulunmadan tekrar enerji vermeyin.",
       },
       {
-        question: "Acil destek her bolgeye veriliyor mu?",
+        question: "Acil destek her bölgeye veriliyor mu?",
         answer:
-          "Hizmet bolgesi merkezi ayarlardan guncellenmelidir. Uygunluk telefon veya WhatsApp uzerinden hizli netlestirilir.",
+          "Çorlu merkez mahalleleri ve yakın çevredeki talepler telefon veya WhatsApp üzerinden hızlıca değerlendirilir. Adres ve arıza belirtisi paylaşıldığında uygunluk netleşir.",
+      },
+      {
+        question: "Kombi veya şofben arızalandığında acil elektrikçi çağrılmalı mıdır?",
+        answer:
+          "Eğer arıza elektriksel bağlantılardan veya sigortadan kaynaklanıyorsa evet. Kombinin kendi iç kartı veya mekanik arızası varsa servis çağrılmalıdır.",
+      },
+      {
+        question: "Sigorta attıktan sonra kaldırınca tekrar atıyorsa ne yapılmalıdır?",
+        answer:
+          "Hattaki cihazları prizden çekin ve tekrar deneyin. Hala atıyorsa tesisatta kısa devre veya kablo erimesi vardır. Zorlamadan acil servisimizi aramalısınız.",
+      },
+      {
+        question: "Elektrik çarpması durumunda ilk olarak ne yapılmalıdır?",
+        answer:
+          "Kazazedeye dokunmadan önce hemen ana sigortayı kapatarak elektriği kesin. Sigortaya ulaşılamıyorsa yalıtkan bir cisimle kişiyi kablodan ayırın ve 112'yi arayın.",
       },
     ],
   },

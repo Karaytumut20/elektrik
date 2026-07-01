@@ -52,6 +52,72 @@ before update on public.blog_posts
 for each row
 execute function public.set_updated_at();
 
+-- Create admin user in auth.users if it doesn't exist
+insert into auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  recovery_sent_at,
+  last_sign_in_at,
+  raw_app_meta_data,
+  raw_user_meta_data,
+  created_at,
+  updated_at,
+  confirmation_token,
+  email_change,
+  email_change_token_new,
+  recovery_token
+)
+select
+  '00000000-0000-0000-0000-000000000000',
+  '2a21f73c-5721-45e4-a32c-2de5bacf9514',
+  'authenticated',
+  'authenticated',
+  'admin@voltaelektrik.local',
+  crypt('voltaadmin123!', gen_salt('bf')),
+  now(),
+  now(),
+  now(),
+  '{"provider": "email", "providers": ["email"]}',
+  '{}',
+  now(),
+  now(),
+  '',
+  '',
+  '',
+  ''
+where not exists (
+  select 1 from auth.users where id = '2a21f73c-5721-45e4-a32c-2de5bacf9514'
+);
+
+-- Create identity for the user in auth.identities if it doesn't exist
+insert into auth.identities (
+  id,
+  provider_id,
+  user_id,
+  identity_data,
+  provider,
+  last_sign_in_at,
+  created_at,
+  updated_at
+)
+select
+  '2a21f73c-5721-45e4-a32c-2de5bacf9514',
+  '2a21f73c-5721-45e4-a32c-2de5bacf9514',
+  '2a21f73c-5721-45e4-a32c-2de5bacf9514',
+  jsonb_build_object('sub', '2a21f73c-5721-45e4-a32c-2de5bacf9514', 'email', 'admin@voltaelektrik.local'),
+  'email',
+  now(),
+  now(),
+  now()
+where not exists (
+  select 1 from auth.identities where user_id = '2a21f73c-5721-45e4-a32c-2de5bacf9514'
+);
+
 insert into public.admin_profiles (user_id, email, display_name, role, is_active)
 values (
   '2a21f73c-5721-45e4-a32c-2de5bacf9514',
@@ -158,3 +224,63 @@ grant select, insert, update, delete on public.blog_posts to authenticated;
 grant select on public.admin_profiles to authenticated;
 
 notify pgrst, 'reload schema';
+
+-- Create contact submissions table
+create table if not exists public.contact_submissions (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  phone text not null,
+  email text,
+  service text not null,
+  message text not null,
+  created_at timestamptz not null default now()
+);
+
+-- Enable RLS
+alter table public.contact_submissions enable row level security;
+
+-- Create policy for public insert (anonymous users can submit contact form)
+drop policy if exists "Public can insert contact submissions" on public.contact_submissions;
+create policy "Public can insert contact submissions"
+on public.contact_submissions
+for insert
+with check (true);
+
+-- Create policy for authenticated admins (admins can read/delete contact submissions)
+drop policy if exists "Active admins can read all contact submissions" on public.contact_submissions;
+create policy "Active admins can read all contact submissions"
+on public.contact_submissions
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_profiles ap
+    where ap.user_id = auth.uid()
+      and ap.is_active = true
+  )
+);
+
+drop policy if exists "Active admins can delete contact submissions" on public.contact_submissions;
+create policy "Active admins can delete contact submissions"
+on public.contact_submissions
+for delete
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_profiles ap
+    where ap.user_id = auth.uid()
+      and ap.is_active = true
+  )
+);
+
+-- Grant privileges
+grant select on public.contact_submissions to authenticated;
+grant insert on public.contact_submissions to anon, authenticated;
+grant delete on public.contact_submissions to authenticated;
+
+grant all privileges on public.contact_submissions to service_role;
+grant all privileges on public.blog_posts to service_role;
+grant all privileges on public.admin_profiles to service_role;
+

@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [...staticPages, ...servicePages, ...blogPages].map((path) => ({
     url: `${companyConfig.siteUrl}${path}`,
     lastModified: new Date(),
-    changeFrequency: path.startsWith("/blog") ? "weekly" : "monthly",
-    priority: path === "" ? 1 : 0.7,
+    changeFrequency: path === "" || path.startsWith("/hizmetler") ? "weekly" : path.startsWith("/blog") ? "weekly" : "monthly",
+    priority: path === "" ? 1 : path === "/hizmetler" ? 0.9 : path.startsWith("/hizmetler/") ? 0.85 : path === "/iletisim" ? 0.8 : 0.7,
   }));
 }

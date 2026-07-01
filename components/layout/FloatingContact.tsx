@@ -1,5 +1,6 @@
-import { MessageCircle, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function FloatingContact() {
   return (
@@ -9,10 +10,10 @@ export function FloatingContact() {
       </a>
       <a
         className="grid h-12 w-12 place-items-center rounded-md bg-emerald-600 text-white shadow-lg"
-        href={whatsappUrl("Merhaba, elektrik hizmeti icin bilgi almak istiyorum.")}
+        href={whatsappUrl("Merhaba, elektrik hizmeti için bilgi almak istiyorum.")}
         aria-label="WhatsApp ile yaz"
       >
-        <MessageCircle className="h-5 w-5" aria-hidden="true" />
+        <WhatsAppIcon className="h-6 w-6" aria-hidden="true" />
       </a>
     </div>
   );

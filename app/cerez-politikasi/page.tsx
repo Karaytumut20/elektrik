@@ -4,8 +4,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Cerez Politikasi",
-  description: "Web sitesinde kullanilabilecek zorunlu, performans ve iletisim amacli cerezlere iliskin bilgilendirme.",
+  title: "Çerez Politikası",
+  description: "Web sitesinde kullanılabilecek zorunlu, performans ve iletişim amaçlı çerezlere ilişkin bilgilendirme.",
   path: "/cerez-politikasi",
 });
 
@@ -14,11 +14,11 @@ export default function CookiePage() {
     <>
       <section className="bg-white py-10">
         <div className="site-container">
-          <Breadcrumbs items={[{ label: "Cerez Politikasi", href: "/cerez-politikasi" }]} />
+          <Breadcrumbs items={[{ label: "Çerez Politikası", href: "/cerez-politikasi" }]} />
           <SectionHeading
             eyebrow="Yasal"
-            title="Cerez Politikasi"
-            description="Bu sayfa, kullanilacak analiz veya reklam araclari kesinlestiginde guncellenmelidir."
+            title="Çerez Politikası"
+            description="Web sitesinin güvenli ve verimli çalışması için kullanılabilecek çerezlere ilişkin bilgilendirme."
             className="mb-0 mt-8"
             as="h1"
           />
@@ -28,16 +28,16 @@ export default function CookiePage() {
         <div className="site-container grid gap-4">
           {[
             {
-              title: "Zorunlu cerezler",
-              text: "Site guvenligi, oturum yonetimi ve temel gezinme icin gerekli teknik cerezler kullanilabilir.",
+              title: "Zorunlu çerezler",
+              text: "Site güvenliği, oturum yönetimi ve temel gezinme için gerekli teknik çerezler kullanılabilir.",
             },
             {
-              title: "Performans cerezleri",
-              text: "Analitik araclari kullanilacaksa hangi araclarin devrede oldugu, veri saklama suresi ve devre disi birakma yontemi bu alana eklenmelidir.",
+              title: "Performans çerezleri",
+              text: "Site performansını ve ziyaretçi deneyimini anlamak için anonimleştirilmiş ölçüm araçları kullanılabilir. Reklam veya gelişmiş analiz araçları devreye alınırsa bu politika güncellenir.",
             },
             {
-              title: "Tercih yonetimi",
-              text: "Tarayici ayarlarinizdan cerezleri silebilir veya engelleyebilirsiniz. Bu durumda bazi site ozellikleri sinirli calisabilir.",
+              title: "Tercih yönetimi",
+              text: "Tarayıcı ayarlarınızdan çerezleri silebilir veya engelleyebilirsiniz. Bu durumda bazı site özellikleri sınırlı çalışabilir.",
             },
           ].map((section) => (
             <Card key={section.title}>

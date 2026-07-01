@@ -120,6 +120,17 @@ svg {
   border-color: var(--line);
 }
 
+.btn-whatsapp {
+  background: #25D366;
+  color: #ffffff;
+  border-color: #1da851;
+}
+
+.btn-whatsapp:hover {
+  background: #20ba5a;
+  border-color: #1a9648;
+}
+
 .btn-danger {
   background: #fff1f2;
   color: #be123c;
@@ -158,6 +169,7 @@ svg {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

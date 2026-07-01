@@ -9,7 +9,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <button type="submit" disabled={pending} className="btn btn-primary w-full sm:w-auto">
-      {pending ? "Gonderiliyor..." : "Talep gonder"}
+      {pending ? "Gönderiliyor..." : "Talep gönder"}
     </button>
   );
 }
@@ -19,6 +19,17 @@ export function ContactForm() {
 
   return (
     <form action={action} className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      {/* Honeypot field for spam prevention */}
+      <div className="absolute -left-[9999px] -top-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+        <input 
+          type="text" 
+          name="bot_trap_field" 
+          tabIndex={-1} 
+          autoComplete="new-password" 
+          style={{ display: "none" }} 
+        />
+      </div>
+
       <div className="grid gap-2">
         <label htmlFor="name" className="form-label">
           Ad soyad
@@ -44,11 +55,11 @@ export function ContactForm() {
       </div>
       <div className="grid gap-2">
         <label htmlFor="service" className="form-label">
-          Hizmet secimi
+          Hizmet seçimi
         </label>
         <select id="service" name="service" required className="field" defaultValue="">
           <option value="" disabled>
-            Hizmet secin
+            Hizmet seçin
           </option>
           {services.map((service) => (
             <option key={service.slug} value={service.title}>
@@ -67,7 +78,7 @@ export function ContactForm() {
       </div>
       <label className="flex gap-3 text-sm leading-6 text-slate-700">
         <input type="checkbox" name="consent" required className="mt-1 h-4 w-4" />
-        KVKK aydinlatma metnini okudum; tarafima donus yapilmasi icin bilgilerimin islenmesini kabul ediyorum.
+        KVKK aydınlatma metnini okudum; tarafıma dönüş yapılması için bilgilerimin işlenmesini kabul ediyorum.
       </label>
       {state.fieldErrors?.consent ? <p className="form-error">{state.fieldErrors.consent}</p> : null}
       {state.message ? (

@@ -2,12 +2,13 @@ import Link from "next/link";
 import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "whatsapp";
 
 const variants: Record<Variant, string> = {
   primary: "btn-primary",
   secondary: "btn-secondary",
   ghost: "btn-ghost",
+  whatsapp: "btn-whatsapp",
 };
 
 type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
