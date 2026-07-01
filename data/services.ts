@@ -580,7 +580,7 @@ export const services: ElectricalService[] = [
     ],
   },
   {
-    slug: "acil-elektrikci-hizmeti",
+    slug: "acil-elektrikci",
     title: "Acil Elektrikçi Hizmeti",
     shortDescription:
       "Sigorta atması, yanık kokusu, priz ısınması ve ani elektrik kesintileri için hızlı destek.",

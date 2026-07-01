@@ -5,9 +5,9 @@ export type BreadcrumbItem = {
   href: string;
 };
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumbs({ items, className }: { items: BreadcrumbItem[]; className?: string }) {
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-slate-500">
+    <nav aria-label="Breadcrumb" className={`text-sm text-slate-500 ${className ?? ""}`}>
       <ol className="flex flex-wrap items-center gap-2">
         <li>
           <Link href="/" className="hover:text-slate-900">

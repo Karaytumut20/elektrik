@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
-import { companyConfig, mainNavigation, serviceAreas } from "@/data/site";
+import { companyConfig, mainNavigation } from "@/data/site";
+import { serviceAreas } from "@/data/areas";
 import { services } from "@/data/services";
 import { phoneHref } from "@/lib/whatsapp";
 
@@ -39,12 +40,17 @@ export function Footer() {
             <h2 className="text-sm font-bold uppercase text-amber-200">Hizmet Bölgeleri</h2>
             <ul className="mt-4 grid gap-2 text-sm text-slate-300">
               {serviceAreas.map((area) => (
-                <li key={area}>{area}</li>
+                <li key={area.slug}>
+                  <Link href={`/bolge/${area.slug}`} className="hover:text-amber-200 transition-colors">
+                    {area.name}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
         </div>
       </div>
+
       <div className="border-t border-white/10">
         <div className="site-container flex flex-col gap-3 py-5 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 {companyConfig.name}. Tüm hakları saklıdır.</p>

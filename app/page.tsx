@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ClipboardCheck, MapPin, Phone, ShieldCheck, Wrench } from "lucide-react";
+import { ArrowRight, CheckCircle2, ClipboardCheck, MapPin, Phone, ShieldCheck, Star, Wrench, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { blogEmptyState } from "@/data/blog";
-import { companyConfig, serviceAreas, trustSignals, urgentSymptoms } from "@/data/site";
+import { companyConfig, trustSignals, urgentSymptoms } from "@/data/site";
+import { serviceAreas as areaData } from "@/data/areas";
 import { faqSchema } from "@/data/schemas";
 import { services } from "@/data/services";
 import { getPublishedBlogPosts } from "@/lib/db";
@@ -15,6 +16,7 @@ import { buildMetadata } from "@/lib/seo";
 import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { ReviewsSlider } from "@/components/ui/ReviewsSlider";
+import { BlogGrid } from "@/components/blog/BlogGrid";
 
 export const metadata = buildMetadata({
   title: "Çorlu Elektrikçi | Acil Elektrik Arıza, Tesisat ve Pano",
@@ -154,6 +156,32 @@ export default async function HomePage() {
               sizes="(min-width: 1024px) 48vw, 100vw"
               className="object-cover"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stats bar ── */}
+      <section className="bg-electric-yellow">
+        <div className="site-container">
+          <div className="grid divide-y divide-electric-navy/10 sm:divide-x sm:divide-y-0 sm:grid-cols-3">
+            {[
+              { icon: Zap, value: "500+", label: "Tamamlanan iş" },
+              { icon: Star, value: "4.8★", label: "Ortalama müşteri puanı" },
+              { icon: ShieldCheck, value: "8+ Yıl", label: "Sektör deneyimi" },
+            ].map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <div key={stat.label} className="flex items-center gap-4 px-6 py-5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-electric-navy/10">
+                    <Icon className="h-5 w-5 text-electric-navy" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-black text-electric-navy">{stat.value}</p>
+                    <p className="text-xs font-semibold text-electric-navy/70">{stat.label}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -327,31 +355,78 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow="Hizmet bölgeleri"
               title="Çorlu ve yakın çevrede elektrikçi hizmeti."
-              description="Çorlu merkez mahallelerinde, site-apartmanlarda, konutlarda ve küçük işletmelerde elektrik arıza, tesisat, pano ve montaj işleri için destek veriyoruz."
+              description="Çorlu merkez mahallelerinden Ergene ve Çerkezköy'e kadar her bölge için ayrı detay sayfamızı inceleyin."
             />
             <div className="grid gap-2 sm:grid-cols-2">
-              {serviceAreas.map((area) => (
-                <p key={area} className="flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-semibold">
-                  <MapPin className="h-4 w-4 text-electric-blue" />
-                  {area}
-                </p>
+              {areaData.map((area) => (
+                <Link
+                  key={area.slug}
+                  href={`/bolge/${area.slug}`}
+                  className="flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-semibold transition-colors hover:border-electric-blue/30 hover:bg-blue-50/40"
+                >
+                  <MapPin className="h-4 w-4 shrink-0 text-electric-blue" />
+                  {area.name}
+                </Link>
               ))}
             </div>
+            <div className="mt-4">
+              <Link href="/bolge" className="inline-flex items-center gap-2 text-sm font-bold text-electric-blue hover:underline">
+                Tüm bölgeler
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
           </Card>
-          <Card className="bg-amber-100">
-            <Badge>Acil elektrikçi</Badge>
-            <h2 className="mt-4 text-3xl font-bold leading-tight text-slate-950">Sigorta atıyor, priz ısınıyor veya yanık kokusu mu var?</h2>
-            <p className="mt-4 leading-7 text-slate-700">
-              Riskli belirtilerde gecikmeden ilgili hattın enerjisini kesin ve profesyonel destek alın. Hemen arayarak durumu hızlıca netleştirebilirsiniz.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={phoneHref()} variant="secondary">
-                Hemen Ara
-              </ButtonLink>
-              <ButtonLink href={whatsappUrl("Merhaba, acil elektrik arızası için destek istiyorum.")} variant="whatsapp">
-                <WhatsAppIcon className="h-4 w-4" />
-                WhatsApp
-              </ButtonLink>
+          <Card className="overflow-hidden border-amber-200/50 bg-gradient-to-br from-amber-50 to-amber-100/50 p-0 shadow-md flex flex-col">
+            {/* Image box on top - increased height */}
+            <div className="relative h-80 w-full bg-slate-900">
+              <Image
+                src="/images/home-emergency-alert.jpg"
+                alt="Acil elektrik uyarısı"
+                fill
+                className="object-cover object-center opacity-85"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent" />
+            </div>
+            
+            {/* Content box below */}
+            <div className="p-6 flex flex-col justify-between flex-1">
+              <div>
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-800 ring-1 ring-amber-500/20">
+                  <span className="h-2 w-2 rounded-full bg-amber-600 animate-pulse" />
+                  Acil Elektrik Servisi
+                </div>
+                <h2 className="mt-4 text-2xl font-black text-slate-950 leading-tight">
+                  Sigorta atıyor, priz ısınıyor veya yanık kokusu mu var?
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-700">
+                  Elektrik arızaları ihmal edildiğinde yangın veya çarpılma riski taşır. Güvenliğiniz için gecikmeden ilgili hattın sigortasını indirin ve profesyonel destek talep edin.
+                </p>
+                
+                {/* Mini warning checklist */}
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {[
+                    "Sigortayı hemen indirin",
+                    "Cihazları prizden çekin",
+                    "Islak elle müdahale etmeyin",
+                    "Hemen profesyonel çağırın",
+                  ].map((step) => (
+                    <div key={step} className="flex items-center gap-2 text-xs font-semibold text-slate-800">
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-amber-600" />
+                      {step}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                <ButtonLink href={phoneHref()} variant="secondary" className="bg-amber-600 text-white hover:bg-amber-700 border-none font-bold">
+                  Hemen Ara
+                </ButtonLink>
+                <ButtonLink href={whatsappUrl("Merhaba, acil elektrik arızası için destek istiyorum.")} variant="whatsapp">
+                  <WhatsAppIcon className="h-4 w-4" />
+                  WhatsApp
+                </ButtonLink>
+              </div>
             </div>
           </Card>
         </div>
@@ -370,28 +445,24 @@ export default async function HomePage() {
 
       <section className="section-band bg-electric-mist">
         <div className="site-container">
-          <SectionHeading
-            eyebrow="Blog"
-            title="Elektrik tesisatı ve güvenli kullanım rehberleri."
-            description="Admin panelinden yayınlanan son yazılar burada listelenir."
-          />
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeading
+              eyebrow="Blog"
+              title="Elektrik ve güvenlik rehberleri."
+              description="Uzman ipuçları, bakım tavsiyeleri ve güvenli kullanım kılavuzları."
+              className="mb-0"
+            />
+            <Link
+              href="/blog"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              Tüm yazılar
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
           {blogResult.error ? <p className="rounded-md bg-red-50 p-4 text-sm font-semibold text-red-700">{blogResult.error}</p> : null}
           {latestPosts.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-3">
-              {latestPosts.map((post) => (
-                <Card key={post.id}>
-                  <p className="text-xs font-semibold uppercase text-slate-500">
-                    {post.published_at ? new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium" }).format(new Date(post.published_at)) : "Taslak değil"}
-                  </p>
-                  <h3 className="mt-3 text-xl font-bold text-slate-950">{post.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{post.excerpt}</p>
-                  <Link href={`/blog/${post.slug}`} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-electric-blue">
-                    Oku
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Card>
-              ))}
-            </div>
+            <BlogGrid posts={latestPosts} />
           ) : (
             <Card>
               <h3 className="text-xl font-bold text-slate-950">{blogEmptyState.title}</h3>
