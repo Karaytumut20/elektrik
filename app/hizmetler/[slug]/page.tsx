@@ -33,10 +33,17 @@ export async function generateMetadata({ params }: PageProps) {
   if (!service) return {};
 
   return buildMetadata({
-    title: service.title,
-    description: service.shortDescription,
+    title: `Çorlu ${service.title}`,
+    description: `${service.shortDescription} Çorlu, Ergene ve Çerkezköy çevresinde güvenli işçilik, net teklif ve aynı gün dönüş avantajıyla hizmet alın.`,
     path: `/hizmetler/${service.slug}`,
     image: service.image,
+    keywords: [
+      `Çorlu ${service.title}`,
+      `${service.title} Çorlu`,
+      "Çorlu elektrikçi",
+      "Tekirdağ elektrikçi",
+      "Çorlu elektrik arıza",
+    ],
   });
 }
 
@@ -74,11 +81,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               {/* Service badge */}
               <div className="inline-flex items-center gap-2 rounded-full border border-electric-yellow/30 bg-electric-yellow/10 px-4 py-1.5 text-sm font-semibold text-electric-yellow">
                 <Icon className="h-4 w-4" />
-                Elektrik Hizmeti
+                Çorlu Elektrik Hizmeti
               </div>
 
               <h1 className="mt-5 text-4xl font-bold leading-tight md:text-5xl lg:text-[3.25rem]">
-                {service.title}
+                Çorlu {service.title}
               </h1>
               <p className="mt-5 text-lg leading-8 text-slate-300 max-w-xl">
                 {service.detailDescription}
@@ -409,6 +416,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                         alt={item.title}
                         fill
                         sizes="(min-width: 768px) 33vw, 100vw"
+                        quality={60}
                         className="object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
                       />
                     ) : (

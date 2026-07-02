@@ -93,7 +93,7 @@ export const services: ElectricalService[] = [
     slug: "ev-elektrik-tesisati",
     title: "Ev Elektrik Tesisatı",
     shortDescription:
-      "Daire, villa and tadilat projeleri için güvenli, düzenli ve ihtiyaca uygun elektrik tesisatı kurulumu.",
+      "Daire, villa ve tadilat projeleri için güvenli, düzenli ve ihtiyaca uygun elektrik tesisatı kurulumu.",
     detailDescription:
       "Konutlarda elektrik tesisatı; güvenlik, kullanım konforu ve ileride yapılacak değişiklikler düşünülerek planlanmalıdır. Priz, aydınlatma, mutfak hatları ve zayıf akım geçişlerini proje ihtiyacına göre düzenliyoruz.",
     image: "/images/service-wiring.webp",
@@ -101,7 +101,7 @@ export const services: ElectricalService[] = [
     operations: [
       "Priz ve aydınlatma hatlarının planlanması",
       "Mutfak ve yüksek güç hatlarının ayrılması",
-      "Buat, kablo and sigorta organizasyonu",
+      "Buat, kablo ve sigorta organizasyonu",
       "Test ve etiketleme",
     ],
     benefits: [
@@ -198,7 +198,7 @@ export const services: ElectricalService[] = [
     icon: ShieldCheck,
     operations: [
       "Mevcut pano ve hat incelemesi",
-      "Sigorta and kaçak akım düzenlemesi",
+      "Sigorta ve kaçak akım düzenlemesi",
       "Klemens, etiket ve kablo düzeni",
       "Devreye alma ve yük kontrolü",
     ],
@@ -313,7 +313,7 @@ export const services: ElectricalService[] = [
           "Mevcut hat ve duvar yapısına göre değiştirilebilir. En temiz uygulama yolu yerinde belirlenir.",
       },
       {
-        question: "Topraklamasiz prize cihaz takmak güvenli mi?",
+        question: "Topraklamasız prize cihaz takmak güvenli mi?",
         answer:
           "Topraklama gerektiren cihazlarda uygun değildir. Hat ve topraklama kontrolü yapılmalıdır.",
       },
@@ -362,7 +362,7 @@ export const services: ElectricalService[] = [
           "Evet. Ürün, kasa, vitrin ve genel alanlar için farklı aydınlatma ihtiyaçları birlikte planlanır.",
       },
       {
-        question: "LED donusumu yapılıyor mu?",
+        question: "LED dönüşümü yapılıyor mu?",
         answer:
           "Evet. Mevcut armatürler ve hat uygunluğu kontrol edilerek LED dönüşümü uygulanabilir.",
       },
@@ -547,7 +547,7 @@ export const services: ElectricalService[] = [
     ],
     benefits: [
       "Diğer ekiplerle uyumlu iş programı",
-      "Gelecekte bakımı kolay hat yapisi",
+      "Gelecekte bakımı kolay hat yapısı",
       "Temiz ve düzenli teslim",
     ],
     process: commonProcess,
@@ -592,7 +592,7 @@ export const services: ElectricalService[] = [
       "Acil risk değerlendirmesi",
       "Enerjinin güvenli şekilde kontrolü",
       "Arıza kaynağının tespiti",
-      "Geçici veya kalici güvenli çözüm",
+      "Geçici veya kalıcı güvenli çözüm",
     ],
     benefits: [
       "Riskli arızalara hızlı yaklaşım",

@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="10" fill="#102033"/>
-  <path d="M36 6 15 36h15l-4 22 23-33H34l2-19Z" fill="#f6c445"/>
+  <!-- Left Red Hemisphere -->
+  <path d="M32 4 C16.54 4 4 16.54 4 32 C4 47.46 16.54 60 32 60 C32 60 32 4 32 4 Z" fill="#D31D24"/>
+  <!-- Right Dark Hemisphere -->
+  <path d="M32 4 C32 4 32 60 32 60 C47.46 60 60 47.46 60 32 C60 16.54 47.46 4 32 4 Z" fill="#3D3B3C"/>
+  <!-- Centered White Lightning Bolt -->
+  <path d="M37 6 L18 36 H30 L25 58 L46 28 H34 Z" fill="#FFFFFF"/>
 </svg>
+

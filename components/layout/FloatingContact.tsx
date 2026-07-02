@@ -9,7 +9,7 @@ export function FloatingContact() {
         <Phone className="h-5 w-5" aria-hidden="true" />
       </a>
       <a
-        className="grid h-12 w-12 place-items-center rounded-md bg-emerald-600 text-white shadow-lg"
+        className="grid h-12 w-12 place-items-center rounded-md bg-[#075e54] text-white shadow-lg"
         href={whatsappUrl("Merhaba, elektrik hizmeti için bilgi almak istiyorum.")}
         aria-label="WhatsApp ile yaz"
       >

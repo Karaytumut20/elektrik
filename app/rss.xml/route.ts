@@ -1,7 +1,7 @@
 import { companyConfig } from "@/data/site";
 import { getPublishedBlogPosts } from "@/lib/db";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 function escapeXml(value: string) {
   return value

@@ -22,7 +22,11 @@ function BlogCard({ post, featured = false }: { post: BlogPost; featured?: boole
       className={`group flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${featured ? "md:col-span-2 lg:col-span-1" : ""}`}
     >
       {/* Cover image */}
-      <Link href={`/blog/${post.slug}`} className="relative block h-52 w-full overflow-hidden bg-gradient-to-br from-electric-navy to-electric-coal flex-shrink-0">
+      <Link
+        href={`/blog/${post.slug}`}
+        aria-label={`${post.title} yazısını oku`}
+        className="relative block h-52 w-full overflow-hidden bg-gradient-to-br from-electric-navy to-electric-coal flex-shrink-0"
+      >
         {post.cover_image_url ? (
           <Image
             src={post.cover_image_url}

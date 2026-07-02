@@ -11,8 +11,8 @@ import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { cn } from "@/lib/cn";
 
 export const metadata = buildMetadata({
-  title: "Çorlu Elektrikçi İletişim",
-  description: "Çorlu elektrikçi iletişim: elektrik arıza, tesisat, pano, avize ve aydınlatma hizmetleri için telefon, WhatsApp veya formdan teklif alın.",
+  title: "İnallar Elektrik | İletişim",
+  description: "İnallar Elektrik Çorlu elektrikçi iletişim: elektrik arıza, tesisat, pano, avize ve aydınlatma hizmetleri için telefon, WhatsApp veya formdan teklif alın.",
   path: "/iletisim",
 });
 
@@ -41,7 +41,7 @@ export default function ContactPage() {
               title="WhatsApp"
               text="WhatsApp'tan yaz"
               href={whatsappUrl("Merhaba, elektrik hizmeti için bilgi almak istiyorum.")}
-              className="bg-[#25D366] hover:bg-[#20ba5a] border-[#25D366] transition-colors duration-200"
+              className="border-[#075e54] bg-[#075e54] transition-colors duration-200 hover:bg-[#064f47]"
               iconClassName="text-white"
               titleClassName="text-white"
               textClassName="text-white font-medium"

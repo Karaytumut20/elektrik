@@ -6,7 +6,7 @@ import { getPublishedBlogPosts } from "@/lib/db";
 import { buildMetadata } from "@/lib/seo";
 import { BookOpen } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata = buildMetadata({
   title: "Çorlu Elektrik Blog",

@@ -8,9 +8,9 @@ import { companyConfig } from "@/data/site";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Çorlu Elektrikçi Hakkımızda",
+  title: "İnallar Elektrik | Hakkımızda",
   description:
-    "Çorlu Elektrikçi yaklaşımı: güvenli işçilik, kaliteli malzeme, düzenli kablolama, net teklif ve teslim sonrası kontrol odaklı elektrik hizmetleri.",
+    "İnallar Elektrik yaklaşımı: güvenli işçilik, kaliteli malzeme, düzenli kablolama, net teklif ve teslim sonrası kontrol odaklı elektrik hizmetleri.",
   path: "/hakkimizda",
 });
 
@@ -65,7 +65,7 @@ export default function AboutPage() {
           <div className="relative min-h-[400px] w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-100 shadow-sm">
             <Image
               src="/images/electrician-about.webp"
-              alt="Çorlu Elektrikçi - Çalışma Ortamı"
+              alt="İnallar Elektrik - Çalışma Ortamı"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"

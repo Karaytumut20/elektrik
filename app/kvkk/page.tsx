@@ -1,14 +1,13 @@
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { companyConfig } from "@/data/site";
 import { buildMetadata } from "@/lib/seo";
-import { CheckCircle2, ShieldCheck, Mail, Phone, ExternalLink } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Mail, ExternalLink } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export const metadata = buildMetadata({
-  title: "KVKK Aydınlatma Metni | Çorlu Elektrikçi",
+  title: "KVKK Aydınlatma Metni | İnallar Elektrik",
   description: "Elektrik hizmet talebi kapsamında işlenen kişisel verilere ilişkin KVKK aydınlatma metni.",
   path: "/kvkk",
 });

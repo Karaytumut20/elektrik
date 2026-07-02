@@ -44,7 +44,7 @@ export const getPublishedBlogPosts = cache(async function getPublishedBlogPosts(
     .order("published_at", { ascending: false });
 
   if (error) {
-    return { posts: [], isConfigured: true, error: "Blog yazilari su anda yuklenemiyor." };
+    return { posts: [], isConfigured: true, error: "Blog yazıları şu anda yüklenemiyor." };
   }
 
   return { posts: (data ?? []) as BlogPost[], isConfigured: true, error: null };

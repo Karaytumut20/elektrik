@@ -1,17 +1,35 @@
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import Image from "next/image";
 import { companyConfig } from "@/data/site";
 
-export function Logo({ href = "/" }: { href?: string }) {
+interface LogoProps {
+  href?: string;
+  /** "default" = renkli (navbar), "white" = beyaz (footer) */
+  variant?: "default" | "white";
+  /** "md" = normal navbar boyutu, "lg" = daha büyük (footer) */
+  size?: "md" | "lg";
+}
+
+export function Logo({ href = "/", variant = "default", size = "md" }: LogoProps) {
+  const dimensions =
+    size === "lg"
+      ? { height: "h-16", width: "w-48" }
+      : { height: "h-14", width: "w-40" };
+
   return (
-    <Link href={href} className="flex items-center gap-3" aria-label={`${companyConfig.name} ana sayfa`}>
-      <span className="grid h-10 w-10 place-items-center rounded-md bg-amber-300 text-slate-950">
-        <Zap className="h-6 w-6" aria-hidden="true" />
-      </span>
-      <span className="leading-tight">
-        <span className="block text-lg font-bold text-slate-950">{companyConfig.name}</span>
-        <span className="block text-xs font-semibold uppercase text-slate-500">Elektrik Hizmetleri</span>
-      </span>
+    <Link href={href} className="flex items-center" aria-label={`${companyConfig.name} ana sayfa`}>
+      <div className={`relative ${dimensions.height} ${dimensions.width} flex-shrink-0`}>
+        <Image
+          src="/images/logo.png"
+          alt={companyConfig.name}
+          fill
+          priority
+          sizes="(max-width: 768px) 160px, 192px"
+          className={`object-contain ${variant === "white" ? "brightness-0 invert" : ""}`}
+        />
+      </div>
     </Link>
   );
 }
+
+

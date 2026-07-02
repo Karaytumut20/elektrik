@@ -1,14 +1,13 @@
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { companyConfig } from "@/data/site";
 import { buildMetadata } from "@/lib/seo";
-import { CheckCircle2, ShieldAlert, FileText, Scale } from "lucide-react";
+import { CheckCircle2, ShieldAlert, Scale } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export const metadata = buildMetadata({
-  title: "Gizlilik Politikası | Çorlu Elektrikçi",
+  title: "Gizlilik Politikası | İnallar Elektrik",
   description: "Elektrik hizmetleri web sitesi gizlilik politikası ve kişisel veri işleme prensipleri.",
   path: "/gizlilik-politikasi",
 });

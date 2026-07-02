@@ -1,5 +1,4 @@
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { buildMetadata } from "@/lib/seo";
 import { CheckCircle2, Shield, Eye, HelpCircle } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
@@ -7,7 +6,7 @@ import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export const metadata = buildMetadata({
-  title: "Çerez Politikası | Çorlu Elektrikçi",
+  title: "Çerez Politikası | İnallar Elektrik",
   description: "Web sitesinde kullanılabilecek zorunlu, performans ve iletişim amaçlı çerezlere ilişkin bilgilendirme.",
   path: "/cerez-politikasi",
 });

@@ -1,4 +1,4 @@
-import { Cable, LampCeiling, Lightbulb, Plug, ShieldCheck, Siren, Wrench, Zap } from "lucide-react";
+import { Cable, LampCeiling, Plug, ShieldCheck, Siren, Zap } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 
 export type AreaService = {
@@ -67,7 +67,7 @@ const commonServices: AreaService[] = [
     icon: LampCeiling,
     title: "Avize & Aydınlatma",
     description: "Avize, spot, LED şerit ve sarkıt aydınlatma montajı ve kablo düzenlemesi.",
-    href: "/hizmetler/avize-ve-aydinlatma-montaji",
+    href: "/hizmetler/avize-montaji",
   },
   {
     icon: Siren,
@@ -96,7 +96,7 @@ const commonFeatures = [
   },
 ];
 
-export const serviceAreas: ServiceArea[] = [
+const primaryServiceAreas: ServiceArea[] = [
   {
     slug: "corlu-merkez",
     name: "Çorlu Merkez",
@@ -434,6 +434,155 @@ export const serviceAreas: ServiceArea[] = [
     nearbyAreas: ["Ergene", "Türkgücü Mahallesi", "Çorlu Merkez"],
   },
 ];
+
+type NeighborhoodSeed = {
+  slug: string;
+  name: string;
+  shortName: string;
+  focus: string;
+  nearbyAreas: string[];
+};
+
+const imageSets = [
+  { heroImage: IMAGES.city, galleryImages: [IMAGES.electrician, IMAGES.interior, IMAGES.panel] },
+  { heroImage: IMAGES.electrician, galleryImages: [IMAGES.city, IMAGES.panel, IMAGES.interior] },
+  { heroImage: IMAGES.interior, galleryImages: [IMAGES.panel, IMAGES.city, IMAGES.electrician] },
+  { heroImage: IMAGES.panel, galleryImages: [IMAGES.electrician, IMAGES.interior, IMAGES.city] },
+];
+
+const additionalNeighborhoodSeeds: NeighborhoodSeed[] = [
+  {
+    slug: "cemaliye",
+    name: "Cemaliye Mahallesi",
+    shortName: "Cemaliye",
+    focus: "apartman, konut ve küçük işletmelerde arıza tespiti, priz yenileme ve pano düzenleme",
+    nearbyAreas: ["Reşadiye Mahallesi", "Muhittin Mahallesi", "Çorlu Merkez"],
+  },
+  {
+    slug: "cumhuriyet",
+    name: "Cumhuriyet Mahallesi",
+    shortName: "Cumhuriyet",
+    focus: "konut tesisatı, aydınlatma montajı ve kaçak akım güvenlik kontrolleri",
+    nearbyAreas: ["Alipaşa Mahallesi", "Çorlu Merkez", "Esentepe Mahallesi"],
+  },
+  {
+    slug: "cobancesme",
+    name: "Çobançeşme Mahallesi",
+    shortName: "Çobançeşme",
+    focus: "site, apartman ve iş yerlerinde elektrik arıza, pano ve tesisat yenileme",
+    nearbyAreas: ["Esentepe Mahallesi", "Havuzlar Mahallesi", "Hürriyet Mahallesi"],
+  },
+  {
+    slug: "deregunduzlu",
+    name: "Deregündüzlü Mahallesi",
+    shortName: "Deregündüzlü",
+    focus: "müstakil yapı, bahçe hattı, topraklama ve güvenli pano bağlantıları",
+    nearbyAreas: ["Sarılar Mahallesi", "Maksutlu Mahallesi", "Seymen Mahallesi"],
+  },
+  {
+    slug: "esentepe",
+    name: "Esentepe Mahallesi",
+    shortName: "Esentepe",
+    focus: "yoğun konut alanlarında priz, aydınlatma, pano ve arıza müdahalesi",
+    nearbyAreas: ["Çobançeşme Mahallesi", "Havuzlar Mahallesi", "Cumhuriyet Mahallesi"],
+  },
+  {
+    slug: "hatip",
+    name: "Hatip Mahallesi",
+    shortName: "Hatip",
+    focus: "konut ve yeni yerleşim alanlarında tesisat kontrolü, pano ve aydınlatma işleri",
+    nearbyAreas: ["Hıdırağa Mahallesi", "Silahtarağa Mahallesi", "Nusratiye Mahallesi"],
+  },
+  {
+    slug: "havuzlar",
+    name: "Havuzlar Mahallesi",
+    shortName: "Havuzlar",
+    focus: "apartman, site ve ticari alanlarda elektrik arıza, LED aydınlatma ve güvenlik kontrolleri",
+    nearbyAreas: ["Esentepe Mahallesi", "Çobançeşme Mahallesi", "Hürriyet Mahallesi"],
+  },
+  {
+    slug: "hidiraga",
+    name: "Hıdırağa Mahallesi",
+    shortName: "Hıdırağa",
+    focus: "eski tesisat kontrolü, topraklama, kaçak akım rölesi ve güvenli onarım",
+    nearbyAreas: ["Hatip Mahallesi", "Nusratiye Mahallesi", "Reşadiye Mahallesi"],
+  },
+  {
+    slug: "maksutlu",
+    name: "Maksutlu Mahallesi",
+    shortName: "Maksutlu",
+    focus: "müstakil konut, dış mekan aydınlatma, bahçe hattı ve pano güvenliği",
+    nearbyAreas: ["Deregündüzlü Mahallesi", "Sarılar Mahallesi", "Şahpaz Mahallesi"],
+  },
+  {
+    slug: "sarilar",
+    name: "Sarılar Mahallesi",
+    shortName: "Sarılar",
+    focus: "kırsal ve müstakil yapılarda elektrik arıza, topraklama ve hat yenileme",
+    nearbyAreas: ["Deregündüzlü Mahallesi", "Maksutlu Mahallesi", "Yenice Mahallesi"],
+  },
+  {
+    slug: "sahpaz",
+    name: "Şahpaz Mahallesi",
+    shortName: "Şahpaz",
+    focus: "müstakil yapı, küçük işletme ve tarımsal alanlarda güvenli elektrik çözümleri",
+    nearbyAreas: ["Maksutlu Mahallesi", "Yenice Mahallesi", "Seymen Mahallesi"],
+  },
+  {
+    slug: "silahtaraga",
+    name: "Silahtarağa Mahallesi",
+    shortName: "Silahtarağa",
+    focus: "konut ve iş yerlerinde elektrik arıza tespiti, pano yenileme ve montaj işleri",
+    nearbyAreas: ["Hatip Mahallesi", "Nusratiye Mahallesi", "Şeyhsinan Mahallesi"],
+  },
+  {
+    slug: "yenice",
+    name: "Yenice Mahallesi",
+    shortName: "Yenice",
+    focus: "yeni yapı, müstakil konut ve tadilat projelerinde tesisat ve pano uygulamaları",
+    nearbyAreas: ["Sarılar Mahallesi", "Şahpaz Mahallesi", "Seymen Mahallesi"],
+  },
+];
+
+const additionalNeighborhoods: ServiceArea[] = additionalNeighborhoodSeeds.map((area, index) => {
+  const images = imageSets[index % imageSets.length];
+
+  return {
+    slug: area.slug,
+    name: area.name,
+    shortName: area.shortName,
+    heroImage: images.heroImage,
+    galleryImages: images.galleryImages,
+    metaTitle: `${area.name} Elektrikçi | Çorlu Arıza ve Tesisat`,
+    metaDescription: `${area.name}'nde elektrik arıza tespiti, tesisat, pano, priz ve aydınlatma hizmetleri. Çorlu yerel elektrikçi, güvenli işçilik ve net teklif.`,
+    heroTitle: `${area.name}'nde Elektrikçi Hizmeti`,
+    heroSubtitle: "Arıza, tesisat, pano ve montaj işlerinde yerel destek",
+    intro: `${area.name}'nde ${area.focus} için planlı ve güvenli elektrik hizmeti sunulmaktadır. Talep alınırken arıza belirtisi, bina tipi ve aciliyet durumu netleştirilir; işlem sonunda hat, pano veya montaj noktası test edilerek teslim edilir.`,
+    features: commonFeatures,
+    services: commonServices,
+    faqs: [
+      {
+        question: `${area.shortName}'de elektrik arızası için aynı gün destek alınabilir mi?`,
+        answer: `Müsaitlik ve arızanın aciliyetine göre ${area.shortName}'de aynı gün veya en yakın uygun zaman için planlama yapılır.`,
+      },
+      {
+        question: `${area.shortName}'de eski tesisat kontrolü yapılıyor mu?`,
+        answer: "Evet. Pano, sigorta, kaçak akım rölesi, priz-topraklama bağlantıları ve görünür kablo riskleri kontrol edilerek ihtiyaçlar netleştirilir.",
+      },
+      {
+        question: "Küçük priz veya avize montajı için keşif gerekir mi?",
+        answer: "Basit montaj işlerinde fotoğrafla ön değerlendirme yapılabilir. Yeni hat, pano veya kapsamlı tesisat işlerinde yerinde kontrol daha sağlıklıdır.",
+      },
+      {
+        question: "İşçilik ve malzeme fiyatı nasıl belirlenir?",
+        answer: "Arızanın kaynağı, kullanılacak malzeme, hat uzunluğu ve çalışma kapsamı görüldükten sonra net teklif paylaşılır.",
+      },
+    ],
+    nearbyAreas: area.nearbyAreas,
+  };
+});
+
+export const serviceAreas: ServiceArea[] = [...primaryServiceAreas, ...additionalNeighborhoods];
 
 export function getAreaBySlug(slug: string): ServiceArea | undefined {
   return serviceAreas.find((area) => area.slug === slug);

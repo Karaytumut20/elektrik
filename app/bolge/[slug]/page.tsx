@@ -14,7 +14,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/Button";
 import { serviceAreas, getAreaBySlug } from "@/data/areas";
-import { companyConfig } from "@/data/site";
+import { areaElectricianSchema, faqSchema } from "@/data/schemas";
 import { buildMetadata } from "@/lib/seo";
 import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
@@ -44,28 +44,9 @@ export default async function AreaDetailPage({ params }: PageProps) {
   const area = getAreaBySlug(slug);
   if (!area) notFound();
 
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: companyConfig.name,
-    url: companyConfig.siteUrl,
-    telephone: companyConfig.phone,
-    areaServed: {
-      "@type": "Place",
-      name: area.name,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: area.shortName,
-        addressRegion: "Tekirdağ",
-        addressCountry: "TR",
-      },
-    },
-    description: area.metaDescription,
-  };
-
   return (
     <>
-      <JsonLd data={localBusinessSchema} />
+      <JsonLd data={[areaElectricianSchema(area), faqSchema(area.faqs)]} />
 
       {/* ══════════════════════════════════════════════
           1. HERO — Dark navy + city image + CTA

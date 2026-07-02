@@ -8,9 +8,9 @@ import { services } from "@/data/services";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Çorlu Elektrik Hizmetleri",
+  title: "İnallar Elektrik Hizmetleri | Arıza, Tesisat ve Pano",
   description:
-    "Çorlu elektrik hizmetleri: arıza tespiti, ev ve iş yeri tesisatı, pano yenileme, kaçak akım rölesi, priz, aydınlatma, avize ve topraklama.",
+    "Çorlu elektrikçi hizmetleri: arıza tespiti, acil elektrikçi, ev ve iş yeri tesisatı, pano yenileme, kaçak akım rölesi, priz, aydınlatma ve topraklama.",
   path: "/hizmetler",
 });
 
@@ -45,6 +45,7 @@ export default function ServicesPage() {
                         alt={service.title}
                         fill
                         sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
+                        quality={60}
                         className="object-cover transition-transform duration-300 hover:scale-105"
                       />
                     </div>

@@ -18,10 +18,12 @@ import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { ReviewsSlider } from "@/components/ui/ReviewsSlider";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 
+export const revalidate = 3600;
+
 export const metadata = buildMetadata({
-  title: "Çorlu Elektrikçi | Acil Elektrik Arıza, Tesisat ve Pano",
+  title: "İnallar Elektrik | Çorlu Acil Elektrik Arıza, Tesisat ve Pano",
   description:
-    "Çorlu elektrikçi hizmeti: elektrik arıza tespiti, acil elektrikçi, tesisat yenileme, pano düzenleme, kaçak akım, priz, avize ve aydınlatma işleri.",
+    "İnallar Elektrik ile Çorlu elektrikçi hizmeti: elektrik arıza tespiti, acil elektrikçi, tesisat yenileme, pano düzenleme, kaçak akım, priz, avize ve aydınlatma işleri.",
   path: "/",
 });
 
@@ -120,7 +122,7 @@ export default async function HomePage() {
         <div className="site-container grid min-h-[680px] items-center gap-10 py-12 lg:grid-cols-[1fr_0.95fr] lg:py-16">
           <div className="max-w-2xl">
             <Badge className="bg-electric-yellow text-electric-navy">Çorlu yerel elektrik hizmeti</Badge>
-            <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">Çorlu Elektrikçi Hizmeti</h1>
+            <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">İnallar Elektrik – Çorlu'nun Güvenilir Elektrikçisi</h1>
             <p className="mt-5 text-lg leading-8 text-slate-200">
               {companyConfig.name}, Çorlu ve yakın çevrede konut ve iş yerleri için elektrik arıza tespiti, acil elektrikçi desteği, tesisat yenileme, pano düzenleme ve aydınlatma uygulamalarında güvenli işçilik odaklı çalışır.
             </p>
@@ -215,7 +217,7 @@ export default async function HomePage() {
           <div className="relative min-h-[440px] overflow-hidden rounded-2xl border border-slate-200/60 shadow-lg lg:h-[480px]">
             <Image
               src="/images/electrician-about.webp"
-              alt="Çorlu Elektrikçi - Hakkımızda"
+              alt="İnallar Elektrik - Hakkımızda"
               fill
               sizes="(min-width: 1024px) 45vw, 100vw"
               className="object-cover transition-transform duration-500 hover:scale-105"
@@ -245,6 +247,7 @@ export default async function HomePage() {
                           alt={service.title}
                           fill
                           sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
+                          quality={60}
                           className="object-cover transition-transform duration-300 hover:scale-105"
                         />
                       </div>
@@ -358,7 +361,7 @@ export default async function HomePage() {
               description="Çorlu merkez mahallelerinden Ergene ve Çerkezköy'e kadar her bölge için ayrı detay sayfamızı inceleyin."
             />
             <div className="grid gap-2 sm:grid-cols-2">
-              {areaData.map((area) => (
+              {areaData.slice(0, 14).map((area) => (
                 <Link
                   key={area.slug}
                   href={`/bolge/${area.slug}`}
@@ -371,7 +374,7 @@ export default async function HomePage() {
             </div>
             <div className="mt-4">
               <Link href="/bolge" className="inline-flex items-center gap-2 text-sm font-bold text-electric-blue hover:underline">
-                Tüm bölgeler
+                Tüm bölgeleri gör ({areaData.length})
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>

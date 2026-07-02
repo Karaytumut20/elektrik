@@ -9,6 +9,55 @@ const nextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/hizmetler/avize-ve-aydinlatma-montaji",
+        destination: "/hizmetler/avize-montaji",
+        permanent: true,
+      },
+      {
+        source: "/hizmetler/avize-aydinlatma-montaji",
+        destination: "/hizmetler/avize-montaji",
+        permanent: true,
+      },
+      {
+        source: "/hizmetler/pano-yenileme",
+        destination: "/hizmetler/sigorta-ve-elektrik-panosu-yenileme",
+        permanent: true,
+      },
+      {
+        source: "/hizmetler/elektrik-panosu-yenileme",
+        destination: "/hizmetler/sigorta-ve-elektrik-panosu-yenileme",
+        permanent: true,
+      },
+      {
+        source: "/hizmetler/kacak-akim-rolesi",
+        destination: "/hizmetler/kacak-akim-rolesi-montaji",
+        permanent: true,
+      },
+      {
+        source: "/acil-elektrikci",
+        destination: "/hizmetler/acil-elektrikci",
+        permanent: true,
+      },
+      {
+        source: "/elektrikci",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/corlu-elektrikci",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/tekirdag-corlu-elektrikci",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -6,8 +6,8 @@ import { serviceAreas } from "@/data/areas";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Çorlu Elektrikçi Hizmet Bölgeleri | Mahalle Bazında Elektrik Hizmeti",
-  description: "Çorlu Merkez, Alipaşa, Muhittin, Şeyhsinan, Reşadiye ve tüm mahallelerde elektrik arıza, tesisat, pano ve montaj hizmetleri.",
+  title: "İnallar Elektrik Hizmet Bölgeleri | Mahalle Bazında Elektrik Hizmeti",
+  description: "İnallar Elektrik olarak Çorlu Merkez, Alipaşa, Muhittin, Şeyhsinan, Reşadiye ve tüm mahallelerde elektrik arıza, tesisat, pano ve montaj hizmetleri.",
   path: "/bolge",
 });
 
@@ -49,6 +49,7 @@ export default function BolgeListPage() {
                     alt={area.name}
                     fill
                     sizes="(min-width:1280px) 25vw, (min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                    quality={60}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-electric-navy/70 to-transparent" />
