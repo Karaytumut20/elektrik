@@ -80,16 +80,13 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Cinematic banner (if cover image present) */}
         {post.cover_image_url ? (
           <div className="site-container -mt-6 pb-2 relative z-10">
-            <div className="relative h-[240px] overflow-hidden rounded-xl border border-slate-200 shadow-lg md:h-[380px]">
-              <Image
+            <div className="relative w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-950/20 shadow-lg">
+              <img
                 src={post.cover_image_url}
                 alt={`${post.title} kapak görseli`}
-                fill
-                priority
-                sizes="(min-width: 1180px) 1180px, 100vw"
-                className="object-cover"
+                className="w-full h-auto max-h-[500px] object-contain mx-auto"
+                loading="eager"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
             </div>
           </div>
         ) : null}

@@ -18,7 +18,7 @@ const blogSchema = z.object({
   slug: z.string().trim().min(3, "Slug en az 3 karakter olmali."),
   excerpt: z.string().trim().max(240, "Kisa aciklama 240 karakteri gecmemeli.").optional(),
   content: z.string().trim().min(40, "Icerik en az 40 karakter olmali."),
-  cover_image_url: z.string().trim().url("Kapak gorseli gecerli bir URL olmali.").optional().or(z.literal("")),
+  cover_image_url: z.string().trim().optional().or(z.literal("")),
   status: z.enum(["draft", "published"]),
   published_at: z.string().trim().optional(),
 });

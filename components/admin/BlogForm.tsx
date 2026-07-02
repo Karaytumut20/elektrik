@@ -89,9 +89,9 @@ export function BlogForm({ post }: BlogFormProps) {
 
         <div className="grid gap-2">
           <label htmlFor="cover_image_url" className="form-label">
-            Kapak gorseli URL
+            Görsel Linki / URL (Supabase için)
           </label>
-          <input id="cover_image_url" name="cover_image_url" type="url" className="field" defaultValue={post?.cover_image_url ?? ""} />
+          <input id="cover_image_url" name="cover_image_url" type="text" placeholder="https://... veya /images/..." className="field" defaultValue={post?.cover_image_url ?? ""} />
           {state.fieldErrors?.cover_image_url ? <p className="form-error">{state.fieldErrors.cover_image_url}</p> : null}
         </div>
 
