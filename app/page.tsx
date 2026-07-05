@@ -386,6 +386,7 @@ export default async function HomePage() {
                 src="/images/home-emergency-alert.jpg"
                 alt="Acil elektrik uyarısı"
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-center opacity-85"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent" />

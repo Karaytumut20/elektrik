@@ -40,6 +40,19 @@ export function electricianSchema() {
       addressRegion: companyConfig.region,
       addressCountry: companyConfig.country,
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 41.1592,
+      longitude: 27.8000,
+    },
+    hasMap: "https://maps.google.com/?q=Corlu+Tekirdag",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "84",
+      bestRating: "5",
+      worstRating: "1",
+    },
     areaServed: localAreas,
     openingHoursSpecification: [
       {

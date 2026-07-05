@@ -60,6 +60,7 @@ export default async function AreaDetailPage({ params }: PageProps) {
             fill
             priority
             sizes="100vw"
+            quality={60}
             className="object-cover opacity-20"
           />
         </div>
@@ -212,6 +213,7 @@ export default async function AreaDetailPage({ params }: PageProps) {
                 alt={`${area.name} elektrikçi hizmeti`}
                 fill
                 sizes="(min-width:1024px) 50vw, 100vw"
+                quality={60}
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-electric-navy/30 to-transparent" />
@@ -295,6 +297,7 @@ export default async function AreaDetailPage({ params }: PageProps) {
                   alt={`${area.name} elektrik hizmeti ${i + 1}`}
                   fill
                   sizes="(min-width:1024px) 33vw, 100vw"
+                  quality={60}
                   className="object-cover transition-transform duration-500 hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
