@@ -118,15 +118,30 @@ export default async function HomePage() {
     <>
       <JsonLd data={faqSchema(homeFaqs)} />
 
-      <section className="bg-electric-navy text-white">
-        <div className="site-container grid min-h-[680px] items-center gap-10 py-12 lg:grid-cols-[1fr_0.95fr] lg:py-16">
-          <div className="max-w-2xl">
+      <section className="relative overflow-hidden bg-electric-navy text-white">
+        {/* Background Hero Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/electrician-hero.webp"
+            alt="Elektrik panosunu kontrol eden profesyonel elektrikçi"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-right lg:object-center"
+          />
+          {/* Gradients for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-electric-navy via-electric-navy/90 to-electric-navy/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-electric-navy via-transparent to-electric-navy/30" />
+        </div>
+
+        <div className="site-container relative z-10 flex min-h-[620px] items-center py-16 lg:py-24">
+          <div className="max-w-3xl">
             <Badge className="bg-electric-yellow text-electric-navy">Çorlu yerel elektrik hizmeti</Badge>
             <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">İnallar Elektrik – Çorlu'nun Güvenilir Elektrikçisi</h1>
             <p className="mt-5 text-lg leading-8 text-slate-200">
               {companyConfig.name}, Çorlu ve yakın çevrede konut ve iş yerleri için elektrik arıza tespiti, acil elektrikçi desteği, tesisat yenileme, pano düzenleme ve aydınlatma uygulamalarında güvenli işçilik odaklı çalışır.
             </p>
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href={phoneHref()} variant="primary">
                 <Phone className="h-4 w-4" />
                 Hemen Ara
@@ -135,11 +150,11 @@ export default async function HomePage() {
                 <WhatsAppIcon className="h-4 w-4" />
                 WhatsApp
               </ButtonLink>
-              <ButtonLink href="/iletisim" variant="secondary" className="border-white bg-white text-slate-950">
+              <ButtonLink href="/iletisim" variant="secondary" className="border-white bg-white text-slate-950 hover:bg-slate-100">
                 Ücretsiz Teklif Al
               </ButtonLink>
             </div>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="mt-10 grid gap-3 sm:grid-cols-2">
               {trustSignals.map((item) => (
                 <div key={item} className="flex items-center gap-2 text-sm font-semibold text-slate-200">
                   <CheckCircle2 className="h-5 w-5 text-electric-yellow" />
@@ -147,17 +162,6 @@ export default async function HomePage() {
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="relative min-h-[360px] overflow-hidden rounded-lg border border-white/10 bg-electric-coal shadow-2xl">
-            <Image
-              src="/images/electrician-hero.webp"
-              alt="Elektrik panosunu kontrol eden profesyonel elektrikçi"
-              fill
-              priority
-              sizes="(min-width: 1024px) 48vw, 100vw"
-              className="object-cover"
-            />
           </div>
         </div>
       </section>
