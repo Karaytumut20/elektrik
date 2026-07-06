@@ -628,6 +628,153 @@ export const services: ElectricalService[] = [
       },
     ],
   },
+  {
+    slug: "bakim-onarim",
+    title: "Bakım Onarım Hizmeti",
+    shortDescription:
+      "Konut, iş yeri ve tesislerde elektrik panoları, altyapı hatları ve koruma sistemlerinin periyodik bakım ve onarımı.",
+    detailDescription:
+      "Elektrik tesisatlarında oluşabilecek beklenmedik arızaların, ısınmaların ve yangın risklerinin önüne geçmek için periyodik bakım onarım büyük önem taşır. Pano vidalarının sıkılması, kaçak akım testleri, kablo ve klemens kontrolleri ile sistemlerinizi güvenli tutuyoruz.",
+    image: "/images/service-maintenance.webp",
+    icon: Wrench,
+    operations: [
+      "Pano ve sigorta bağlantılarının termal/fiziksel kontrolü",
+      "Kaçak akım ve topraklama direnci ölçümü",
+      "Gevşeyen klemens ve buat vida sıkımları",
+      "Yük dağılımı ve kapasite aşımı tespiti",
+    ],
+    benefits: [
+      "Kesintisiz ve güvenli elektrik kullanımı",
+      "Yangın ve ekipman arızası riskini minimuma indirme",
+      "Enerji verimliliği ve ekipman ömrünü uzatma",
+    ],
+    process: commonProcess,
+    faqs: [
+      {
+        question: "Elektrik bakım onarımı ne sıklıkla yapılmalıdır?",
+        answer:
+          "Konutlarda 2-3 yılda bir, iş yerlerinde ve sanayi tesislerinde ise yılda en az 1 kez periyodik bakım yaptırılması önerilir.",
+      },
+      {
+        question: "Bakım sırasında işletmenin elektriği tamamen kesilir mi?",
+        answer:
+          "Test ve vida sıkım aşamalarında kısa süreli ve planlı kesintiler yapılır. Kesinti zamanı önceden müşterimizle koordineli belirlenir.",
+      },
+      {
+        question: "Bakım sonrası rapor sunuyor musunuz?",
+        answer:
+          "Evet. Yapılan ölçümler, tespit edilen riskler ve değiştirilen parçalar ayrıntılı olarak bilgilendirilir.",
+      },
+      {
+        question: "Sigorta kutusunda ısınma ve cızırdayan ses olması bakım gerektirir mi?",
+        answer:
+          "Kesinlikle evet. Klemens veya vida gevşemeleri ark yaparak ısınmaya yol açar, acil bakımla giderilmelidir.",
+      },
+      {
+        question: "Bakım kapsamına topraklama kontrolü dahil midir?",
+        answer:
+          "Evet. Prizlerin topraklama sürekliliği ve panodaki toprak barası bağlantıları bakıma dahildir.",
+      },
+    ],
+  },
+  {
+    slug: "tamir-tadilat",
+    title: "Tamir Tadilat İşleri",
+    shortDescription:
+      "Ev ve iş yeri yenilemelerinde hat çekimi, priz-anahtar konumu değişimi ve komple tesisat tadilatı.",
+    detailDescription:
+      "Tadilat süreçlerinde elektrik altyapısının doğru planlanması, ileride yaşanacak kırım ve arızaların önüne geçer. Mutfak, banyo, salon ve iş yeri mimari değişikliklerine uygun yeni priz, aydınlatma ve tablo hatları çekerek tadilat sürecini güvenle tamamlıyoruz.",
+    image: "/images/service-repair.webp",
+    icon: Hammer,
+    operations: [
+      "Tadilat projesine uygun hat yeri planlaması",
+      "Sıva altı borulama ve hat kanalı açma",
+      "Yeni priz, anahtar ve aydınlatma buatları yerleşimi",
+      "Kanal kapatma öncesi izolasyon ve test işlemleri",
+    ],
+    benefits: [
+      "Evinize ve mobilya yerleşiminize tam uyum",
+      "Güçlü ve korumalı hat yapısı",
+      "Temiz işçilik ve anahtar teslim uygulama",
+    ],
+    process: commonProcess,
+    faqs: [
+      {
+        question: "Mutfak tadilatında elektrik hattı yenilenmeli mi?",
+        answer:
+          "Fırın, ocak, bulaşık makinesi ve tezgah üstü cihazlar yüksek güç çeker. Bu cihazlar için bağımsız hat çekilmesi şarttır.",
+      },
+      {
+        question: "Tadilat sırasında sıvalar kırılmadan kablo çekilebilir mi?",
+        answer:
+          "Mevcut borular uygunsa içinden yeni kablo çekilebilir. Boru tıkalı veya yetersizse estetik sıva üstü kanallar tercih edilebilir.",
+      },
+      {
+        question: "Banyo tadilatında elektrik güvenliği nasıl sağlanır?",
+        answer:
+          "Islak alanlara uygun IP korumalı prizler takılır ve kaçak akım rölesi koruması zorunlu olarak devreye alınır.",
+      },
+      {
+        question: "Tadilat elektrik işleri ne kadar sürer?",
+        answer:
+          "Dairenin veya iş yerinin büyüklüğüne göre kaba ve ince işçilik ortalama 2 ila 4 gün içinde tamamlanır.",
+      },
+      {
+        question: "Eski alüminyum kablolar tadilatta değiştirilmeli mi?",
+        answer:
+          "Evet. Eski alüminyum kablolar ısınmaya ve kırılmaya yatkındır. Standartlara uygun bakır kablolarla değiştirilmesi tavsiye edilir.",
+      },
+    ],
+  },
+  {
+    slug: "yangin-alarm-guvenlik-ve-kamera-sistemleri",
+    title: "Yangın Alarm Güvenlik ve Kamera Sistemleri",
+    shortDescription:
+      "Ev, site ve işletmeler için kablosuz/kablolu güvenlik kameraları, duman dedektörleri ve alarm sistemi kurulumu.",
+    detailDescription:
+      "Mekanlarınızın 7/24 güvenliğini sağlamak için IP ve AHD güvenlik kamera sistemleri, duman ve ısı algılamalı yangın alarm panoları, hareket sensörleri ve siren kurulumlarını profesyonel işçilikle gerçekleştiriyoruz.",
+    image: "/images/service-security.webp",
+    icon: ShieldCheck,
+    operations: [
+      "Güvenlik kamerası (CCTV / IP) hat çekimi ve montajı",
+      "Duman ve ısı dedektörleri yerleşimi",
+      "Yangın alarm panosu ve siren bağlantıları",
+      "Mobil izleme entegrasyonu ve sistem testi",
+    ],
+    benefits: [
+      "7/24 uzaktan izleme ve yüksek güvenlik",
+      "Erken yangın ve duman uyarısı",
+      "Kablo kirliliği olmadan estetik ve düzenli kurulum",
+    ],
+    process: commonProcess,
+    faqs: [
+      {
+        question: "Güvenlik kameraları cep telefonundan izlenebilir mi?",
+        answer:
+          "Evet. Kurduğumuz IP ve AHD sistemlerin tamamı internet bağlantısı ile akıllı telefonlardan 7/24 canlı izlenebilir.",
+      },
+      {
+        question: "Yangın alarm sisteminde hangi dedektörler kullanılır?",
+        answer:
+          "Mekanın amacına göre duman dedektörü, ısı artış dedektörü ve gaz kaçak dedektörleri entegre edilir.",
+      },
+      {
+        question: "Elektrik kesildiğinde güvenlik kameraları çalışmaya devam eder mi?",
+        answer:
+          "Kesintisiz Güç Kaynağı (UPS) bağlanan sistemler elektrik kesintisinde de saatlerce kayda ve yayına devam eder.",
+      },
+      {
+        question: "Gece görüşlü güvenlik kameraları mevcut mu?",
+        answer:
+          "Evet. Kızılötesi (IR) ve renkli gece görüş (ColorVu/Full Color) teknolojisine sahip kameralar monte edilmektedir.",
+      },
+      {
+        question: "Kamera kayıtları kaç gün geriye dönük saklanır?",
+        answer:
+          "Takılan sabit disk (HDD) kapasitesine ve kamera sayısına göre 15 gün ila 60 gün arasında kayıt saklanabilmektedir.",
+      },
+    ],
+  },
 ];
 
 export function getServiceBySlug(slug: string) {

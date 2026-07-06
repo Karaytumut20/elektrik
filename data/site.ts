@@ -6,7 +6,7 @@ export const companyConfig = {
   siteUrl: configuredSiteUrl ?? "https://www.corluelektrikcim.com",
   phone: process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? "+90 542 470 42 15",
   whatsapp: process.env.NEXT_PUBLIC_BUSINESS_WHATSAPP ?? "905424704215",
-  email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "info@corluelektrikcim.com",
+  email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "inallarelektrik@gmail.com",
   address: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS ?? "Çorlu, Tekirdağ",
   city: "Çorlu",
   region: "Tekirdağ",
@@ -55,6 +55,9 @@ export const serviceAreas = [
   "Yenice Mahallesi",
   "Ergene",
   "Çerkezköy",
+  "Yeniçiftlik",
+  "Marmara Ereğlisi",
+  "Veliköy",
 ];
 
 export const trustSignals = [
@@ -80,10 +83,15 @@ export const localSearchTerms = [
   "Çorlu elektrik tesisatı",
   "Çorlu pano yenileme",
   "Çorlu avize montajı",
+  "Yeniçiftlik elektrikçi",
+  "Marmara Ereğlisi elektrikçi",
+  "Veliköy elektrikçi",
   "Tekirdağ Çorlu elektrikçi",
   "Çorlu elektrik ustası",
   "Çorlu kaçak akım rölesi",
   "Çorlu topraklama",
   "Çorlu LED aydınlatma",
   "Çorlu priz montajı",
+  "Çorlu yangın alarm güvenlik kamera sistemleri",
+  "Çorlu elektrik bakım onarım",
 ];
