@@ -1,4 +1,9 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { ButtonLink } from "@/components/ui/Button";
@@ -7,21 +12,46 @@ import { phoneHref, whatsappUrl } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Sayfa değiştiğinde mobil menüyü otomatik kapat
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
-      <div className="site-container flex min-h-20 items-center justify-between gap-4 py-3">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md relative">
+      {/* Background Image Container with its own overflow-hidden to prevent clipping absolute children like mobile dropdown */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <Image
+          src="/images/logo.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-white/90" />
+      </div>
+
+      <div className="site-container flex min-h-20 items-center justify-between gap-4 py-3 relative z-10">
         <Logo />
+
+        {/* Masaüstü Navigasyon */}
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Ana navigasyon">
           {mainNavigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-950"
+              className="rounded-md px-3 py-2 text-sm font-bold text-slate-800 hover:bg-slate-900/10 hover:text-slate-950 transition-colors"
             >
               {item.label}
             </Link>
           ))}
         </nav>
+
+        {/* Masaüstü Butonlar */}
         <div className="hidden items-center gap-2 lg:flex">
           <ButtonLink href={phoneHref()} variant="ghost">
             Hemen Ara
@@ -30,34 +60,46 @@ export function Header() {
             Ücretsiz Teklif Al
           </ButtonLink>
         </div>
-        <details className="group relative lg:hidden">
-          <summary
-            className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-md border border-slate-200 text-slate-900 [&::-webkit-details-marker]:hidden"
-            aria-label="Menüyü aç veya kapat"
+
+        {/* Mobil Menü Butonu & Menüsü */}
+        <div className="relative lg:hidden z-50">
+          <button
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="grid h-11 w-11 place-items-center rounded-md border border-slate-200/80 bg-white/80 text-slate-900 transition-colors hover:bg-slate-100"
+            aria-label={isOpen ? "Menüyü kapat" : "Menüyü aç"}
+            aria-expanded={isOpen}
           >
-            <Menu className="h-5 w-5 group-open:hidden" aria-hidden="true" />
-            <X className="hidden h-5 w-5 group-open:block" aria-hidden="true" />
-          </summary>
-          <nav
-            className="absolute right-0 top-[calc(100%+0.75rem)] grid w-[min(22rem,calc(100vw-2rem))] gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-xl"
-            aria-label="Mobil navigasyon"
-          >
-            {mainNavigation.map((item) => (
-              <Link key={item.href} href={item.href} className="rounded-md px-3 py-3 text-base font-bold text-slate-800 hover:bg-slate-100">
-                {item.label}
-              </Link>
-            ))}
-            <div className="grid gap-2 pt-2 sm:grid-cols-2">
-              <ButtonLink href={phoneHref()} variant="secondary">
-                Hemen Ara
-              </ButtonLink>
-              <ButtonLink href={whatsappUrl("Merhaba, elektrik hizmeti için bilgi almak istiyorum.")} variant="whatsapp">
-                <WhatsAppIcon className="h-4 w-4" />
-                WhatsApp
-              </ButtonLink>
-            </div>
-          </nav>
-        </details>
+            {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+          </button>
+
+          {isOpen && (
+            <nav
+              className="absolute right-0 top-[calc(100%+0.75rem)] grid w-[min(22rem,calc(100vw-2rem))] gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-xl z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+              aria-label="Mobil navigasyon"
+            >
+              {mainNavigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-md px-3 py-3 text-base font-bold text-slate-800 hover:bg-slate-100 transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <div className="grid gap-2 pt-2 sm:grid-cols-2">
+                <ButtonLink href={phoneHref()} variant="secondary" onClick={() => setIsOpen(false)}>
+                  Hemen Ara
+                </ButtonLink>
+                <ButtonLink href={whatsappUrl("Merhaba, elektrik hizmeti için bilgi almak istiyorum.")} variant="whatsapp" onClick={() => setIsOpen(false)}>
+                  <WhatsAppIcon className="h-4 w-4" />
+                  WhatsApp
+                </ButtonLink>
+              </div>
+            </nav>
+          )}
+        </div>
       </div>
     </header>
   );
