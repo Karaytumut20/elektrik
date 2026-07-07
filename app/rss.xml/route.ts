@@ -17,25 +17,28 @@ export async function GET() {
   const items = result.posts
     .map(
       (post) => `
-        <item>
-          <title>${escapeXml(post.title)}</title>
-          <link>${companyConfig.siteUrl}/blog/${post.slug}</link>
-          <guid>${companyConfig.siteUrl}/blog/${post.slug}</guid>
-          <description>${escapeXml(post.excerpt ?? "")}</description>
-          <pubDate>${new Date(post.published_at ?? post.created_at).toUTCString()}</pubDate>
-        </item>`,
+    <item>
+      <title>${escapeXml(post.title)}</title>
+      <link>${companyConfig.siteUrl}/blog/${post.slug}</link>
+      <guid isPermaLink="true">${companyConfig.siteUrl}/blog/${post.slug}</guid>
+      <description>${escapeXml(post.excerpt ?? "")}</description>
+      <pubDate>${new Date(post.published_at ?? post.created_at).toUTCString()}</pubDate>
+    </item>`,
     )
     .join("");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-    <rss version="2.0">
-      <channel>
-        <title>${escapeXml(companyConfig.name)} Blog</title>
-        <link>${companyConfig.siteUrl}/blog</link>
-        <description>Elektrik hizmetleri blog yazilari</description>
-        ${items}
-      </channel>
-    </rss>`;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(companyConfig.name)} Blog</title>
+    <link>${companyConfig.siteUrl}/blog</link>
+    <description>Elektrik hizmetleri blog yazilari</description>
+    <language>tr</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${companyConfig.siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
+    ${items.trim()}
+  </channel>
+</rss>`.trim();
 
   return new Response(xml, {
     headers: {

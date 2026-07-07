@@ -94,6 +94,47 @@ where not exists (
   select 1 from auth.users where id = '2a21f73c-5721-45e4-a32c-2de5bacf9514'
 );
 
+insert into auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  recovery_sent_at,
+  last_sign_in_at,
+  raw_app_meta_data,
+  raw_user_meta_data,
+  created_at,
+  updated_at,
+  confirmation_token,
+  email_change,
+  email_change_token_new,
+  recovery_token
+)
+select
+  '00000000-0000-0000-0000-000000000000',
+  '4a59ec38-5367-454e-9be8-1c72e1553372',
+  'authenticated',
+  'authenticated',
+  'inallarelektrik@gmail.com',
+  crypt('inallarelektrik.1', gen_salt('bf')),
+  now(),
+  now(),
+  now(),
+  '{"provider": "email", "providers": ["email"]}',
+  '{}',
+  now(),
+  now(),
+  '',
+  '',
+  '',
+  ''
+where not exists (
+  select 1 from auth.users where id = '4a59ec38-5367-454e-9be8-1c72e1553372'
+);
+
 -- Create identity for the user in auth.identities if it doesn't exist
 insert into auth.identities (
   id,
@@ -118,11 +159,50 @@ where not exists (
   select 1 from auth.identities where user_id = '2a21f73c-5721-45e4-a32c-2de5bacf9514'
 );
 
+insert into auth.identities (
+  id,
+  provider_id,
+  user_id,
+  identity_data,
+  provider,
+  last_sign_in_at,
+  created_at,
+  updated_at
+)
+select
+  '4a59ec38-5367-454e-9be8-1c72e1553372',
+  '4a59ec38-5367-454e-9be8-1c72e1553372',
+  '4a59ec38-5367-454e-9be8-1c72e1553372',
+  jsonb_build_object('sub', '4a59ec38-5367-454e-9be8-1c72e1553372', 'email', 'inallarelektrik@gmail.com'),
+  'email',
+  now(),
+  now(),
+  now()
+where not exists (
+  select 1 from auth.identities where user_id = '4a59ec38-5367-454e-9be8-1c72e1553372'
+);
+
 insert into public.admin_profiles (user_id, email, display_name, role, is_active)
 values (
   '2a21f73c-5721-45e4-a32c-2de5bacf9514',
   'admin@voltaelektrik.local',
   'Admin',
+  'admin',
+  true
+)
+on conflict (user_id) do update
+set
+  email = excluded.email,
+  display_name = excluded.display_name,
+  role = excluded.role,
+  is_active = excluded.is_active,
+  updated_at = now();
+
+insert into public.admin_profiles (user_id, email, display_name, role, is_active)
+values (
+  '4a59ec38-5367-454e-9be8-1c72e1553372',
+  'inallarelektrik@gmail.com',
+  'İnallar Elektrik',
   'admin',
   true
 )

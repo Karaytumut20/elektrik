@@ -15,7 +15,7 @@ export function ReviewsSlider({ reviews }: { reviews: Review[] }) {
           <article key={`${review.name}-${i}`} className="min-w-[82%] snap-start md:min-w-0">
             <div className="flex h-full min-h-[220px] flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
               <div>
-                <div className="mb-4 flex items-center gap-1 text-electric-yellow" aria-label={`${review.rating} yıldız`}>
+                <div className="mb-4 flex items-center gap-1 text-electric-yellow" role="img" aria-label={`${review.rating} yıldız`}>
                   {[...Array(review.rating)].map((_, index) => (
                     <Star key={index} className="h-4 w-4 fill-current" aria-hidden="true" />
                   ))}

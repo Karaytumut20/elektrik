@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatDate, readingTime, renderPlainContent } from "@/components/blog/BlogGrid";
+import { BlogCoverImage } from "@/components/blog/BlogCoverImage";
 import { articleSchema } from "@/data/schemas";
 import { getPublishedBlogPostBySlug, getPublishedBlogPosts } from "@/lib/db";
 import { buildMetadata } from "@/lib/seo";
@@ -79,16 +80,10 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Cinematic banner (if cover image present) */}
         {post.cover_image_url ? (
-          <div className="site-container -mt-6 pb-2 relative z-10">
-            <div className="relative w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-950/20 shadow-lg">
-              <img
-                src={post.cover_image_url}
-                alt={`${post.title} kapak görseli`}
-                className="w-full h-auto max-h-[500px] object-contain mx-auto"
-                loading="eager"
-              />
-            </div>
-          </div>
+          <BlogCoverImage
+            src={post.cover_image_url}
+            alt={`${post.title} kapak görseli`}
+          />
         ) : null}
 
         {/* Clean, centered article content */}
