@@ -81,14 +81,14 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
             },
           ]}
         />
-        <div data-site-chrome>
+        <div data-site-chrome="true">
           <Header />
         </div>
         <main id="main-content">{children}</main>
-        <div data-site-chrome>
+        <div data-site-chrome="true">
           <Footer />
         </div>
-        <div data-site-chrome>
+        <div data-site-chrome="true">
           <FloatingContact />
         </div>
         

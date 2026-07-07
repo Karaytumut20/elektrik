@@ -118,15 +118,17 @@ export default async function HomePage() {
     <>
       <JsonLd data={faqSchema(homeFaqs)} />
 
-      <section className="relative overflow-hidden bg-electric-navy text-white">
-        {/* Background Hero Image */}
+      <section className="relative min-h-[620px] overflow-hidden bg-electric-navy text-white">
+        {/* Background Hero Image — fixed height prevents CLS */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/electrician-hero.webp"
             alt="Elektrik panosunu kontrol eden profesyonel elektrikçi"
             fill
             priority
-            sizes="100vw"
+            fetchPriority="high"
+            sizes="(max-width: 768px) 100vw, 100vw"
+            quality={80}
             className="object-cover object-right lg:object-center"
           />
           {/* Gradients for text legibility */}

@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <style>{`
-        [data-site-chrome] {
+        [data-site-chrome="true"] {
           display: none !important;
         }
       `}</style>
