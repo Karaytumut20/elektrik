@@ -3,7 +3,7 @@ const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
 export const companyConfig = {
   name: "İnallar Elektrik",
   legalName: process.env.NEXT_PUBLIC_BUSINESS_LEGAL_NAME ?? "İnallar Elektrik ve Mühendislik Hizmetleri",
-  siteUrl: configuredSiteUrl ?? "https://www.corluelektrikcim.com",
+  siteUrl: configuredSiteUrl ?? "https://corluelektrikcim.com",
   phone: process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? "+90 542 470 42 15",
   whatsapp: process.env.NEXT_PUBLIC_BUSINESS_WHATSAPP ?? "905424704215",
   email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "inallarelektrik@gmail.com",
