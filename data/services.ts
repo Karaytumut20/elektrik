@@ -736,7 +736,7 @@ export const services: ElectricalService[] = [
     image: "/images/service-security.webp",
     icon: ShieldCheck,
     operations: [
-      "Güvenlik kamerası (CCTV / IP) hat çekimi ve montajı",
+      "Güvenlik kamerası ve IP kamera hat çekimi ile montajı",
       "Duman ve ısı dedektörleri yerleşimi",
       "Yangın alarm panosu ve siren bağlantıları",
       "Mobil izleme entegrasyonu ve sistem testi",

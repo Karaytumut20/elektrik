@@ -17,6 +17,26 @@ SUPABASE_SERVICE_ROLE_KEY=
 
 `SUPABASE_SERVICE_ROLE_KEY` yalnizca server tarafinda kullanilmalidir. Client component veya public JavaScript icine tasinmamalidir.
 
+## Operasyon yonetimi migration sirasi
+
+Mevcut blog ve iletisim migrationlari uygulandiktan sonra:
+
+1. `migrations/20260728000000_operations_management.sql`
+2. `migrations/20260803000000_ad_click_tracking.sql`
+
+Bu migration eklemelidir; mevcut blog, iletisim ve admin kayitlarini silmez. Musteri, personel,
+randevu, is emri, stok, tahsilat, dosya, kur ve audit tablolarini; transaction fonksiyonlarini;
+RLS kurallarini ve private `service-files` bucket yapilandirmasini ekler.
+
+Uygulamadan once Supabase SQL Editor veya CLI uzerinden hedef projenin dogru oldugunu kontrol edin.
+Migration uygulandiktan sonra mevcut `admin_profiles` satirlarina `app_role = 'super_admin'`
+varsayilani atanir. Diger kullanicilar icin uygun roller:
+`manager`, `editor`, `support`, `service_staff`, `viewer`.
+
+`20260803000000_ad_click_tracking.sql`, yalnızca `gclid`, `gbraid` veya `wbraid`
+bulunan reklam ziyaretlerini saklayan private tabloyu ve 60 günlük otomatik temizliği
+ekler. Supabase Dashboard > SQL Editor ekranında operasyon migration'indan sonra çalıştırılmalıdır.
+
 ## SQL kurulumu
 
 Supabase SQL Editor icinde su dosyayi calistirin:

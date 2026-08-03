@@ -49,6 +49,16 @@ export default function PrivacyPage() {
         "SSL sertifikalı güvenli hat iletişimi",
         "Sınırlı erişim ve yetki kontrolleri",
       ]
+    },
+    {
+      title: "5. Reklam Trafiği ve Güvenlik Kayıtları",
+      desc: "Google Ads reklamı üzerinden gelen ziyaretlerde reklam sahteciliğini ve tekrarlanan tıklamaları incelemek amacıyla sınırlı teknik kayıt tutulur.",
+      details: [
+        "Yalnızca gclid, gbraid veya wbraid reklam parametresi bulunan ziyaretler kaydedilir.",
+        "IP adresi, ziyaret zamanı, girilen sayfa, cihaz bilgisi, yönlendiren sayfa ve ülke bilgisi işlenir.",
+        "Ham IP adresi yalnızca yetkili yönetici tarafından görülebilir ve en fazla 60 gün saklanır.",
+        "Bu kayıtlar otomatik IP engellemesi için kullanılmaz.",
+      ]
     }
   ];
 

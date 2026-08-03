@@ -8,6 +8,7 @@ import { FloatingContact } from "@/components/layout/FloatingContact";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { companyConfig } from "@/data/site";
 import { electricianSchema } from "@/data/schemas";
+import { AdClickTracker } from "@/components/seo/AdClickTracker";
 
 export const metadata: Metadata = {
   metadataBase: new URL(companyConfig.siteUrl),
@@ -88,6 +89,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </Script>
       </head>
       <body>
+        <AdClickTracker />
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

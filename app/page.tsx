@@ -139,7 +139,7 @@ export default async function HomePage() {
         <div className="site-container relative z-10 flex min-h-[620px] items-center py-16 lg:py-24">
           <div className="max-w-3xl">
             <Badge className="bg-electric-yellow text-electric-navy">Çorlu yerel elektrik hizmeti</Badge>
-            <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">İnallar Elektrik – Çorlu'nun Güvenilir Elektrikçisi</h1>
+            <h1 className="mt-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">İnallar Elektrik – Çorlu&apos;nun Güvenilir Elektrikçisi</h1>
             <p className="mt-5 text-lg leading-8 text-slate-200">
               {companyConfig.name}, Çorlu ve yakın çevrede konut ve iş yerleri için elektrik arıza tespiti, acil elektrikçi desteği, tesisat yenileme, pano düzenleme ve aydınlatma uygulamalarında güvenli işçilik odaklı çalışır.
             </p>
