@@ -36,7 +36,8 @@ export default async function AdminContactPage({
   const { data, error } = await supabase
     .from("contact_submissions")
     .select("id, name, phone, email, service, message, created_at")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(100);
 
   const submissions = (data ?? []) as ContactSubmission[];
 

@@ -3,7 +3,7 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { OperationForm } from "@/components/admin/OperationForm";
 import { createCustomer, createInventoryItem, createQuickServiceOrder } from "@/lib/admin/operations-actions";
 import { canSeeFinance, canWrite, requireAdmin } from "@/lib/admin/auth";
-import { getCustomers, getInventory, getServiceOrders, getTcmbRate } from "@/lib/admin/operations";
+import { getCustomers, getInventory, getServiceOrders } from "@/lib/admin/operations";
 import { money, orderStatusLabel } from "@/lib/admin/operations-types";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +12,6 @@ export default async function WorkOrdersPage({ searchParams }: { searchParams: P
   const admin = await requireAdmin();
   const { q = "", payment } = await searchParams;
   const [ordersResult, customersResult, inventoryResult] = await Promise.all([getServiceOrders(q), getCustomers(), getInventory()]);
-  let rate = null;
-  try { rate = await getTcmbRate(); } catch {}
   const filtered = ordersResult.data.filter((order) => {
     const remaining = Number(order.grand_total) - Number(order.paid_amount);
     if (payment === "unpaid") return Number(order.paid_amount) <= 0 && remaining > 0.01;
@@ -41,8 +39,8 @@ export default async function WorkOrdersPage({ searchParams }: { searchParams: P
         <div className="admin-field lg:col-span-2"><label htmlFor="order_service">Hizmet / işlem</label><input id="order_service" name="service_name" required /></div>
         <div className="admin-field"><label htmlFor="order_price">Hizmet satış fiyatı</label><input id="order_price" name="labor_sale" type="number" min="0" step="0.01" /></div>
         <div className="admin-field"><label htmlFor="order_currency">Para birimi</label><select id="order_currency" name="currency"><option>TRY</option><option>USD</option></select></div>
-        <div className="admin-field"><label htmlFor="order_rate">USD/TL işlem kuru</label><input id="order_rate" name="exchange_rate" type="number" min="0" step="0.0001" defaultValue={rate?.rate} /></div>
-        <input type="hidden" name="exchange_rate_date" value={rate?.rateDate ?? ""} />
+        <div className="admin-field"><label htmlFor="order_rate">USD/TL işlem kuru (USD ise)</label><input id="order_rate" name="exchange_rate" type="number" min="0" step="0.0001" inputMode="decimal" /></div>
+        <input type="hidden" name="exchange_rate_date" value="" />
         <div className="admin-field lg:col-span-2"><label htmlFor="quick_material">Stoktan malzeme (opsiyonel)</label><select id="quick_material" name="material_id"><option value="">Seçilmedi</option>{inventoryResult.data.map((item) => <option key={item.id} value={item.id}>{item.name} · {item.stock_quantity} {item.unit}</option>)}</select></div>
         <div className="admin-field"><label htmlFor="material_quantity">Malzeme miktarı</label><input id="material_quantity" name="material_quantity" type="number" min="0" step="0.001" /></div>
         <div className="admin-field lg:col-span-2"><label htmlFor="material_name">Harici malzeme adı (opsiyonel)</label><input id="material_name" name="material_name" /></div>

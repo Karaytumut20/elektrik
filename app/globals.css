@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body:has([data-admin-layout="true"]) [data-site-chrome="true"] {
+  display: none;
+}
+
 :root {
   --background: #f5f7fb;
   --foreground: #172033;

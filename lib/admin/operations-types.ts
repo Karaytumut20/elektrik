@@ -36,6 +36,8 @@ export type Appointment = {
   status: string;
   amount_due: number | null;
   currency: Currency;
+  exchange_rate: number | null;
+  exchange_rate_date: string | null;
   primary_staff_id: string | null;
   assistant_staff_id: string | null;
   customer?: { name: string; primary_phone: string } | null;
@@ -78,13 +80,6 @@ export type InventoryItem = {
   supplier_name: string | null;
   warranty_months: number | null;
   storage_location: string | null;
-};
-
-export type ExchangeRate = {
-  rate: number;
-  rateDate: string;
-  source: "TCMB";
-  stale: boolean;
 };
 
 export function money(value: number | null | undefined, currency: Currency = "TRY") {

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import Script from "next/script";
 import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -8,7 +7,7 @@ import { FloatingContact } from "@/components/layout/FloatingContact";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { companyConfig } from "@/data/site";
 import { electricianSchema } from "@/data/schemas";
-import { AdClickTracker } from "@/components/seo/AdClickTracker";
+import { MarketingRuntime } from "@/components/seo/MarketingRuntime";
 
 export const metadata: Metadata = {
   metadataBase: new URL(companyConfig.siteUrl),
@@ -64,32 +63,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="tr" data-scroll-behavior="smooth">
-      <head>
-        {/* Google Tag Manager */}
-        <Script id="gtm-script" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TWXHLR7F');`}
-        </Script>
-        {/* Google Tag (gtag.js) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17594874326"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'AW-17594874326');
-          `}
-        </Script>
-      </head>
       <body>
-        <AdClickTracker />
+        <MarketingRuntime />
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -127,26 +102,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div data-site-chrome="true">
           <FloatingContact />
         </div>
-        
-        {/* Service Worker Registration for PWA */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').then(
-                    function(reg) {
-                      console.log('PWA ServiceWorker registered successfully:', reg.scope);
-                    },
-                    function(err) {
-                      console.log('PWA ServiceWorker registration failed:', err);
-                    }
-                  );
-                });
-              }
-            `
-          }}
-        />
       </body>
     </html>
   );

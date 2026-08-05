@@ -19,6 +19,8 @@ export function Header() {
     setIsOpen(false);
   }, [pathname]);
 
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
       <div className="site-container flex min-h-20 items-center justify-between gap-4 py-3">

@@ -1,6 +1,5 @@
-import { unstable_cache } from "next/cache";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
-import type { Appointment, Customer, ExchangeRate, InventoryItem, ServiceOrder, Staff } from "./operations-types";
+import type { Appointment, Customer, InventoryItem, ServiceOrder, Staff } from "./operations-types";
 
 type QueryResult<T> = { data: T; error?: string };
 
@@ -162,29 +161,3 @@ export async function getDashboardData(): Promise<QueryResult<DashboardData | nu
     return failure(null, error);
   }
 }
-
-async function fetchTcmbRateUncached(): Promise<ExchangeRate> {
-  const db = createSupabaseServiceClient();
-  try {
-    const response = await fetch("https://www.tcmb.gov.tr/kurlar/today.xml", {
-      next: { revalidate: 14400 },
-      signal: AbortSignal.timeout(1500),
-    });
-    if (!response.ok) throw new Error("TCMB kuru alınamadı.");
-    const xml = await response.text();
-    const block = xml.match(/<Currency[^>]+CurrencyCode="USD"[\s\S]*?<\/Currency>/)?.[0];
-    const raw = block?.match(/<ForexSelling>([^<]+)<\/ForexSelling>/)?.[1];
-    const dateRaw = xml.match(/Date="(\d{2}\/\d{2}\/\d{4})"/)?.[1];
-    if (!raw || !dateRaw) throw new Error("TCMB kur verisi çözümlenemedi.");
-    const [day, month, year] = dateRaw.split("/");
-    const result: ExchangeRate = { rate: Number(raw), rateDate: `${year}-${month}-${day}`, source: "TCMB", stale: false };
-    await db.from("exchange_rates").upsert({ rate_date: result.rateDate, rate: result.rate, source: "TCMB" });
-    return result;
-  } catch {
-    const { data } = await db.from("exchange_rates").select("rate,rate_date").order("rate_date", { ascending: false }).limit(1).maybeSingle();
-    if (!data) throw new Error("Güncel veya kayıtlı döviz kuru bulunamadı.");
-    return { rate: Number(data.rate), rateDate: data.rate_date, source: "TCMB", stale: true };
-  }
-}
-
-export const getTcmbRate = unstable_cache(fetchTcmbRateUncached, ["tcmb-usd-try"], { revalidate: 14400 });

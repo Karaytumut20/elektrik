@@ -1,5 +1,6 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 
 export type AdClickRow = {
@@ -9,7 +10,6 @@ export type AdClickRow = {
   clicked_at: string;
   landing_page: string;
   user_agent: string | null;
-  referrer: string | null;
   country: string | null;
 };
 
@@ -34,11 +34,11 @@ function deviceFromUserAgent(userAgent: string | null) {
   return "Masaüstü";
 }
 
-export async function getGroupedAdClicks(days: 1 | 7 | 30 | 60) {
+async function fetchGroupedAdClicks(days: 1 | 7 | 30 | 60) {
   const since = new Date(Date.now() - days * 86400000).toISOString();
   const { data, error } = await createSupabaseServiceClient()
     .from("ad_clicks")
-    .select("click_id,click_type,ip_address,clicked_at,landing_page,user_agent,referrer,country")
+    .select("click_id,click_type,ip_address,clicked_at,landing_page,user_agent,country")
     .gte("clicked_at", since)
     .order("clicked_at", { ascending: false })
     .limit(5000);
@@ -85,3 +85,5 @@ export async function getGroupedAdClicks(days: 1 | 7 | 30 | 60) {
 
   return { groups: [...grouped.values()].sort((a, b) => b.clickCount - a.clickCount), total: rows.length, truncated: rows.length === 5000 };
 }
+
+export const getGroupedAdClicks = unstable_cache(fetchGroupedAdClicks, ["grouped-ad-clicks-v1"], { revalidate: 15 });

@@ -24,18 +24,9 @@ const hasExtendedAdminProfileSchema = unstable_cache(async () => {
   throw error;
 }, ["admin-profile-schema-v1"], { revalidate: 300 });
 
-export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
-  if (!hasSupabasePublicEnv()) return null;
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) return null;
-
+const getCachedAdminProfile = unstable_cache(async (userId: string) => {
+  const service = createSupabaseServiceClient();
   try {
-    const service = createSupabaseServiceClient();
     const supportsExtendedProfile = await hasExtendedAdminProfileSchema();
     let displayName: string | null;
     let rawRole: string | null;
@@ -45,7 +36,7 @@ export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
       const { data: legacyProfile, error: legacyProfileError } = await service
         .from("admin_profiles")
         .select("display_name, role, is_active")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .maybeSingle();
       if (legacyProfileError || !legacyProfile?.is_active) return null;
       displayName = legacyProfile.display_name ?? null;
@@ -55,7 +46,7 @@ export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
       const { data: extendedProfile, error: extendedProfileError } = await service
         .from("admin_profiles")
         .select("display_name, role, app_role, staff_id, is_active")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .maybeSingle();
       if (extendedProfileError || !extendedProfile?.is_active) return null;
       displayName = extendedProfile.display_name ?? null;
@@ -65,16 +56,27 @@ export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
 
     const role = (rawRole === "admin" ? "super_admin" : rawRole) as AdminRole;
     if (!["super_admin", "manager", "editor", "support", "service_staff", "viewer"].includes(role)) return null;
-    return {
-      id: user.id,
-      email: user.email ?? null,
-      displayName,
-      role,
-      staffId,
-    };
+    return { displayName, role, staffId };
   } catch {
     return null;
   }
+}, ["admin-profile-by-user-v1"], { revalidate: 30 });
+
+export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
+  if (!hasSupabasePublicEnv()) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  const userId = typeof claims?.sub === "string" ? claims.sub : null;
+  if (error || !userId) return null;
+
+  const profile = await getCachedAdminProfile(userId);
+  if (!profile) return null;
+  return {
+    id: userId,
+    email: typeof claims?.email === "string" ? claims.email : null,
+    ...profile,
+  };
 });
 
 export async function requireAdmin() {

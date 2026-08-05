@@ -4,7 +4,7 @@ import { CalendarBoard } from "@/components/admin/CalendarBoard";
 import { OperationForm } from "@/components/admin/OperationForm";
 import { createCustomer, createStaff, saveAppointment } from "@/lib/admin/operations-actions";
 import { requireAdmin, canWrite } from "@/lib/admin/auth";
-import { getAppointments, getCustomers, getStaff, getTcmbRate } from "@/lib/admin/operations";
+import { getAppointments, getCustomers, getStaff } from "@/lib/admin/operations";
 
 export const dynamic = "force-dynamic";
 
@@ -46,8 +46,6 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const [appointmentResult, customerResult, staffResult] = await Promise.all([
     getAppointments(from.toISOString(), to.toISOString()), getCustomers(), getStaff(),
   ]);
-  let currentRate = null;
-  try { currentRate = await getTcmbRate(); } catch {}
   const editing = params.edit ? appointmentResult.data.find((item) => item.id === params.edit) : null;
   const dateKey = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Istanbul" }).format(base);
   const previous = new Date(base); previous.setMonth(previous.getMonth() - (view === "month" ? 1 : 0)); previous.setDate(previous.getDate() - (view === "week" ? 7 : view === "day" ? 1 : 0));
@@ -86,8 +84,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
               <div className="admin-field"><label htmlFor="status">Durum</label><select id="status" name="status" defaultValue={editing?.status ?? "planned"}><option value="planned">Planlandı</option><option value="customer_called">Müşteri Arandı</option><option value="on_the_way">Yola Çıkıldı</option><option value="started">İşlem Başladı</option><option value="waiting_material">Malzeme Bekleniyor</option><option value="completed">İşlem Tamamlandı</option><option value="cancelled">İptal Edildi</option><option value="postponed">Ertelendi</option><option value="waiting_payment">Tahsilat Bekleniyor</option></select></div>
               <div className="admin-field"><label htmlFor="amount_due">Alınacak tutar</label><input id="amount_due" name="amount_due" type="number" min="0" step="0.01" defaultValue={editing?.amount_due ?? ""} /></div>
               <div className="admin-field"><label htmlFor="currency">Para birimi</label><select id="currency" name="currency" defaultValue={editing?.currency ?? "TRY"}><option>TRY</option><option>USD</option></select></div>
-              <input type="hidden" name="exchange_rate" value={currentRate?.rate ?? ""} />
-              <input type="hidden" name="exchange_rate_date" value={currentRate?.rateDate ?? ""} />
+              <div className="admin-field"><label htmlFor="exchange_rate">USD/TL işlem kuru (USD ise)</label><input id="exchange_rate" name="exchange_rate" type="number" min="0" step="0.0001" inputMode="decimal" defaultValue={editing?.exchange_rate ?? ""} /></div>
+              <input type="hidden" name="exchange_rate_date" value={editing?.exchange_rate_date ?? ""} />
               <div className="admin-field sm:col-span-2"><label htmlFor="reported_issue">Müşterinin bildirdiği sorun</label><textarea id="reported_issue" name="reported_issue" /></div>
               <div className="admin-field sm:col-span-2"><label htmlFor="service_address">Hizmet adresi</label><textarea id="service_address" name="service_address" /></div>
               <div className="admin-field"><label htmlFor="city">Şehir</label><input id="city" name="city" defaultValue="Tekirdağ" /></div>

@@ -8,6 +8,7 @@ const api = read("app/api/ad-clicks/route.ts");
 const tracker = read("components/seo/AdClickTracker.tsx");
 const clickLogsPage = read("app/admin/click-logs/page.tsx");
 const layout = read("app/layout.tsx");
+const marketingRuntime = read("components/seo/MarketingRuntime.tsx");
 
 const checks = [
   ["only ad parameters are selected", /\["gclid", "gbraid", "wbraid"\]/.test(tracker)],
@@ -20,7 +21,8 @@ const checks = [
   ["60 day cleanup exists", /interval '60 days'/.test(migration)],
   ["click logs require the shared Supabase admin session", /await requireAdmin\(\)/.test(clickLogsPage)],
   ["click logs use the shared admin shell", /<AdminShell>/.test(clickLogsPage)],
-  ["no direct Google Ads conversion event in layout", !/gtag\(['"]event['"],\s*['"]conversion['"]/.test(layout)],
+  ["marketing runtime is disabled on admin routes", /if \(isAdmin\) return null/.test(marketingRuntime)],
+  ["no direct Google Ads conversion event in layout", !/gtag\(['"]event['"],\s*['"]conversion['"]/.test(`${layout}\n${marketingRuntime}`)],
 ];
 
 const failed = checks.filter(([, passed]) => !passed).map(([name]) => name);

@@ -1,4 +1,4 @@
-const CACHE_NAME = "inallar-elektrik-v1";
+const CACHE_NAME = "volta-elektrik-v2";
 const ASSETS_TO_CACHE = [
   "/",
   "/favicon.ico",
@@ -36,8 +36,14 @@ self.addEventListener("activate", (event) => {
 
 // Fetch Event - Network First with Cache Fallback
 self.addEventListener("fetch", (event) => {
+  const requestUrl = new URL(event.request.url);
   // Only handle GET requests and local resources
-  if (event.request.method !== "GET" || !event.request.url.startsWith(self.location.origin)) {
+  if (
+    event.request.method !== "GET" ||
+    requestUrl.origin !== self.location.origin ||
+    requestUrl.pathname.startsWith("/admin") ||
+    requestUrl.pathname.startsWith("/api")
+  ) {
     return;
   }
 

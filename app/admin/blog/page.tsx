@@ -24,7 +24,8 @@ export default async function AdminBlogPage({ searchParams }: { searchParams: Pr
   const { data, error } = await supabase
     .from("blog_posts")
     .select("id, title, slug, excerpt, content, cover_image_url, status, published_at, created_at, updated_at")
-    .order("updated_at", { ascending: false });
+    .order("updated_at", { ascending: false })
+    .limit(100);
 
   const posts = (data ?? []) as BlogPost[];
 
