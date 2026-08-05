@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Boxes, CalendarDays, CircleDollarSign, FileText, Gauge, LogOut, MessageSquare, Users, Wrench } from "lucide-react";
+import { Boxes, CalendarDays, CircleDollarSign, FileText, Gauge, LogOut, MessageSquare, MousePointerClick, Users, Wrench } from "lucide-react";
 import { companyConfig } from "@/data/site";
 import { signOutAdmin } from "@/lib/admin/blog-actions";
 import { getCurrentAdmin } from "@/lib/admin/auth";
@@ -16,6 +16,7 @@ const links = [
   { href: "/admin/accounting", label: "Muhasebe", icon: CircleDollarSign },
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/iletisim", label: "Mesajlar", icon: MessageSquare },
+  { href: "/admin/click-logs", label: "Reklam Tıklamaları", icon: MousePointerClick },
 ];
 
 export async function AdminShell({ children }: { children: ReactNode }) {

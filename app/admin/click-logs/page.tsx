@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AlertTriangle, LogOut, MousePointerClick, ShieldCheck } from "lucide-react";
+import { AlertTriangle, ShieldCheck } from "lucide-react";
+import { AdminShell } from "@/components/admin/AdminShell";
 import { CopyIpButton } from "@/components/admin/CopyIpButton";
-import { signOutClickLogs } from "@/app/admin/click-logs/actions";
-import { requireClickLogAdmin } from "@/lib/click-tracking/auth";
+import { requireAdmin } from "@/lib/admin/auth";
 import { getGroupedAdClicks } from "@/lib/click-tracking/data";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ function formatDate(value: string) {
 }
 
 export default async function ClickLogsPage({ searchParams }: { searchParams: Promise<{ days?: string }> }) {
-  await requireClickLogAdmin();
+  await requireAdmin();
   const requested = Number((await searchParams).days ?? "7");
   const days = ([1, 7, 30, 60].includes(requested) ? requested : 7) as 1 | 7 | 30 | 60;
   let report: Awaited<ReturnType<typeof getGroupedAdClicks>> | null = null;
@@ -23,14 +23,7 @@ export default async function ClickLogsPage({ searchParams }: { searchParams: Pr
   const suspicious = report?.groups.filter((group) => group.suspicious).length ?? 0;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="site-container flex min-h-16 items-center justify-between gap-4 py-3">
-          <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-lg bg-slate-950 text-amber-300"><MousePointerClick className="h-5 w-5" /></span><div><p className="font-bold text-slate-950">Google Ads Tıklama Kayıtları</p><p className="text-xs text-slate-500">Otomatik engelleme yapılmaz</p></div></div>
-          <form action={signOutClickLogs}><button className="btn btn-ghost" type="submit"><LogOut className="h-4 w-4" /> Çıkış</button></form>
-        </div>
-      </header>
-      <main className="site-container py-8">
+    <AdminShell>
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div><p className="text-sm font-semibold text-amber-600">Yalnızca gclid / gbraid / wbraid</p><h1 className="text-3xl font-bold text-slate-950">Reklam Trafiği Raporu</h1></div>
           <nav className="flex gap-2" aria-label="Tarih filtresi">{[1, 7, 30, 60].map((value) => <Link key={value} href={`/admin/click-logs?days=${value}`} className={`btn ${days === value ? "btn-primary" : "btn-secondary"}`}>{value} gün</Link>)}</nav>
@@ -57,7 +50,6 @@ export default async function ClickLogsPage({ searchParams }: { searchParams: Pr
             {report.groups.length === 0 ? <tr><td colSpan={7}>Seçilen dönemde reklam parametreli ziyaret yok.</td></tr> : null}
           </tbody></table></div>
         </> : null}
-      </main>
-    </div>
+    </AdminShell>
   );
 }

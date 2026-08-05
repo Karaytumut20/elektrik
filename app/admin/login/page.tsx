@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = buildMetadata({
   title: "Admin Giris",
-  description: "Blog yonetimi icin admin giris ekrani.",
+  description: "Yonetim paneli icin guvenli admin giris ekrani.",
   path: "/admin/login",
   noIndex: true,
 });
@@ -21,7 +21,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
         <div className="mb-6 text-center text-white">
           <p className="text-sm font-semibold uppercase text-amber-300">{companyConfig.name}</p>
           <h1 className="mt-2 text-3xl font-bold">Admin girisi</h1>
-          <p className="mt-2 text-sm text-slate-300">Bu panel yalnizca blog yazilarini yonetir.</p>
+          <p className="mt-2 text-sm text-slate-300">Takvim, is emirleri, cari, blog ve reklam raporlarini tek hesaptan yonetin.</p>
         </div>
         {params.setup === "missing-env" ? (
           <p className="mb-4 rounded-md bg-amber-100 p-3 text-sm font-semibold text-amber-900">
