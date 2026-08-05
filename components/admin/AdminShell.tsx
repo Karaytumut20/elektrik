@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Boxes, CalendarDays, CircleDollarSign, FileText, Gauge, LogOut, MessageSquare, MousePointerClick, Users, Wrench } from "lucide-react";
 import { companyConfig } from "@/data/site";
 import { signOutAdmin } from "@/lib/admin/blog-actions";
@@ -21,12 +21,7 @@ const links = [
 
 export async function AdminShell({ children }: { children: ReactNode }) {
   const admin = await getCurrentAdmin();
-  let rate: Awaited<ReturnType<typeof getTcmbRate>> | null = null;
-  try {
-    rate = await getTcmbRate();
-  } catch {
-    rate = null;
-  }
+
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -39,12 +34,9 @@ export async function AdminShell({ children }: { children: ReactNode }) {
               {companyConfig.name} Admin
             </Link>
             <div className="flex items-center gap-3 text-xs text-slate-600">
-              {rate ? (
-                <span className="hidden rounded-full bg-slate-100 px-3 py-1.5 md:inline">
-                  1 USD = {rate.rate.toLocaleString("tr-TR", { minimumFractionDigits: 4 })} TL · TCMB · {rate.rateDate}
-                  {rate.stale ? " · güncel değil" : ""}
-                </span>
-              ) : null}
+              <Suspense fallback={null}>
+                <ExchangeRateBadge />
+              </Suspense>
               <span className="hidden sm:inline">{admin?.displayName ?? admin?.email}</span>
               <form action={signOutAdmin}>
                 <button type="submit" className="btn btn-ghost" aria-label="Çıkış yap">
@@ -65,6 +57,22 @@ export async function AdminShell({ children }: { children: ReactNode }) {
       </header>
       <main className="site-container py-8">{children}</main>
     </div>
+  );
+}
+
+async function ExchangeRateBadge() {
+  let rate: Awaited<ReturnType<typeof getTcmbRate>> | null = null;
+  try {
+    rate = await getTcmbRate();
+  } catch {
+    rate = null;
+  }
+  if (!rate) return null;
+  return (
+    <span className="hidden rounded-full bg-slate-100 px-3 py-1.5 md:inline">
+      1 USD = {rate.rate.toLocaleString("tr-TR", { minimumFractionDigits: 4 })} TL · TCMB · {rate.rateDate}
+      {rate.stale ? " · güncel değil" : ""}
+    </span>
   );
 }
 

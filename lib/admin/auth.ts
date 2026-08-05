@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
 import { hasSupabasePublicEnv } from "@/lib/supabase/env";
@@ -13,6 +14,16 @@ export type CurrentAdmin = {
   staffId: string | null;
 };
 
+const hasExtendedAdminProfileSchema = unstable_cache(async () => {
+  const { error } = await createSupabaseServiceClient()
+    .from("admin_profiles")
+    .select("app_role, staff_id")
+    .limit(0);
+  if (!error) return true;
+  if (error.code === "42703") return false;
+  throw error;
+}, ["admin-profile-schema-v1"], { revalidate: 300 });
+
 export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
   if (!hasSupabasePublicEnv()) return null;
   const supabase = await createSupabaseServerClient();
@@ -25,20 +36,12 @@ export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
 
   try {
     const service = createSupabaseServiceClient();
-    const { data: extendedProfile, error: extendedProfileError } = await service
-      .from("admin_profiles")
-      .select("display_name, role, app_role, staff_id, is_active")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    // Older installations do not have app_role/staff_id until the operations
-    // migration is applied. Falling back keeps the existing admin login usable.
-    const needsLegacyFallback = extendedProfileError?.code === "42703";
+    const supportsExtendedProfile = await hasExtendedAdminProfileSchema();
     let displayName: string | null;
     let rawRole: string | null;
     let staffId: string | null;
 
-    if (needsLegacyFallback) {
+    if (!supportsExtendedProfile) {
       const { data: legacyProfile, error: legacyProfileError } = await service
         .from("admin_profiles")
         .select("display_name, role, is_active")
@@ -49,6 +52,11 @@ export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
       rawRole = legacyProfile.role;
       staffId = null;
     } else {
+      const { data: extendedProfile, error: extendedProfileError } = await service
+        .from("admin_profiles")
+        .select("display_name, role, app_role, staff_id, is_active")
+        .eq("user_id", user.id)
+        .maybeSingle();
       if (extendedProfileError || !extendedProfile?.is_active) return null;
       displayName = extendedProfile.display_name ?? null;
       rawRole = extendedProfile.app_role ?? extendedProfile.role;

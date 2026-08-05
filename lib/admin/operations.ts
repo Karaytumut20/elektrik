@@ -166,7 +166,10 @@ export async function getDashboardData(): Promise<QueryResult<DashboardData | nu
 async function fetchTcmbRateUncached(): Promise<ExchangeRate> {
   const db = createSupabaseServiceClient();
   try {
-    const response = await fetch("https://www.tcmb.gov.tr/kurlar/today.xml", { next: { revalidate: 14400 } });
+    const response = await fetch("https://www.tcmb.gov.tr/kurlar/today.xml", {
+      next: { revalidate: 14400 },
+      signal: AbortSignal.timeout(1500),
+    });
     if (!response.ok) throw new Error("TCMB kuru alınamadı.");
     const xml = await response.text();
     const block = xml.match(/<Currency[^>]+CurrencyCode="USD"[\s\S]*?<\/Currency>/)?.[0];
