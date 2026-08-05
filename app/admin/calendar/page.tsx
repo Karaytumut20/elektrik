@@ -1,106 +1,152 @@
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { CalendarBoard } from "@/components/admin/CalendarBoard";
-import { OperationForm } from "@/components/admin/OperationForm";
-import { createCustomer, createStaff, saveAppointment } from "@/lib/admin/operations-actions";
 import { requireAdmin, canWrite } from "@/lib/admin/auth";
 import { getAppointments, getCustomers, getStaff } from "@/lib/admin/operations";
 
 export const dynamic = "force-dynamic";
 
-function localInput(date: Date) {
-  const shifted = new Date(date.getTime() + 3 * 3600000);
-  return shifted.toISOString().slice(0, 16);
+const DAY = 86400000;
+const views = [
+  ["month", "Aylık"],
+  ["week", "Haftalık"],
+  ["day", "Günlük"],
+  ["upcoming", "Yaklaşan"],
+] as const;
+
+function keyInIstanbul(value: Date) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Istanbul" }).format(value);
+}
+
+function atIstanbulMidnight(key: string) {
+  return new Date(`${key}T00:00:00+03:00`);
+}
+
+function isValidDateKey(value: string | undefined): value is string {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T12:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function shiftKey(key: string, amount: number, unit: "day" | "month") {
+  const date = new Date(`${key}T12:00:00Z`);
+  if (unit === "month") {
+    date.setUTCDate(1);
+    date.setUTCMonth(date.getUTCMonth() + amount);
+  } else {
+    date.setUTCDate(date.getUTCDate() + amount);
+  }
+  return date.toISOString().slice(0, 10);
+}
+
+function weekDayIndex(key: string) {
+  return (new Date(`${key}T12:00:00Z`).getUTCDay() + 6) % 7;
+}
+
+function periodLabel(view: string, displayDate: string, from: Date, to: Date) {
+  const display = new Date(`${displayDate}T12:00:00+03:00`);
+  if (view === "month") return new Intl.DateTimeFormat("tr-TR", { month: "long", year: "numeric", timeZone: "Europe/Istanbul" }).format(display);
+  if (view === "day") return new Intl.DateTimeFormat("tr-TR", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" }).format(display);
+  const formatter = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", timeZone: "Europe/Istanbul" });
+  if (view === "upcoming") return `${formatter.format(from)} – ${formatter.format(new Date(to.getTime() - DAY))} · 30 gün`;
+  return `${formatter.format(from)} – ${formatter.format(new Date(to.getTime() - DAY))}`;
 }
 
 export default async function CalendarPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const admin = await requireAdmin();
   const params = await searchParams;
-  const view = ["month", "week", "day", "upcoming"].includes(params.view ?? "") ? params.view! : "month";
-  const base = params.date ? new Date(`${params.date}T12:00:00+03:00`) : new Date();
-  if (params.offset) base.setDate(base.getDate() + Number(params.offset));
+  const view = views.some(([key]) => key === params.view) ? params.view! : "month";
+  const today = keyInIstanbul(new Date());
+  let displayDate = isValidDateKey(params.date) ? params.date : today;
+  const legacyOffset = Number(params.offset ?? 0);
+  if (Number.isFinite(legacyOffset) && legacyOffset) displayDate = shiftKey(displayDate, legacyOffset, "day");
+
   let from: Date;
   let to: Date;
   let gridStart: Date;
   if (view === "day") {
-    from = new Date(base); from.setHours(0, 0, 0, 0);
-    to = new Date(from.getTime() + 86400000);
+    from = atIstanbulMidnight(displayDate);
+    to = new Date(from.getTime() + DAY);
     gridStart = from;
   } else if (view === "week") {
-    from = new Date(base);
-    const day = (from.getDay() + 6) % 7;
-    from.setDate(from.getDate() - day); from.setHours(0, 0, 0, 0);
-    to = new Date(from.getTime() + 7 * 86400000);
+    from = new Date(atIstanbulMidnight(displayDate).getTime() - weekDayIndex(displayDate) * DAY);
+    to = new Date(from.getTime() + 7 * DAY);
     gridStart = from;
   } else if (view === "upcoming") {
-    from = new Date();
-    to = new Date(from.getTime() + 30 * 86400000);
+    from = atIstanbulMidnight(displayDate);
+    to = new Date(from.getTime() + 30 * DAY);
     gridStart = from;
   } else {
-    const first = new Date(base.getFullYear(), base.getMonth(), 1);
-    const offset = (first.getDay() + 6) % 7;
-    gridStart = new Date(first); gridStart.setDate(first.getDate() - offset); gridStart.setHours(0, 0, 0, 0);
+    const firstOfMonth = `${displayDate.slice(0, 7)}-01`;
+    gridStart = new Date(atIstanbulMidnight(firstOfMonth).getTime() - weekDayIndex(firstOfMonth) * DAY);
     from = gridStart;
-    to = new Date(gridStart.getTime() + 42 * 86400000);
+    to = new Date(gridStart.getTime() + 42 * DAY);
   }
+
   const [appointmentResult, customerResult, staffResult] = await Promise.all([
-    getAppointments(from.toISOString(), to.toISOString()), getCustomers(), getStaff(),
+    getAppointments(from.toISOString(), to.toISOString()),
+    getCustomers(),
+    getStaff(),
   ]);
-  const editing = params.edit ? appointmentResult.data.find((item) => item.id === params.edit) : null;
-  const dateKey = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Istanbul" }).format(base);
-  const previous = new Date(base); previous.setMonth(previous.getMonth() - (view === "month" ? 1 : 0)); previous.setDate(previous.getDate() - (view === "week" ? 7 : view === "day" ? 1 : 0));
-  const next = new Date(base); next.setMonth(next.getMonth() + (view === "month" ? 1 : 0)); next.setDate(next.getDate() + (view === "week" ? 7 : view === "day" ? 1 : 0));
-  const now = new Date();
-  const defaultEnd = new Date(now.getTime() + 3600000);
+
+  const navigationStep = view === "month" ? 1 : view === "week" ? 7 : view === "upcoming" ? 30 : 1;
+  const navigationUnit = view === "month" ? "month" : "day";
+  const previousDate = shiftKey(displayDate, -navigationStep, navigationUnit);
+  const nextDate = shiftKey(displayDate, navigationStep, navigationUnit);
+  const label = periodLabel(view, displayDate, from, to);
 
   return (
     <AdminShell>
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div><p className="text-sm font-semibold text-amber-600">Planlama</p><h1 className="text-3xl font-bold text-slate-950">Takvim ve Randevular</h1></div>
-        <div className="flex flex-wrap gap-2">
-          {["month", "week", "day", "upcoming"].map((item) => <Link key={item} href={`/admin/calendar?view=${item}&date=${dateKey}`} className={`btn ${view === item ? "btn-primary" : "btn-secondary"}`}>{({ month: "Aylık", week: "Haftalık", day: "Günlük", upcoming: "Yaklaşan" } as Record<string, string>)[item]}</Link>)}
+      <div className="mb-5 space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-amber-600">Planlama</p>
+          <h1 className="text-2xl font-bold text-slate-950 sm:text-3xl">Takvim ve İşler</h1>
+          <p className="mt-1 max-w-2xl text-sm text-slate-500">Bir gün seçin, işi ekleyin; kayıtlı işe dokunarak ayrıntıları görün veya düzenleyin.</p>
         </div>
+        <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0" aria-label="Takvim görünümü">
+          {views.map(([key, title]) => (
+            <Link
+              key={key}
+              href={`/admin/calendar?view=${key}&date=${displayDate}`}
+              prefetch={false}
+              aria-current={view === key ? "page" : undefined}
+              className={`btn shrink-0 ${view === key ? "btn-primary" : "btn-secondary"}`}
+            >
+              {title}
+            </Link>
+          ))}
+        </nav>
       </div>
-      <div className="mb-4 flex items-center justify-between">
-        <Link className="btn btn-secondary" href={`/admin/calendar?view=${view}&date=${previous.toISOString().slice(0,10)}`}>Önceki</Link>
-        <Link className="btn btn-ghost" href={`/admin/calendar?view=${view}`}>Bugün</Link>
-        <Link className="btn btn-secondary" href={`/admin/calendar?view=${view}&date=${next.toISOString().slice(0,10)}`}>Sonraki</Link>
-      </div>
-      {appointmentResult.error ? <div className="admin-card mb-5 text-amber-800">Takvim tabloları henüz kurulmamış olabilir.</div> : <CalendarBoard initialAppointments={appointmentResult.data} monthStart={gridStart.toISOString()} view={view} />}
 
-      {canWrite(admin.role) ? (
-        <div className="mt-8 grid gap-5 lg:grid-cols-[2fr_1fr]">
-          <section className="admin-card">
-            <h2 className="mb-4 text-xl font-bold">{editing ? "Randevuyu Düzenle" : "Yeni Randevu"}</h2>
-            <OperationForm action={saveAppointment} submitLabel="Randevuyu Kaydet" className="grid gap-4 sm:grid-cols-2">
-              {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
-              <div className="admin-field sm:col-span-2"><label htmlFor="customer_id">Müşteri</label><select id="customer_id" name="customer_id" defaultValue={editing?.customer_id ?? ""} required><option value="">Seçin</option>{customerResult.data.map((c) => <option value={c.id} key={c.id}>{c.name} · {c.primary_phone}</option>)}</select></div>
-              <div className="admin-field sm:col-span-2"><label htmlFor="service_name">Hizmet</label><input id="service_name" name="service_name" defaultValue={editing?.service_name ?? ""} required /></div>
-              <div className="admin-field"><label htmlFor="starts_at">Başlangıç</label><input id="starts_at" name="starts_at" type="datetime-local" defaultValue={editing ? localInput(new Date(editing.starts_at)) : localInput(now)} required /></div>
-              <div className="admin-field"><label htmlFor="estimated_ends_at">Tahmini bitiş</label><input id="estimated_ends_at" name="estimated_ends_at" type="datetime-local" defaultValue={editing ? localInput(new Date(editing.estimated_ends_at)) : localInput(defaultEnd)} required /></div>
-              <div className="admin-field"><label htmlFor="primary_staff_id">Görevli</label><select id="primary_staff_id" name="primary_staff_id" defaultValue={editing?.primary_staff_id ?? ""}><option value="">Atanmadı</option>{staffResult.data.map((s) => <option value={s.id} key={s.id}>{s.full_name}</option>)}</select></div>
-              <div className="admin-field"><label htmlFor="assistant_staff_id">Yardımcı</label><select id="assistant_staff_id" name="assistant_staff_id" defaultValue={editing?.assistant_staff_id ?? ""}><option value="">Atanmadı</option>{staffResult.data.map((s) => <option value={s.id} key={s.id}>{s.full_name}</option>)}</select></div>
-              <div className="admin-field"><label htmlFor="priority">Öncelik</label><select id="priority" name="priority" defaultValue={editing?.priority ?? "normal"}><option value="normal">Normal</option><option value="important">Önemli</option><option value="urgent">Acil</option></select></div>
-              <div className="admin-field"><label htmlFor="status">Durum</label><select id="status" name="status" defaultValue={editing?.status ?? "planned"}><option value="planned">Planlandı</option><option value="customer_called">Müşteri Arandı</option><option value="on_the_way">Yola Çıkıldı</option><option value="started">İşlem Başladı</option><option value="waiting_material">Malzeme Bekleniyor</option><option value="completed">İşlem Tamamlandı</option><option value="cancelled">İptal Edildi</option><option value="postponed">Ertelendi</option><option value="waiting_payment">Tahsilat Bekleniyor</option></select></div>
-              <div className="admin-field"><label htmlFor="amount_due">Alınacak tutar</label><input id="amount_due" name="amount_due" type="number" min="0" step="0.01" defaultValue={editing?.amount_due ?? ""} /></div>
-              <div className="admin-field"><label htmlFor="currency">Para birimi</label><select id="currency" name="currency" defaultValue={editing?.currency ?? "TRY"}><option>TRY</option><option>USD</option></select></div>
-              <div className="admin-field"><label htmlFor="exchange_rate">USD/TL işlem kuru (USD ise)</label><input id="exchange_rate" name="exchange_rate" type="number" min="0" step="0.0001" inputMode="decimal" defaultValue={editing?.exchange_rate ?? ""} /></div>
-              <input type="hidden" name="exchange_rate_date" value={editing?.exchange_rate_date ?? ""} />
-              <div className="admin-field sm:col-span-2"><label htmlFor="reported_issue">Müşterinin bildirdiği sorun</label><textarea id="reported_issue" name="reported_issue" /></div>
-              <div className="admin-field sm:col-span-2"><label htmlFor="service_address">Hizmet adresi</label><textarea id="service_address" name="service_address" /></div>
-              <div className="admin-field"><label htmlFor="city">Şehir</label><input id="city" name="city" defaultValue="Tekirdağ" /></div>
-              <div className="admin-field"><label htmlFor="district">İlçe</label><input id="district" name="district" defaultValue="Çorlu" /></div>
-              <div className="admin-field"><label htmlFor="internal_note">İç not</label><textarea id="internal_note" name="internal_note" /></div>
-              <div className="admin-field"><label htmlFor="customer_note">Müşteri notu</label><textarea id="customer_note" name="customer_note" /></div>
-              <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" name="reminder_enabled" /> Hatırlatma oluştur</label>
-            </OperationForm>
-          </section>
-          <aside className="space-y-5">
-            <details className="admin-card" open><summary className="cursor-pointer font-bold">Hızlı müşteri ekle</summary><OperationForm action={createCustomer} submitLabel="Müşteri Ekle" className="mt-4 space-y-3" targetSelectId="customer_id"><div className="admin-field"><label htmlFor="quick_customer_name">Ad / unvan</label><input id="quick_customer_name" name="name" required /></div><div className="admin-field"><label htmlFor="quick_phone">Telefon</label><input id="quick_phone" name="primary_phone" required /></div><input type="hidden" name="customer_type" value="individual" /></OperationForm></details>
-            <details className="admin-card"><summary className="cursor-pointer font-bold">Hızlı personel ekle</summary><OperationForm action={createStaff} submitLabel="Personel Ekle" className="mt-4 space-y-3" targetSelectId="primary_staff_id" createdLabelField="full_name"><div className="admin-field"><label htmlFor="quick_staff_name">Ad soyad</label><input id="quick_staff_name" name="full_name" required /></div><div className="admin-field"><label htmlFor="quick_staff_phone">Telefon</label><input id="quick_staff_phone" name="phone" /></div></OperationForm></details>
-          </aside>
+      <div className="mb-4 grid grid-cols-[2.75rem_minmax(0,1fr)_2.75rem] items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:p-3">
+        <Link className="btn btn-secondary h-11 min-h-11 px-0 sm:px-4" href={`/admin/calendar?view=${view}&date=${previousDate}`} prefetch={false} aria-label="Önceki dönem">
+          <ChevronLeft className="h-5 w-5" /><span className="hidden sm:inline">Önceki</span>
+        </Link>
+        <div className="text-center">
+          <p className="truncate text-sm font-bold capitalize text-slate-950 sm:text-base">{label}</p>
+          <Link className="text-xs font-semibold text-blue-700" href={`/admin/calendar?view=${view}&date=${today}`} prefetch={false}>Bugüne dön</Link>
+        </div>
+        <Link className="btn btn-secondary h-11 min-h-11 px-0 sm:px-4" href={`/admin/calendar?view=${view}&date=${nextDate}`} prefetch={false} aria-label="Sonraki dönem">
+          <span className="hidden sm:inline">Sonraki</span><ChevronRight className="h-5 w-5" />
+        </Link>
+      </div>
+
+      {appointmentResult.error ? (
+        <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+          Takvim verileri alınamadı. Supabase operasyon tablolarının kurulu olduğunu kontrol edin.
         </div>
       ) : null}
+
+      <CalendarBoard
+        initialAppointments={appointmentResult.data}
+        monthStart={gridStart.toISOString()}
+        displayDate={displayDate}
+        view={view}
+        customers={customerResult.data}
+        staff={staffResult.data}
+        canEdit={canWrite(admin.role)}
+      />
     </AdminShell>
   );
 }

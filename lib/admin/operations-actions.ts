@@ -102,10 +102,10 @@ export async function createStaff(_: OperationState, formData: FormData): Promis
 export async function saveAppointment(_: OperationState, formData: FormData): Promise<OperationState> {
   const admin = await requireRole(["super_admin", "manager", "editor", "support", "service_staff"]);
   const schema = z.object({
-    customer_id: z.string().uuid("Müşteri seçin."),
-    service_name: z.string().min(2, "Hizmet adı gereklidir."),
-    starts_at: z.string().min(10),
-    estimated_ends_at: z.string().min(10),
+    customer_id: z.union([z.literal(""), z.string().uuid("Müşteri seçimi geçersiz.")]),
+    service_name: z.string().max(160, "İş başlığı en fazla 160 karakter olabilir."),
+    starts_at: z.string().max(40),
+    estimated_ends_at: z.string().max(40),
     priority: z.enum(["normal", "important", "urgent"]),
     status: z.enum(["planned", "customer_called", "on_the_way", "started", "waiting_material", "completed", "cancelled", "postponed", "waiting_payment"]),
     currency: z.enum(["TRY", "USD"]),
@@ -120,15 +120,36 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
     currency: text(formData.get("currency")) || "TRY",
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Randevu alanlarını kontrol edin." };
-  const startsAt = new Date(parsed.data.starts_at);
-  const endsAt = new Date(parsed.data.estimated_ends_at);
+
+  const parseLocalDate = (value: string) => {
+    if (!value) return null;
+    const localDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)
+      ? new Date(`${value}${value.length === 16 ? ":00" : ""}+03:00`)
+      : new Date(value);
+    return Number.isNaN(localDate.getTime()) ? null : localDate;
+  };
+  const parsedStart = parseLocalDate(parsed.data.starts_at);
+  const parsedEnd = parseLocalDate(parsed.data.estimated_ends_at);
+  if (parsed.data.starts_at && !parsedStart) return { error: "Başlangıç tarihi geçersiz." };
+  if (parsed.data.estimated_ends_at && !parsedEnd) return { error: "Bitiş tarihi geçersiz." };
+  const startsAt = parsedStart ?? (parsedEnd ? new Date(parsedEnd.getTime() - 3600000) : new Date());
+  const endsAt = parsedEnd ?? new Date(startsAt.getTime() + 3600000);
   if (!(startsAt < endsAt)) return { error: "Bitiş saati başlangıçtan sonra olmalıdır." };
 
   const id = optional(formData.get("id"));
+  if (id && !z.string().uuid().safeParse(id).success) return { error: "Randevu kaydı geçersiz." };
+  const amountDue = optionalNumber(formData.get("amount_due"));
+  const exchangeRate = optionalNumber(formData.get("exchange_rate"));
+  if (amountDue != null && (!Number.isFinite(amountDue) || amountDue < 0)) return { error: "Tutar geçersiz." };
+  if (exchangeRate != null && (!Number.isFinite(exchangeRate) || exchangeRate <= 0)) return { error: "Döviz kuru geçersiz." };
   try {
     const db = createSupabaseServiceClient();
     const payload = {
-      ...parsed.data,
+      customer_id: parsed.data.customer_id || null,
+      service_name: parsed.data.service_name || "Yeni iş",
+      priority: parsed.data.priority,
+      status: parsed.data.status,
+      currency: parsed.data.currency,
       starts_at: startsAt.toISOString(),
       estimated_ends_at: endsAt.toISOString(),
       description: optional(formData.get("description")),
@@ -142,8 +163,8 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
       internal_note: optional(formData.get("internal_note")),
       customer_note: optional(formData.get("customer_note")),
       reminder_enabled: formData.get("reminder_enabled") === "on",
-      amount_due: optionalNumber(formData.get("amount_due")),
-      exchange_rate: optionalNumber(formData.get("exchange_rate")),
+      amount_due: amountDue,
+      exchange_rate: exchangeRate,
       exchange_rate_date: optional(formData.get("exchange_rate_date")),
       created_by: admin.id,
     };
@@ -152,7 +173,7 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
       : await db.from("appointments").insert(payload).select("id").single();
     if (result.error) throw result.error;
     await audit(admin.id, id ? "update" : "create", "appointments", result.data.id, {
-      customer_id: parsed.data.customer_id, starts_at: startsAt.toISOString(), status: parsed.data.status,
+      customer_id: parsed.data.customer_id || null, starts_at: startsAt.toISOString(), status: parsed.data.status,
     });
     revalidatePath("/admin/calendar");
     revalidatePath("/admin/dashboard");

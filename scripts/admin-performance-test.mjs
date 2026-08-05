@@ -14,7 +14,7 @@ const serviceWorker = read("public/sw.js");
 const checks = [
   ["admin has no blocking TCMB request", !/TCMB|tcmb\.gov\.tr|getTcmbRate/.test(`${shell}\n${layoutShell}\n${operations}`)],
   ["admin navigation does not prefetch every dynamic page", /links\.map[\s\S]*prefetch=\{false\}/.test(layoutShell)],
-  ["desktop navigation uses a persistent sidebar", /<aside[\s\S]*lg:h-screen/.test(layoutShell) && existsSync(join(root, "app", "admin", "layout.tsx"))],
+  ["desktop navigation uses a persistent sidebar", /<aside[\s\S]*lg:relative[\s\S]*lg:h-dvh/.test(layoutShell) && existsSync(join(root, "app", "admin", "layout.tsx"))],
   ["admin profile schema detection is cached", /unstable_cache[\s\S]*admin-profile-schema-v1[\s\S]*revalidate: 300/.test(auth)],
   ["admin profile lookup is cached", /admin-profile-by-user-v1[\s\S]*revalidate: 30/.test(auth)],
   ["verified JWT claims are used for identity", /auth\.getClaims\(\)/.test(auth)],

@@ -28,12 +28,21 @@ export type Staff = {
 
 export type Appointment = {
   id: string;
-  customer_id: string;
+  customer_id: string | null;
   service_name: string;
+  description: string | null;
+  reported_issue: string | null;
   starts_at: string;
   estimated_ends_at: string;
+  service_address: string | null;
+  city: string | null;
+  district: string | null;
+  map_url: string | null;
   priority: "normal" | "important" | "urgent";
   status: string;
+  internal_note: string | null;
+  customer_note: string | null;
+  reminder_enabled: boolean;
   amount_due: number | null;
   currency: Currency;
   exchange_rate: number | null;

@@ -74,7 +74,7 @@ end $$;
 
 create table if not exists public.appointments (
   id uuid primary key default gen_random_uuid(),
-  customer_id uuid not null references public.customers(id) on delete restrict,
+  customer_id uuid references public.customers(id) on delete restrict,
   service_name text not null,
   description text,
   reported_issue text,

@@ -23,6 +23,7 @@ Mevcut blog ve iletisim migrationlari uygulandiktan sonra:
 
 1. `migrations/20260728000000_operations_management.sql`
 2. `migrations/20260803000000_ad_click_tracking.sql`
+3. `migrations/20260805000000_optional_calendar_customer.sql`
 
 Bu migration eklemelidir; mevcut blog, iletisim ve admin kayitlarini silmez. Musteri, personel,
 randevu, is emri, stok, tahsilat, dosya, kur ve audit tablolarini; transaction fonksiyonlarini;
@@ -36,6 +37,10 @@ varsayilani atanir. Diger kullanicilar icin uygun roller:
 `20260803000000_ad_click_tracking.sql`, yalnızca `gclid`, `gbraid` veya `wbraid`
 bulunan reklam ziyaretlerini saklayan private tabloyu ve 60 günlük otomatik temizliği
 ekler. Supabase Dashboard > SQL Editor ekranında operasyon migration'indan sonra çalıştırılmalıdır.
+
+`20260805000000_optional_calendar_customer.sql`, takvime müşteri kartı seçmeden hızlı iş
+girilebilmesi için yalnızca `appointments.customer_id` zorunluluğunu kaldırır. Mevcut
+kayıtları veya foreign key ilişkisini silmez.
 
 ## SQL kurulumu
 
