@@ -25,21 +25,44 @@ export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
 
   try {
     const service = createSupabaseServiceClient();
-    const { data: profile, error: profileError } = await service
+    const { data: extendedProfile, error: extendedProfileError } = await service
       .from("admin_profiles")
       .select("display_name, role, app_role, staff_id, is_active")
       .eq("user_id", user.id)
       .maybeSingle();
-    if (profileError || !profile?.is_active) return null;
-    const rawRole = profile.app_role ?? profile.role;
+
+    // Older installations do not have app_role/staff_id until the operations
+    // migration is applied. Falling back keeps the existing admin login usable.
+    const needsLegacyFallback = extendedProfileError?.code === "42703";
+    let displayName: string | null;
+    let rawRole: string | null;
+    let staffId: string | null;
+
+    if (needsLegacyFallback) {
+      const { data: legacyProfile, error: legacyProfileError } = await service
+        .from("admin_profiles")
+        .select("display_name, role, is_active")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (legacyProfileError || !legacyProfile?.is_active) return null;
+      displayName = legacyProfile.display_name ?? null;
+      rawRole = legacyProfile.role;
+      staffId = null;
+    } else {
+      if (extendedProfileError || !extendedProfile?.is_active) return null;
+      displayName = extendedProfile.display_name ?? null;
+      rawRole = extendedProfile.app_role ?? extendedProfile.role;
+      staffId = extendedProfile.staff_id ?? null;
+    }
+
     const role = (rawRole === "admin" ? "super_admin" : rawRole) as AdminRole;
     if (!["super_admin", "manager", "editor", "support", "service_staff", "viewer"].includes(role)) return null;
     return {
       id: user.id,
       email: user.email ?? null,
-      displayName: profile.display_name ?? null,
+      displayName,
       role,
-      staffId: profile.staff_id ?? null,
+      staffId,
     };
   } catch {
     return null;
