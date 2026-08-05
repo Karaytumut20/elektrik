@@ -1,6 +1,8 @@
 -- Takvim, servis, cari ve stok yonetimi.
 -- Eklemeli ve tekrar calistirilabilir olacak sekilde tasarlanmistir.
 
+begin;
+
 create extension if not exists pgcrypto;
 
 create sequence if not exists public.service_order_number_seq start 1001;
@@ -16,6 +18,12 @@ create table if not exists public.admin_profiles (
 );
 
 alter table public.admin_profiles
+  add column if not exists email text,
+  add column if not exists display_name text not null default 'Admin',
+  add column if not exists role text not null default 'admin',
+  add column if not exists is_active boolean not null default true,
+  add column if not exists created_at timestamptz not null default now(),
+  add column if not exists updated_at timestamptz not null default now(),
   add column if not exists app_role text not null default 'super_admin',
   add column if not exists staff_id uuid;
 
@@ -104,6 +112,9 @@ create table if not exists public.appointments (
   deleted_at timestamptz,
   constraint appointments_time_order_check check (estimated_ends_at > starts_at)
 );
+
+-- Eski kurulumlarda da müşteri seçmeden hızlı takvim kaydı girilebilsin.
+alter table public.appointments alter column customer_id drop not null;
 
 create index if not exists appointments_period_idx on public.appointments (starts_at, estimated_ends_at)
   where deleted_at is null;
@@ -474,7 +485,7 @@ begin
   if not found then raise exception 'Randevu bulunamadi.'; end if;
 
   select id into v_order_id from public.service_orders where appointment_id = p_appointment_id;
-  if v_order_id is null and (
+  if v_order_id is null and v_appointment.customer_id is not null and (
     coalesce(v_appointment.amount_due, 0) > 0 or v_appointment.status in ('started','completed')
   ) then
     insert into public.service_orders (
@@ -493,7 +504,7 @@ begin
     returning id into v_order_id;
   elsif v_order_id is not null then
     update public.service_orders
-    set customer_id = v_appointment.customer_id,
+    set customer_id = coalesce(v_appointment.customer_id, customer_id),
         service_name = v_appointment.service_name,
         labor_sale = coalesce(v_appointment.amount_due,0),
         currency = v_appointment.currency,
@@ -906,3 +917,8 @@ on conflict (id) do update
 set public = false,
     file_size_limit = excluded.file_size_limit,
     allowed_mime_types = excluded.allowed_mime_types;
+
+commit;
+
+-- PostgREST/Supabase API tablo önbelleğini hemen yenile.
+notify pgrst, 'reload schema';

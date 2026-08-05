@@ -12,6 +12,14 @@ const forbidden = [
 ];
 
 const required = [
+  ["tek transaction kurulumu", /^\s*--[\s\S]*?\bbegin;[\s\S]*\bcommit;/i],
+  ["müşteri tablosu", /create table if not exists public\.customers/i],
+  ["personel tablosu", /create table if not exists public\.staff/i],
+  ["takvim tablosu", /create table if not exists public\.appointments/i],
+  ["iş emri tablosu", /create table if not exists public\.service_orders/i],
+  ["stok tablosu", /create table if not exists public\.inventory_items/i],
+  ["müşterisiz takvim kaydı", /alter table public\.appointments alter column customer_id drop not null/i],
+  ["müşterisiz kayıtta güvenli iş emri tetikleyicisi", /v_order_id is null and v_appointment\.customer_id is not null/i],
   ["randevu tekil iş emri", /appointment_id uuid unique references public\.appointments/i],
   ["personel çakışma kuralı", /p_starts_at < a\.estimated_ends_at[\s\S]*p_ends_at > a\.starts_at/i],
   ["negatif stok koruması", /if v_stock\.stock_quantity < p_quantity then raise exception 'Yetersiz stok\.'/i],
@@ -24,6 +32,7 @@ const required = [
   ["audit log", /create table if not exists public\.audit_logs/i],
   ["RLS", /enable row level security/i],
   ["özel dosya deposu", /'service-files', 'service-files', false/i],
+  ["Supabase şema önbelleği yenileme", /notify pgrst, 'reload schema'/i],
 ];
 
 const errors = [];
