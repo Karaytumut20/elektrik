@@ -65,16 +65,16 @@ const getCachedAdminProfile = unstable_cache(async (userId: string) => {
 export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
   if (!hasSupabasePublicEnv()) return null;
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.auth.getClaims();
-  const claims = data?.claims;
-  const userId = typeof claims?.sub === "string" ? claims.sub : null;
+  const { data, error } = await supabase.auth.getUser();
+  const user = data?.user;
+  const userId = user?.id || null;
   if (error || !userId) return null;
 
   const profile = await getCachedAdminProfile(userId);
   if (!profile) return null;
   return {
     id: userId,
-    email: typeof claims?.email === "string" ? claims.email : null,
+    email: typeof user?.email === "string" ? user.email : null,
     ...profile,
   };
 });
