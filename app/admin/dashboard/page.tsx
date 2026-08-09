@@ -32,7 +32,7 @@ export default async function DashboardPage() {
         <>
           <div className="admin-grid">
             {cards.map(([label, value, Icon, href]) => (
-              <Link href={href} className="admin-card transition hover:-translate-y-0.5 hover:shadow-md" key={label}>
+              <Link href={href} prefetch={false} className="admin-card transition hover:-translate-y-0.5 hover:shadow-md" key={label}>
                 <Icon className="mb-4 h-5 w-5 text-amber-500" />
                 <p className="text-sm font-medium text-slate-500">{label}</p>
                 <p className="mt-1 text-3xl font-bold text-slate-950">{value}</p>

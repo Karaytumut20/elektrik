@@ -26,7 +26,7 @@ export default async function ClickLogsPage({ searchParams }: { searchParams: Pr
     <AdminShell>
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div><p className="text-sm font-semibold text-amber-600">Yalnızca gclid / gbraid / wbraid</p><h1 className="text-3xl font-bold text-slate-950">Reklam Trafiği Raporu</h1></div>
-          <nav className="flex gap-2" aria-label="Tarih filtresi">{[1, 7, 30, 60].map((value) => <Link key={value} href={`/admin/click-logs?days=${value}`} className={`btn ${days === value ? "btn-primary" : "btn-secondary"}`}>{value} gün</Link>)}</nav>
+          <nav className="flex gap-2" aria-label="Tarih filtresi">{[1, 7, 30, 60].map((value) => <Link key={value} href={`/admin/click-logs?days=${value}`} prefetch={false} className={`btn ${days === value ? "btn-primary" : "btn-secondary"}`}>{value} gün</Link>)}</nav>
         </div>
 
         {loadError ? <div className="admin-card flex gap-3 text-amber-800"><AlertTriangle className="h-5 w-5 shrink-0" /><p>`ad_clicks` migration&apos;ı uygulanmamış veya Supabase service-role ayarı eksik. Kurulum tamamlanmadan rapor okunamaz.</p></div> : report ? <>

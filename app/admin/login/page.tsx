@@ -1,6 +1,9 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/admin/LoginForm";
 import { companyConfig } from "@/data/site";
+import { getCurrentAdmin } from "@/lib/admin/auth";
+import { safeAdminDestination } from "@/lib/admin/navigation";
 import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +15,12 @@ export const metadata = buildMetadata({
   noIndex: true,
 });
 
-export default async function AdminLoginPage({ searchParams }: { searchParams: Promise<{ setup?: string; logged_out?: string }> }) {
-  const params = await searchParams;
+export default async function AdminLoginPage({ searchParams }: { searchParams: Promise<{ setup?: string; logged_out?: string; next?: string }> }) {
+  const [params, admin] = await Promise.all([searchParams, getCurrentAdmin()]);
+
+  // Browser history, a stale navigation response or a manual visit must not
+  // show the login form again while a valid admin session already exists.
+  if (admin && !params.logged_out) redirect(safeAdminDestination(params.next));
 
   return (
     <section className="grid min-h-screen place-items-center bg-slate-950 px-4 py-10">

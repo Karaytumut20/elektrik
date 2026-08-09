@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { Boxes, CalendarDays, CircleDollarSign, FileText, Gauge, LogOut, Menu, MessageSquare, MousePointerClick, Users, Wrench, X } from "lucide-react";
 import { companyConfig } from "@/data/site";
@@ -22,6 +22,7 @@ const links = [
 
 export function AdminLayoutShell({ adminLabel, children }: { adminLabel: string | null; children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLoginPage = pathname === "/admin/login" || pathname === "/admin/click-logs/login";
 
@@ -38,6 +39,8 @@ export function AdminLayoutShell({ adminLabel, children }: { adminLabel: string 
             key={href}
             href={href}
             prefetch={false}
+            onPointerEnter={() => router.prefetch(href)}
+            onFocus={() => router.prefetch(href)}
             aria-current={active ? "page" : undefined}
             className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${active ? "bg-amber-300 text-slate-950" : "text-slate-300 hover:bg-slate-800 hover:text-white"}`}
           >

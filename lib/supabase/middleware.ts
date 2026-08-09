@@ -27,6 +27,8 @@ export async function updateSupabaseSession(request: NextRequest) {
     },
   });
 
-  await supabase.auth.getUser();
+  // getClaims verifies the token and refreshes it when needed. With asymmetric
+  // signing keys it avoids a remote /user request on every admin navigation.
+  await supabase.auth.getClaims();
   return response;
 }

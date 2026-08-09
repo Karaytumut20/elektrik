@@ -36,7 +36,7 @@ export default async function AdminBlogPage({ searchParams }: { searchParams: Pr
           <h1 className="text-3xl font-bold text-slate-950">Blog yazilari</h1>
           <p className="mt-2 text-slate-600">Yayin, taslak, duzenleme ve silme islemleri.</p>
         </div>
-        <Link href="/admin/blog/new" className="btn btn-primary">
+        <Link href="/admin/blog/new" prefetch={false} className="btn btn-primary">
           <Plus className="h-4 w-4" />
           Yeni yazi
         </Link>
@@ -74,7 +74,7 @@ export default async function AdminBlogPage({ searchParams }: { searchParams: Pr
                       {post.status === "published" ? "Taslak yap" : "Yayinla"}
                     </button>
                   </form>
-                  <Link href={`/admin/blog/${post.id}/edit`} className="btn btn-ghost">
+                  <Link href={`/admin/blog/${post.id}/edit`} prefetch={false} className="btn btn-ghost">
                     <Edit className="h-4 w-4" />
                     Duzenle
                   </Link>

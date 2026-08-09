@@ -1,9 +1,11 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { requireSupabasePublicEnv, requireSupabaseServiceEnv } from "@/lib/supabase/env";
 import { customFetch } from "@/lib/supabase/fetch";
+
+let serviceClient: SupabaseClient | undefined;
 
 const getSupabaseServerClient = cache(async () => {
   const env = requireSupabasePublicEnv();
@@ -35,8 +37,10 @@ export async function createSupabaseServerClient() {
 }
 
 export function createSupabaseServiceClient() {
+  if (serviceClient) return serviceClient;
+
   const env = requireSupabaseServiceEnv();
-  return createClient(env.url, env.serviceRoleKey, {
+  serviceClient = createClient(env.url, env.serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
@@ -45,4 +49,5 @@ export function createSupabaseServiceClient() {
       fetch: customFetch,
     },
   });
+  return serviceClient;
 }

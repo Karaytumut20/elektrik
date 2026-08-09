@@ -20,7 +20,7 @@ export function LoginForm() {
 
   return (
     <form action={action} className="grid gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      <input type="hidden" name="next" value={searchParams.get("next") ?? "/admin/blog"} />
+      <input type="hidden" name="next" value={searchParams.get("next") ?? "/admin/dashboard"} />
       <div className="grid gap-2">
         <label htmlFor="email" className="text-sm font-semibold text-slate-800">
           E-posta

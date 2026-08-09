@@ -26,55 +26,66 @@ const hasExtendedAdminProfileSchema = unstable_cache(async () => {
 
 const getCachedAdminProfile = unstable_cache(async (userId: string) => {
   const service = createSupabaseServiceClient();
-  try {
-    const supportsExtendedProfile = await hasExtendedAdminProfileSchema();
-    let displayName: string | null;
-    let rawRole: string | null;
-    let staffId: string | null;
+  const supportsExtendedProfile = await hasExtendedAdminProfileSchema();
+  let displayName: string | null;
+  let rawRole: string | null;
+  let staffId: string | null;
 
-    if (!supportsExtendedProfile) {
-      const { data: legacyProfile, error: legacyProfileError } = await service
-        .from("admin_profiles")
-        .select("display_name, role, is_active")
-        .eq("user_id", userId)
-        .maybeSingle();
-      if (legacyProfileError || !legacyProfile?.is_active) return null;
-      displayName = legacyProfile.display_name ?? null;
-      rawRole = legacyProfile.role;
-      staffId = null;
-    } else {
-      const { data: extendedProfile, error: extendedProfileError } = await service
-        .from("admin_profiles")
-        .select("display_name, role, app_role, staff_id, is_active")
-        .eq("user_id", userId)
-        .maybeSingle();
-      if (extendedProfileError || !extendedProfile?.is_active) return null;
-      displayName = extendedProfile.display_name ?? null;
-      rawRole = extendedProfile.app_role ?? extendedProfile.role;
-      staffId = extendedProfile.staff_id ?? null;
-    }
-
-    const role = (rawRole === "admin" ? "super_admin" : rawRole) as AdminRole;
-    if (!["super_admin", "manager", "editor", "support", "service_staff", "viewer"].includes(role)) return null;
-    return { displayName, role, staffId };
-  } catch {
-    return null;
+  if (!supportsExtendedProfile) {
+    const { data: legacyProfile, error: legacyProfileError } = await service
+      .from("admin_profiles")
+      .select("display_name, role, is_active")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (legacyProfileError) throw legacyProfileError;
+    if (!legacyProfile?.is_active) return null;
+    displayName = legacyProfile.display_name ?? null;
+    rawRole = legacyProfile.role;
+    staffId = null;
+  } else {
+    const { data: extendedProfile, error: extendedProfileError } = await service
+      .from("admin_profiles")
+      .select("display_name, role, app_role, staff_id, is_active")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (extendedProfileError) throw extendedProfileError;
+    if (!extendedProfile?.is_active) return null;
+    displayName = extendedProfile.display_name ?? null;
+    rawRole = extendedProfile.app_role ?? extendedProfile.role;
+    staffId = extendedProfile.staff_id ?? null;
   }
+
+  const role = (rawRole === "admin" ? "super_admin" : rawRole) as AdminRole;
+  if (!["super_admin", "manager", "editor", "support", "service_staff", "viewer"].includes(role)) return null;
+  return { displayName, role, staffId };
 }, ["admin-profile-by-user-v1"], { revalidate: 30 });
+
+function isInvalidSessionError(error: { name?: string; status?: number }) {
+  return error.name === "AuthSessionMissingError"
+    || error.name === "AuthInvalidJwtError"
+    || error.status === 400
+    || error.status === 401
+    || error.status === 403;
+}
 
 export const getCurrentAdmin = cache(async (): Promise<CurrentAdmin | null> => {
   if (!hasSupabasePublicEnv()) return null;
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.auth.getUser();
-  const user = data?.user;
-  const userId = user?.id || null;
-  if (error || !userId) return null;
+  const { data, error } = await supabase.auth.getClaims();
+  if (error) {
+    if (isInvalidSessionError(error)) return null;
+    throw error;
+  }
+
+  const claims = data?.claims;
+  const userId = typeof claims?.sub === "string" ? claims.sub : null;
+  if (!userId) return null;
 
   const profile = await getCachedAdminProfile(userId);
   if (!profile) return null;
   return {
     id: userId,
-    email: typeof user?.email === "string" ? user.email : null,
+    email: typeof claims?.email === "string" ? claims.email : null,
     ...profile,
   };
 });

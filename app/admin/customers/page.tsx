@@ -17,7 +17,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
       <form className="mb-5 flex gap-2"><input name="q" defaultValue={q} aria-label="Müşteri ara" placeholder="Ad veya telefon ara" className="min-h-11 flex-1 rounded-lg border border-slate-300 px-3" /><button className="btn btn-secondary" type="submit">Ara</button></form>
       <div className="admin-table-wrap">
         <table className="admin-table"><thead><tr><th>Müşteri</th><th>Telefon</th><th>Konum</th><th>Tip</th><th /></tr></thead><tbody>
-          {result.data.map((customer) => <tr key={customer.id}><td><strong>{customer.name}</strong><br /><span className="text-xs text-slate-500">{customer.contact_name}</span></td><td>{customer.primary_phone}<br />{customer.email}</td><td>{customer.district}, {customer.city}</td><td>{customer.customer_type === "corporate" ? "Kurumsal" : "Bireysel"}</td><td><Link className="font-semibold text-blue-700" href={`/admin/customers/${customer.id}`}>Cari profil</Link></td></tr>)}
+          {result.data.map((customer) => <tr key={customer.id}><td><strong>{customer.name}</strong><br /><span className="text-xs text-slate-500">{customer.contact_name}</span></td><td>{customer.primary_phone}<br />{customer.email}</td><td>{customer.district}, {customer.city}</td><td>{customer.customer_type === "corporate" ? "Kurumsal" : "Bireysel"}</td><td><Link className="font-semibold text-blue-700" href={`/admin/customers/${customer.id}`} prefetch={false}>Cari profil</Link></td></tr>)}
           {result.data.length === 0 ? <tr><td colSpan={5}>{result.error ? "Müşteri tablosu henüz kurulmamış olabilir." : "Kayıt bulunamadı."}</td></tr> : null}
         </tbody></table>
       </div>

@@ -269,10 +269,10 @@ export function CalendarBoard({
                     </button>
                   ))}
                   {items.length > 1 ? (
-                    <Link href={`/admin/calendar?view=day&date=${key}`} className="block truncate text-center text-[9px] font-bold text-blue-700 sm:hidden" onClick={(event) => event.stopPropagation()}>+{items.length - 1} iş</Link>
+                    <Link href={`/admin/calendar?view=day&date=${key}`} prefetch={false} className="block truncate text-center text-[9px] font-bold text-blue-700 sm:hidden" onClick={(event) => event.stopPropagation()}>+{items.length - 1} iş</Link>
                   ) : null}
                   {items.length > 3 ? (
-                    <Link href={`/admin/calendar?view=day&date=${key}`} className="hidden text-xs font-semibold text-blue-700 sm:block" onClick={(event) => event.stopPropagation()}>+{items.length - 3} daha</Link>
+                    <Link href={`/admin/calendar?view=day&date=${key}`} prefetch={false} className="hidden text-xs font-semibold text-blue-700 sm:block" onClick={(event) => event.stopPropagation()}>+{items.length - 3} daha</Link>
                   ) : null}
                 </div>
               </div>

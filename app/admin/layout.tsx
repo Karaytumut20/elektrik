@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const admin = await getCurrentAdmin();
+  // A temporary Supabase/network failure must not turn into a false logout.
+  // Protected pages surface the failure through the admin error boundary.
+  const admin = await getCurrentAdmin().catch(() => null);
   return <AdminLayoutShell adminLabel={admin?.displayName ?? admin?.email ?? null}>{children}</AdminLayoutShell>;
 }
