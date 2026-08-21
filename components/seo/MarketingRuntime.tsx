@@ -11,14 +11,9 @@ export function MarketingRuntime() {
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
-    if (isAdmin) {
-      void navigator.serviceWorker.getRegistrations().then((registrations) => {
-        for (const registration of registrations) {
-          if (registration.scope.startsWith(window.location.origin)) void registration.unregister();
-        }
-      });
-      return;
-    }
+    // Admin registers the same worker from AdminPwaRegister. Its fetch handler
+    // bypasses private routes, so retaining it is safe and keeps the admin PWA installable.
+    if (isAdmin) return;
     const register = () => { void navigator.serviceWorker.register("/sw.js"); };
     window.addEventListener("load", register, { once: true });
     if (document.readyState === "complete") register();

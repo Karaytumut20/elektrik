@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/smoke-test.mjs && node scripts/operations-contract-test.mjs && node scripts/ad-click-tracking-test.mjs && node scripts/admin-performance-test.mjs && node scripts/calendar-responsive-test.mjs"
+    "test": "node scripts/smoke-test.mjs && node scripts/operations-contract-test.mjs && node scripts/ad-click-tracking-test.mjs && node scripts/admin-performance-test.mjs && node scripts/calendar-responsive-test.mjs && node scripts/work-order-payment-test.mjs && node scripts/admin-mobile-layout-test.mjs && node scripts/admin-pwa-test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",

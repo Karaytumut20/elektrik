@@ -485,9 +485,7 @@ begin
   if not found then raise exception 'Randevu bulunamadi.'; end if;
 
   select id into v_order_id from public.service_orders where appointment_id = p_appointment_id;
-  if v_order_id is null and v_appointment.customer_id is not null and (
-    coalesce(v_appointment.amount_due, 0) > 0 or v_appointment.status in ('started','completed')
-  ) then
+  if v_order_id is null and v_appointment.customer_id is not null then
     insert into public.service_orders (
       appointment_id, customer_id, service_name, started_at, finished_at,
       labor_sale, currency, exchange_rate, exchange_rate_date, status, technician_note, customer_note, created_by

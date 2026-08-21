@@ -5,7 +5,14 @@ import { z } from "zod";
 import { requireRole } from "@/lib/admin/auth";
 import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
 
-export type OperationState = { ok?: boolean; message?: string; error?: string; createdId?: string };
+export type OperationState = {
+  ok?: boolean;
+  message?: string;
+  error?: string;
+  createdId?: string;
+  selectedName?: string;
+  selectedPhone?: string;
+};
 
 const text = (value: FormDataEntryValue | null) => typeof value === "string" ? value.trim() : "";
 const optional = (value: FormDataEntryValue | null) => text(value) || null;
@@ -17,6 +24,28 @@ const optionalNumber = (value: FormDataEntryValue | null) => {
   const normalized = text(value).replace(",", ".");
   return normalized ? Number(normalized) : null;
 };
+const normalizedPhone = (value: string) => value.replace(/\D/g, "");
+
+/** `datetime-local` values do not include a timezone. Treat them as Istanbul time
+ * consistently, regardless of the server's own timezone. */
+function parseAppointmentDate(value: string) {
+  if (!value) return null;
+  const date = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)
+    ? new Date(`${value}${value.length === 16 ? ":00" : ""}+03:00`)
+    : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function appointmentRange(startsAt: string, endsAt: string) {
+  const start = parseAppointmentDate(startsAt);
+  const end = parseAppointmentDate(endsAt);
+  if (!start) return { error: "Randevu başlangıç tarihi geçersiz." };
+  if (!end) return { error: "Randevu bitiş tarihi geçersiz." };
+  if (end.getTime() <= start.getTime()) {
+    return { error: "Randevu bitişi başlangıç saatinden sonra olmalıdır." };
+  }
+  return { start, end };
+}
 
 function errorMessage(error: unknown) {
   const candidate = error as { message?: string };
@@ -31,6 +60,21 @@ async function audit(actorId: string, action: string, targetTable: string, targe
     target_id: targetId,
     new_values: values,
   });
+}
+
+async function findActiveCustomerByPhone(phone: string) {
+  const { data, error } = await createSupabaseServiceClient()
+    .from("customers")
+    .select("id,name,primary_phone")
+    .is("deleted_at", null)
+    .limit(1000);
+  if (error) throw error;
+  return (data ?? []).find((customer) => normalizedPhone(customer.primary_phone) === phone) ?? null;
+}
+
+function isActiveCustomerPhoneDuplicate(error: unknown) {
+  const candidate = error as { code?: string; constraint?: string };
+  return candidate?.code === "23505" && candidate.constraint === "customers_primary_phone_active_uidx";
 }
 
 export async function createCustomer(_: OperationState, formData: FormData): Promise<OperationState> {
@@ -51,10 +95,17 @@ export async function createCustomer(_: OperationState, formData: FormData): Pro
 
   try {
     const db = createSupabaseServiceClient();
-    const phone = parsed.data.primary_phone.replace(/\D/g, "");
-    const { data: duplicate } = await db.from("customers").select("id,name").is("deleted_at", null)
-      .ilike("primary_phone", `%${phone.slice(-10)}%`).limit(1).maybeSingle();
-    if (duplicate) return { error: `Bu telefon ${duplicate.name} müşterisinde kayıtlı.` };
+    const phone = normalizedPhone(parsed.data.primary_phone);
+    const duplicate = await findActiveCustomerByPhone(phone);
+    if (duplicate) {
+      return {
+        ok: true,
+        message: `${duplicate.name} bu telefonla zaten kayıtlı; mevcut müşteri seçildi.`,
+        createdId: duplicate.id,
+        selectedName: duplicate.name,
+        selectedPhone: duplicate.primary_phone,
+      };
+    }
     const { data, error } = await db.from("customers").insert({
       ...parsed.data,
       contact_name: optional(formData.get("contact_name")),
@@ -67,10 +118,32 @@ export async function createCustomer(_: OperationState, formData: FormData): Pro
       map_url: optional(formData.get("map_url")),
       notes: optional(formData.get("notes")),
     }).select("id").single();
-    if (error) throw error;
+    if (error) {
+      // A concurrent request can still win after the lookup. Resolve the
+      // unique-index conflict to the existing customer instead of exposing a database error.
+      if (isActiveCustomerPhoneDuplicate(error)) {
+        const existing = await findActiveCustomerByPhone(phone);
+        if (existing) {
+          return {
+            ok: true,
+            message: `${existing.name} bu telefonla zaten kayıtlı; mevcut müşteri seçildi.`,
+            createdId: existing.id,
+            selectedName: existing.name,
+            selectedPhone: existing.primary_phone,
+          };
+        }
+      }
+      throw error;
+    }
     await audit(admin.id, "create", "customers", data.id, { name: parsed.data.name, primary_phone: parsed.data.primary_phone });
     revalidatePath("/admin/customers");
-    return { ok: true, message: "Müşteri kaydedildi.", createdId: data.id };
+    return {
+      ok: true,
+      message: "Müşteri kaydedildi.",
+      createdId: data.id,
+      selectedName: parsed.data.name,
+      selectedPhone: parsed.data.primary_phone,
+    };
   } catch (error) {
     return { error: errorMessage(error) };
   }
@@ -121,15 +194,8 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Randevu alanlarını kontrol edin." };
 
-  const parseLocalDate = (value: string) => {
-    if (!value) return null;
-    const localDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)
-      ? new Date(`${value}${value.length === 16 ? ":00" : ""}+03:00`)
-      : new Date(value);
-    return Number.isNaN(localDate.getTime()) ? null : localDate;
-  };
-  const parsedStart = parseLocalDate(parsed.data.starts_at);
-  const parsedEnd = parseLocalDate(parsed.data.estimated_ends_at);
+  const parsedStart = parseAppointmentDate(parsed.data.starts_at);
+  const parsedEnd = parseAppointmentDate(parsed.data.estimated_ends_at);
   if (parsed.data.starts_at && !parsedStart) return { error: "Başlangıç tarihi geçersiz." };
   if (parsed.data.estimated_ends_at && !parsedEnd) return { error: "Bitiş tarihi geçersiz." };
   const startsAt = parsedStart ?? (parsedEnd ? new Date(parsedEnd.getTime() - 3600000) : new Date());
@@ -142,6 +208,9 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
   const exchangeRate = optionalNumber(formData.get("exchange_rate"));
   if (amountDue != null && (!Number.isFinite(amountDue) || amountDue < 0)) return { error: "Tutar geçersiz." };
   if (exchangeRate != null && (!Number.isFinite(exchangeRate) || exchangeRate <= 0)) return { error: "Döviz kuru geçersiz." };
+  if (parsed.data.currency === "USD" && parsed.data.customer_id && !exchangeRate) {
+    return { error: "USD iş emri için geçerli USD/TL kuru girilmelidir." };
+  }
   try {
     const db = createSupabaseServiceClient();
     const payload = {
@@ -178,7 +247,15 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
     revalidatePath("/admin/calendar");
     revalidatePath("/admin/dashboard");
     revalidatePath("/admin/work-orders");
-    return { ok: true, message: id ? "Randevu güncellendi." : "Randevu oluşturuldu.", createdId: result.data.id };
+    return {
+      ok: true,
+      message: id
+        ? "Randevu ve bağlantılı iş emri güncellendi."
+        : parsed.data.customer_id
+          ? "Randevu ve bağlantılı iş emri oluşturuldu."
+          : "Randevu oluşturuldu.",
+      createdId: result.data.id,
+    };
   } catch (error) {
     return { error: errorMessage(error) };
   }
@@ -186,12 +263,17 @@ export async function saveAppointment(_: OperationState, formData: FormData): Pr
 
 export async function moveAppointment(id: string, startsAt: string, endsAt: string): Promise<OperationState> {
   const admin = await requireRole(["super_admin", "manager", "editor", "support", "service_staff"]);
+  if (!z.string().uuid().safeParse(id).success) return { error: "Randevu kaydı geçersiz." };
+  const range = appointmentRange(startsAt, endsAt);
+  if ("error" in range) return { error: range.error };
   try {
     const { error } = await createSupabaseServiceClient().from("appointments")
-      .update({ starts_at: startsAt, estimated_ends_at: endsAt })
+      .update({ starts_at: range.start.toISOString(), estimated_ends_at: range.end.toISOString() })
       .eq("id", id).is("deleted_at", null);
     if (error) throw error;
-    await audit(admin.id, "reschedule", "appointments", id, { starts_at: startsAt, estimated_ends_at: endsAt });
+    await audit(admin.id, "reschedule", "appointments", id, {
+      starts_at: range.start.toISOString(), estimated_ends_at: range.end.toISOString(),
+    });
     revalidatePath("/admin/calendar");
     return { ok: true };
   } catch (error) {
@@ -240,13 +322,24 @@ export async function createQuickServiceOrder(_: OperationState, formData: FormD
     if ((appointmentStarts && !appointmentEnds) || (!appointmentStarts && appointmentEnds)) {
       return { error: "İleri tarihli randevu için başlangıç ve bitiş birlikte girilmelidir." };
     }
+    const range = appointmentStarts && appointmentEnds ? appointmentRange(appointmentStarts, appointmentEnds) : null;
+    if (range && "error" in range) return { error: range.error };
+    const customerId = text(formData.get("customer_id"));
+    if (!z.string().uuid().safeParse(customerId).success) return { error: "Hızlı işlem için bir müşteri seçmelisiniz." };
+    const serviceName = text(formData.get("service_name"));
+    if (serviceName.length < 2) return { error: "Hizmet / işlem adı en az 2 karakter olmalıdır." };
+    const currency = text(formData.get("currency")) === "USD" ? "USD" : "TRY";
+    const exchangeRate = optional(formData.get("exchange_rate"));
+    if (currency === "USD" && (!exchangeRate || !Number.isFinite(Number(exchangeRate.replace(",", "."))) || Number(exchangeRate.replace(",", ".")) <= 0)) {
+      return { error: "USD işlemi için geçerli USD/TL kuru girilmelidir." };
+    }
     const payload = {
       idempotency_key: text(formData.get("idempotency_key")),
-      customer_id: text(formData.get("customer_id")),
-      service_name: text(formData.get("service_name")),
+      customer_id: customerId,
+      service_name: serviceName,
       labor_sale: String(numberOrZero(formData.get("labor_sale"))),
-      currency: text(formData.get("currency")) || "TRY",
-      exchange_rate: optional(formData.get("exchange_rate")),
+      currency,
+      exchange_rate: exchangeRate,
       exchange_rate_date: optional(formData.get("exchange_rate_date")),
       status: text(formData.get("status")) || "draft",
       material_id: optional(formData.get("material_id")),
@@ -255,8 +348,8 @@ export async function createQuickServiceOrder(_: OperationState, formData: FormD
       paid: formData.get("paid") === "on",
       payment_method: text(formData.get("payment_method")) || "cash",
       technician_note: optional(formData.get("technician_note")),
-      appointment_starts_at: appointmentStarts ? new Date(appointmentStarts).toISOString() : null,
-      appointment_ends_at: appointmentEnds ? new Date(appointmentEnds).toISOString() : null,
+      appointment_starts_at: range && "start" in range ? range.start.toISOString() : null,
+      appointment_ends_at: range && "end" in range ? range.end.toISOString() : null,
     };
     const { data, error } = await db.rpc("create_quick_service_order", { p_payload: payload });
     if (error) throw error;

@@ -51,6 +51,7 @@ export function AdminLayoutShell({ adminLabel, children }: { adminLabel: string 
       })}
     </nav>
   );
+  const mobileLinks = links.filter(({ href }) => ["/admin/dashboard", "/admin/calendar", "/admin/work-orders", "/admin/accounting"].includes(href));
 
   return (
     <div data-admin-layout="true" className="min-h-dvh bg-slate-50 lg:grid lg:grid-cols-[14rem_minmax(0,1fr)]">
@@ -82,8 +83,15 @@ export function AdminLayoutShell({ adminLabel, children }: { adminLabel: string 
           <span className="truncate px-3 text-sm font-bold text-slate-900">{companyConfig.name} Admin</span>
           <span className="h-10 w-10" aria-hidden="true" />
         </header>
-        <main className="mx-auto w-full max-w-[1680px] px-3 py-4 sm:px-5 sm:py-6 lg:px-6 lg:py-7">{children}</main>
+        <main className="mx-auto w-full max-w-[1680px] px-3 py-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:px-5 sm:py-6 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:px-6 lg:py-7">{children}</main>
       </div>
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-slate-200 bg-white/95 px-1 pb-[env(safe-area-inset-bottom)] pt-1 backdrop-blur lg:hidden" aria-label="Hızlı admin menüsü">
+        {mobileLinks.map(({ href, label, icon: Icon }) => {
+          const active = pathname === href || pathname.startsWith(`${href}/`);
+          return <Link key={href} href={href} prefetch={false} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[10px] font-bold ${active ? "text-amber-700" : "text-slate-500"}`} aria-current={active ? "page" : undefined}><Icon className="h-5 w-5" />{label === "İş Emirleri" ? "İşler" : label === "Dashboard" ? "Ana Sayfa" : label}</Link>;
+        })}
+        <button type="button" onClick={() => setMenuOpen(true)} className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[10px] font-bold text-slate-500" aria-label="Tüm menüyü aç"><Menu className="h-5 w-5" />Menü</button>
+      </nav>
     </div>
   );
 }

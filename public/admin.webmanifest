@@ -1,0 +1,31 @@
+{
+  "id": "/admin",
+  "name": "İnallar Elektrik Admin",
+  "short_name": "Elektrik Admin",
+  "description": "İnallar Elektrik operasyon ve müşteri yönetim paneli",
+  "start_url": "/admin/dashboard",
+  "scope": "/admin/",
+  "display": "standalone",
+  "background_color": "#102033",
+  "theme_color": "#102033",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

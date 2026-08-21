@@ -1,11 +1,13 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-import { CalendarClock, X } from "lucide-react";
-import { saveAppointment } from "@/lib/admin/operations-actions";
+import { CalendarClock, Plus, X } from "lucide-react";
+import { createCustomer, saveAppointment } from "@/lib/admin/operations-actions";
 import type { Appointment, Customer, Staff } from "@/lib/admin/operations-types";
+
+type CustomerOption = Pick<Customer, "id" | "name" | "primary_phone">;
 
 function localDateTime(value: string) {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -30,6 +32,36 @@ function SaveButton({ editing }: { editing: boolean }) {
   );
 }
 
+function QuickCustomerForm({ disabled, onCreated }: { disabled: boolean; onCreated: (customer: CustomerOption) => void }) {
+  const [state, formAction] = useActionState(createCustomer, {});
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!state.ok || !state.createdId) return;
+    const fields = formRef.current?.elements;
+    const name = state.selectedName ?? (fields?.namedItem("name") as HTMLInputElement | null)?.value.trim() ?? "Yeni müşteri";
+    const phone = state.selectedPhone ?? (fields?.namedItem("primary_phone") as HTMLInputElement | null)?.value.trim() ?? "";
+    onCreated({ id: state.createdId, name, primary_phone: phone });
+    formRef.current?.reset();
+  }, [onCreated, state.createdId, state.ok, state.selectedName, state.selectedPhone]);
+
+  return (
+    <details className="shrink-0 border-b border-slate-200 bg-amber-50/60">
+      <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-sm font-bold text-slate-800 marker:hidden sm:px-6">
+        <Plus className="h-4 w-4" /> Müşteri listede yok mu? Hızlı müşteri ekle
+      </summary>
+      <form ref={formRef} action={formAction} className="grid gap-3 border-t border-amber-100 px-4 py-4 sm:grid-cols-[1fr_1fr_auto] sm:px-6">
+        <input type="hidden" name="customer_type" value="individual" />
+        <div className="admin-field"><label htmlFor="quick_appointment_customer_name">Ad / unvan</label><input id="quick_appointment_customer_name" name="name" minLength={2} required disabled={disabled} /></div>
+        <div className="admin-field"><label htmlFor="quick_appointment_customer_phone">Telefon</label><input id="quick_appointment_customer_phone" name="primary_phone" minLength={7} required disabled={disabled} inputMode="tel" /></div>
+        <button type="submit" className="btn btn-secondary self-end" disabled={disabled}>Müşteriyi Ekle</button>
+        {state.error ? <p role="alert" className="text-sm font-semibold text-red-700 sm:col-span-3">{state.error}</p> : null}
+        {state.ok ? <p role="status" className="text-sm font-semibold text-emerald-700 sm:col-span-3">{state.message}</p> : null}
+      </form>
+    </details>
+  );
+}
+
 export function AppointmentModal({
   appointment,
   selectedDate,
@@ -47,6 +79,8 @@ export function AppointmentModal({
 }) {
   const router = useRouter();
   const [state, formAction] = useActionState(saveAppointment, {});
+  const [customerOptions, setCustomerOptions] = useState<CustomerOption[]>(customers);
+  const [customerId, setCustomerId] = useState(appointment?.customer_id ?? "");
   const editing = Boolean(appointment);
   const startsAt = appointment ? localDateTime(appointment.starts_at) : `${selectedDate}T09:00`;
   const endsAt = appointment ? localDateTime(appointment.estimated_ends_at) : `${selectedDate}T10:00`;
@@ -69,6 +103,11 @@ export function AppointmentModal({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
+
+  const selectNewCustomer = useCallback((customer: CustomerOption) => {
+    setCustomerOptions((current) => current.some((item) => item.id === customer.id) ? current : [...current, customer]);
+    setCustomerId(customer.id);
+  }, []);
 
   return (
     <div
@@ -98,6 +137,8 @@ export function AppointmentModal({
           </button>
         </header>
 
+        {canEdit ? <QuickCustomerForm disabled={!canEdit} onCreated={selectNewCustomer} /> : null}
+
         <form action={formAction} className="flex min-h-0 flex-1 flex-col">
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-4 py-5 sm:px-6">
             <fieldset disabled={!canEdit} className="space-y-5 border-0 p-0">
@@ -110,10 +151,11 @@ export function AppointmentModal({
               </div>
               <div className="admin-field sm:col-span-2">
                 <label htmlFor="appointment_customer_id">Müşteri</label>
-                <select id="appointment_customer_id" name="customer_id" defaultValue={appointment?.customer_id ?? ""}>
+                <select id="appointment_customer_id" name="customer_id" value={customerId} onChange={(event) => setCustomerId(event.target.value)}>
                   <option value="">Müşteri seçmeden devam et</option>
-                  {customers.map((customer) => <option value={customer.id} key={customer.id}>{customer.name}{customer.primary_phone ? ` · ${customer.primary_phone}` : ""}</option>)}
+                  {customerOptions.map((customer) => <option value={customer.id} key={customer.id}>{customer.name}{customer.primary_phone ? ` · ${customer.primary_phone}` : ""}</option>)}
                 </select>
+                <p className="mt-1 text-xs text-slate-500">Müşteri ve fiyat girildiğinde iş emri otomatik olarak oluşturulur.</p>
               </div>
               <div className="admin-field">
                 <label htmlFor="appointment_starts_at">Başlangıç</label>
@@ -145,6 +187,19 @@ export function AppointmentModal({
                   <option value="urgent">Acil</option>
                 </select>
               </div>
+              <div className="admin-field">
+                <label htmlFor="appointment_amount">Alınacak tutar / iş emri satış fiyatı</label>
+                <input id="appointment_amount" name="amount_due" type="number" min="0" step="0.01" inputMode="decimal" defaultValue={appointment?.amount_due ?? ""} placeholder="Örn. 1500" />
+              </div>
+              <div className="admin-field">
+                <label htmlFor="appointment_currency">Para birimi</label>
+                <select id="appointment_currency" name="currency" defaultValue={appointment?.currency ?? "TRY"}><option>TRY</option><option>USD</option></select>
+              </div>
+              <div className="admin-field sm:col-span-2">
+                <label htmlFor="appointment_exchange_rate">USD/TL işlem kuru <span className="font-normal text-slate-500">(yalnızca USD için)</span></label>
+                <input id="appointment_exchange_rate" name="exchange_rate" type="number" min="0" step="0.0001" inputMode="decimal" defaultValue={appointment?.exchange_rate ?? ""} />
+                <input type="hidden" name="exchange_rate_date" value={appointment?.exchange_rate_date ?? ""} />
+              </div>
               <div className="admin-field sm:col-span-2">
                 <label htmlFor="appointment_reported_issue">Sorun / yapılacak iş</label>
                 <textarea id="appointment_reported_issue" name="reported_issue" defaultValue={appointment?.reported_issue ?? ""} placeholder="Kısa bir açıklama yazabilirsiniz" />
@@ -153,7 +208,7 @@ export function AppointmentModal({
 
               <details className="rounded-2xl border border-slate-200 bg-slate-50/70">
               <summary className="cursor-pointer list-none px-4 py-4 font-bold text-slate-800 marker:hidden">
-                Diğer isteğe bağlı detaylar <span className="ml-1 text-xs font-medium text-slate-500">(personel, adres, ücret ve notlar)</span>
+                Diğer isteğe bağlı detaylar <span className="ml-1 text-xs font-medium text-slate-500">(personel, adres ve notlar)</span>
               </summary>
               <div className="grid gap-4 border-t border-slate-200 p-4 sm:grid-cols-2">
                 <div className="admin-field">
@@ -189,19 +244,6 @@ export function AppointmentModal({
                 <div className="admin-field sm:col-span-2">
                   <label htmlFor="appointment_map_url">Harita bağlantısı</label>
                   <input id="appointment_map_url" name="map_url" type="url" defaultValue={appointment?.map_url ?? ""} placeholder="https://maps.google.com/…" />
-                </div>
-                <div className="admin-field">
-                  <label htmlFor="appointment_amount">Alınacak tutar</label>
-                  <input id="appointment_amount" name="amount_due" type="number" min="0" step="0.01" inputMode="decimal" defaultValue={appointment?.amount_due ?? ""} />
-                </div>
-                <div className="admin-field">
-                  <label htmlFor="appointment_currency">Para birimi</label>
-                  <select id="appointment_currency" name="currency" defaultValue={appointment?.currency ?? "TRY"}><option>TRY</option><option>USD</option></select>
-                </div>
-                <div className="admin-field sm:col-span-2">
-                  <label htmlFor="appointment_exchange_rate">USD/TL işlem kuru</label>
-                  <input id="appointment_exchange_rate" name="exchange_rate" type="number" min="0" step="0.0001" inputMode="decimal" defaultValue={appointment?.exchange_rate ?? ""} />
-                  <input type="hidden" name="exchange_rate_date" value={appointment?.exchange_rate_date ?? ""} />
                 </div>
                 <div className="admin-field">
                   <label htmlFor="appointment_internal_note">İç not</label>

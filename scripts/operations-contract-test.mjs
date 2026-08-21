@@ -20,6 +20,7 @@ const required = [
   ["stok tablosu", /create table if not exists public\.inventory_items/i],
   ["müşterisiz takvim kaydı", /alter table public\.appointments alter column customer_id drop not null/i],
   ["müşterisiz kayıtta güvenli iş emri tetikleyicisi", /v_order_id is null and v_appointment\.customer_id is not null/i],
+  ["takvim ve iş emri entegrasyonu", /if v_order_id is null and v_appointment\.customer_id is not null then/i],
   ["randevu tekil iş emri", /appointment_id uuid unique references public\.appointments/i],
   ["personel çakışma kuralı", /p_starts_at < a\.estimated_ends_at[\s\S]*p_ends_at > a\.starts_at/i],
   ["negatif stok koruması", /if v_stock\.stock_quantity < p_quantity then raise exception 'Yetersiz stok\.'/i],

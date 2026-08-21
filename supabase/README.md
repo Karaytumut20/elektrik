@@ -24,6 +24,8 @@ Mevcut blog ve iletisim migrationlari uygulandiktan sonra:
 1. `migrations/20260728000000_operations_management.sql`
 2. `migrations/20260803000000_ad_click_tracking.sql`
 3. `migrations/20260805000000_optional_calendar_customer.sql`
+4. `migrations/20260821000000_appointment_time_validation.sql`
+5. `migrations/20260821010000_calendar_work_order_integration.sql`
 
 Bu migration eklemelidir; mevcut blog, iletisim ve admin kayitlarini silmez. Musteri, personel,
 randevu, is emri, stok, tahsilat, dosya, kur ve audit tablolarini; transaction fonksiyonlarini;
@@ -41,6 +43,14 @@ ekler. Supabase Dashboard > SQL Editor ekranında operasyon migration'indan sonr
 `20260805000000_optional_calendar_customer.sql`, takvime müşteri kartı seçmeden hızlı iş
 girilebilmesi için yalnızca `appointments.customer_id` zorunluluğunu kaldırır. Mevcut
 kayıtları veya foreign key ilişkisini silmez.
+
+`20260821000000_appointment_time_validation.sql`, randevu bitişinin başlangıçtan sonra
+olmasını tüm yazma yollarında doğrular ve teknik PostgreSQL hata metni yerine anlaşılır bir
+uyarı döndürür.
+
+`20260821010000_calendar_work_order_integration.sql`, takvimde müşteri seçilerek oluşturulan
+her işi otomatik bir iş emrine bağlar. Fiyat, durum ve notlar tek popup üzerinden iş emrine de
+aktarılır.
 
 ## SQL kurulumu
 
